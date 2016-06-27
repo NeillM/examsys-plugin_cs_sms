@@ -1,0 +1,105 @@
+faculty:
+  -
+    id: 1
+    code: "TEST"
+    name: "Faculty of Testing"
+    externalid: "TESTECT"
+  -
+    id: 2
+    code: "CFY-AE"
+    name: "Faculty of Arts and Education"
+    externalid: "CFY-AE"
+schools:
+  -
+    id: 1
+    code: "TEST"
+    school: "Centre for Testing"
+    facultyID: 1
+    externalid: "USC-MED"
+  -
+    id: 2
+    code: "CSC-CELE"
+    school: "Centre for English Language Education"
+    facultyID: 2
+    externalid: "CSC-CELE"
+  -
+    id: 3
+    code: "CSC-EDU"
+    school: "School of Education"
+    facultyID: 2
+    externalid: "CSC-EDU"
+courses:
+  -
+    id: 1
+    name: "M6UNUTRN"
+    description: "Nutrition"
+    schoolid: 1
+    externalid: "M6UNUTRN"
+  -
+    id: 2
+    name: "M6UCVENG"
+    description: "Civil Engineering"
+    schoolid: 1
+    externalid: "M6UCVENG"
+  -
+    id: 3
+    name: "U8PBRSGY"
+    description: "Breast Surgery"
+    schoolid: 1
+    externalid: "UON|U8PBRSGY"
+modules:
+  -
+    id: 1
+    moduleid: "TESTMOD"
+    fullname: "Testing skills"
+    schoolid: 1
+    externalid: "00001111"
+    academic_year_start: "07/01"
+  -
+    id: 2
+    moduleid: "NAAAXXXX"
+    fullname: "Self-marketing skills"
+    schoolid: 1
+    externalid: "030003"
+    academic_year_start: "07/01"
+users:
+  -
+    id: 1
+    grade: "M6UNUTRN"
+    surname: "John"
+    username: "brzhs5"
+    title: ""
+    email: ""
+    gender: null
+    roles: "Student"
+    first_names: "Lewis"
+    yearofstudy: 1
+  -
+    id: 2
+    grade: "M6UCVENG"
+    surname: "Watson"
+    username: "brzamh"
+    title: ""
+    email: ""
+    gender: null
+    roles: "Student"
+    first_names: "Daniel"
+    yearofstudy: 1
+sid:
+  -
+    student_id: "10000667"
+    userID: 1
+  -
+    student_id: "10000670"
+    userID: 2
+modules_student:
+  -
+    id: 1
+    userID: 1
+    idMod: 1
+    calendar_year: 2016
+  -
+    id: 2
+    userID: 2 
+    idMod: 1
+    calendar_year: 2016

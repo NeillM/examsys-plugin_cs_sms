@@ -1,0 +1,37 @@
+config:
+  -
+    component: "plugin_cs_sms"
+    setting: "campuslist"
+    value: "C,M,U"
+  -
+    component: "plugin_cs_sms"
+    setting: "installed"
+    value: 0
+  -
+    component: "plugin_cs_sms"
+    setting: "loglocation"
+    value: ""
+  -
+    component: "plugin_cs_sms"
+    setting: "password"
+    value: "password"
+  -
+    component: "plugin_cs_sms"
+    setting: "ssl_verify"
+    value: "1"  
+  -
+    component: "plugin_cs_sms"
+    setting: "timeout"
+    value: 10
+  -
+    component: "plugin_cs_sms"
+    setting: "url"
+    value: "https://www.example.com"
+  -
+    component: "plugin_cs_sms"
+    setting: "username"
+    value: "username"
+  -
+    component: "plugin_cs_sms"
+    setting: "validate_schema"
+    value: "1"

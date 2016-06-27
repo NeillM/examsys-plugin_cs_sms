@@ -1,0 +1,175 @@
+<?php
+// This file is part of Rogō
+//
+// Rogō is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Rogō is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
+
+namespace plugins\SMS\plugin_cs_sms;
+use plugins\SMS\plugin_cs_sms\log_helper as log_helper,
+    plugins\SMS\plugin_cs_sms\enrolments_helper as enrolments_helper,
+    plugins\SMS\plugin_cs_sms\faculties_helper as faculties_helper,
+    plugins\SMS\plugin_cs_sms\courses_helper as courses_helper,
+    plugins\SMS\plugin_cs_sms\modules_helper as modules_helper;
+/**
+* SMS plugin helper file
+* 
+* @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
+* @copyright Copyright (c) 2016 onwards The University of Nottingham
+*/
+
+/**
+ * SMS import plugin.
+ */
+class plugin_cs_sms extends \plugins\plugins_sms {
+    /**
+     * Name of the plugin;
+     * @var string
+     */
+    protected $plugin = 'plugin_cs_sms';
+    /**
+     * Language pack component.
+     * @var string
+     */
+    private $langcomponent = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
+    /**
+     * Land pack strings.
+     * @var string
+     */
+    private $strings;
+    /**
+     * User running import.
+     * @var integer
+     */
+    private $userid;
+    /**
+     * Schema validation status.
+     * @var boolean
+     */
+    private $validation;
+    /**
+     * Set the availbe land pack strings for the plugin
+     */
+    private function set_lang_strings() {
+        $langpack = new \langpack();
+        $this->strings = $langpack->get_all_strings($this->langcomponent);
+    }
+    
+    /**
+     * Constructor
+     * @param mysqli $mysqli db connection
+     * @param integer $userid rogo id of user running import
+     */
+    public function __construct($mysqli, $userid = 0) {
+        parent::__construct($mysqli);
+        $this->set_lang_strings();
+        $this->logdir = $this->config->get_setting($this->plugin, 'loglocation');
+        $this->userid = $userid;
+        $this->campuslist = $this->config->get_setting($this->plugin, 'campuslist');
+        $this->validation = $this->config->get_setting($this->plugin, 'validate_schema');
+    }
+    /**
+     * Call web service to retrieve information.
+     * @param string $type type of web service to call i.e. RogoProgPlan for courses
+     * @param string $version version of web service.
+     * @param array $args any arguments to call the web service with
+     * @return string xml data from web service
+     */
+    public function callws($type, $version, $args = array()) {
+        $url = $this->config->get_setting($this->plugin, 'url');
+        $url .= '/' . $type . '.' . $version . '/';
+        foreach ($args as $param => $value) {
+            $url .=  $value . '/';
+        }
+        // Strip last &.
+        $url = rtrim($url, '/');
+        $username = $this->config->get_setting($this->plugin, 'username');
+        $encryp = new \encryp();
+        $password = $encryp->mdecrypt_password($this->config->get_setting($this->plugin, 'password'));
+        $timeout = $this->config->get_setting($this->plugin, 'timeout');
+        $options = array(CURLOPT_TIMEOUT => $timeout,
+            CURLOPT_SSL_VERIFYPEER => $this->config->get_setting($this->plugin, 'ssl_verify')
+        );
+        // Auth options.
+        if ($username != '') {
+            $authoptions = array(CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+                CURLOPT_USERPWD => $username . ':' . $password);
+            $options += $authoptions;
+        }
+        $restful = new \restful($this->db);
+        $response = $restful->get($url, $options);
+        return $response;
+    }
+    /**
+     * Get enrolments for academic session
+     * @params integer $session academic session to sync enrolments with
+     */
+    public function get_enrolments($session) {
+        $logfile = log_helper::set_logfile($this->logdir, 'enrol');
+        $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+        foreach ($campuslist as $campus) {
+            $args = array('academic_session' => $session, 'campus' => $campus);
+            $response = $this->callws('RogoEnrolments', 'v1', $args);
+            if ($response != '') {
+                enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation);
+            }
+        }
+    }
+    /**
+     * Get faculties/schools.
+     */
+    public function get_faculties() {
+        $logfile = log_helper::set_logfile($this->logdir, 'faculty');
+        $response = $this->callws('RogoSchools', 'v1');
+        if ($response != '') {
+            faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+        }
+    }
+    /**
+     * Get courses
+     */
+    public function get_courses() {
+        $logfile = log_helper::set_logfile($this->logdir, 'course');
+        $response = $this->callws('RogoProgPlan', 'v1');
+        if ($response != '') {
+            courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+        }
+    }
+    /**
+     * Get modules
+     */
+    public function get_modules() {
+        $logfile = log_helper::set_logfile($this->logdir, 'module');
+        $response = $this->callws('RogoClasses', 'v1');
+        if ($response != '') {
+            modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+        }
+    }
+    /**
+     * Enable this plugin
+     * Only one sms plugin should be enabled at anyone time
+     */
+    public function enable_plugin() {
+        $enabled = array($this->plugin);
+        $this->config->set_setting('enabled_plugin', json_encode($enabled), 'plugin_' . $this->plugin_type);
+    }
+    /**
+     * Disable this plugin
+     * Only one sms plugin should be enabled at anyone time
+     */
+    public function disable_plugin() {
+        $enabled = json_decode($this->config->get_setting('plugin_' . $this->plugin_type, 'enabled_plugin'));
+        if ($this->plugin == $enabled[0]) {
+            $this->config->set_setting('enabled_plugin', json_encode(array()), 'plugin_' . $this->plugin_type);
+        }
+    }
+}

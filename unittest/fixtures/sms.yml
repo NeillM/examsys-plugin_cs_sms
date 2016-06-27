@@ -1,0 +1,42 @@
+academic_year:
+  -
+    calendar_year: 2016
+    academic_year: "2016/17"
+config:
+faculty:
+  -
+    id: 1
+    code: "TEST"
+    name: "Faculty of Testing"
+    externalid: "TESTECT"
+schools:
+  -
+    id: 1
+    code: "TEST"
+    school: "Centre for Testing"
+    facultyID: 1
+    externalid: "USC-MED"
+courses:
+  -
+    id: 1
+    name: "M6UNUTRN"
+    description: "Nutrition"
+    schoolid: 1
+    externalid: "M6UNUTRN"
+  -
+    id: 2
+    name: "M6UCVENG"
+    description: "Civil Engineering"
+    schoolid: 1
+    externalid: "M6UCVENG"
+modules:
+  -
+    id: 1
+    moduleid: "TESTMOD"
+    fullname: "Testing skills"
+    schoolid: 1
+    externalid: "00001111"
+    academic_year_start: "07/01"
+users:
+sid:
+modules_student:
