@@ -206,30 +206,30 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     }
     /**
      * Check if module import is supported by the plugin
-     * @return bool true if module import supported
+     * @return array|bool import url and translation strings, false  if module import supported
      */
     public function supports_module_import() {
-        return true;
+        return array('url' => '../plugins/SMS/' . $this->plugin . '/admin/import_modules.php', 'blurb' => $this->strings['importmodules'], 'tooltip' => $this->strings['importmodulestooltip']);
     }
     /**
      * Check if faculty/school import is supported by the plugin
-     * @return bool true if faculty/school import supported
+     * @return array|bool import url and translation strings, false if faculty/school import supported
      */
     public function supports_faculty_import() {
-        return true;
+        return array('url' => '../plugins/SMS/' . $this->plugin . '/admin/import_faculties.php', 'blurb' => $this->strings['importfaculties'], 'tooltip' => $this->strings['importfacultiestooltip']);
     }
     /**
      * Check if course import is supported by the plugin
-     * @return bool true if course import supported
+     * @return array|bool import url and translation strings, false  if course import supported
      */
     public function supports_course_import() {
-        return true;
+        return array('url' => '../plugins/SMS/' . $this->plugin . '/admin/import_courses.php', 'blurb' => $this->strings['importcourses'], 'tooltip' => $this->strings['importcoursestooltip']);
     }
     /**
      * Check if enorlment import is supported by the plugin
-     * @return bool true if enrolment import supported
+     * @return array|bool import url and translation strings, false  if enrolment import supported
      */
     public function supports_enrol_import() {
-        return true;
+        return array();
     }
 }
