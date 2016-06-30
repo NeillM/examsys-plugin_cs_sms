@@ -124,7 +124,7 @@ class enrolments_helper {
         $mm = new \api\modulemanagement($db);
         $smsimports = array();
         foreach ($enrols as $enroldata) {
-            $moduleid = \module_utils::get_moduleid_from_externalid($enroldata['ModuleID'], $db);
+            $moduleid = \module_utils::get_id_from_externalid($enroldata['ModuleID'], $db);
             // We only enrol if the module exists in rogo.
             if ($moduleid) {
                 $smsimports[$moduleid]['enrolcount'] = 0;
@@ -155,7 +155,7 @@ class enrolments_helper {
             $params['moduleextid'] = $module;
             $params['session'] = $session;
             $params['nodeid'] = $node;
-            $moduleid = \module_utils::get_moduleid_from_externalid($module, $db);
+            $moduleid = \module_utils::get_id_from_externalid($module, $db);
             // We only unenrol if the module exists in rogo.
             if ($moduleid) {
                 $smsimports[$moduleid]['unenrolcount'] = 0;

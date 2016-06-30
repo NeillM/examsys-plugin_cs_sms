@@ -80,7 +80,7 @@ class modules_helper {
         foreach ($modulearray as $mod) {
             $currentmodules[] = $mod['ModuleID'];
             $params = array();
-            $modid = \module_utils::get_moduleid_from_externalid($mod['ModuleID'], $db);
+            $modid = \module_utils::get_id_from_externalid($mod['ModuleID'], $db);
             $params['modulecode'] = self::module_campus_mapping($mod['ModuleCode']);
             $params['name'] = $mod['Description'];
             $params['schoolextid'] = $mod['SchoolID'];
