@@ -39,4 +39,4 @@ plugins:
   -
     component: "plugin_cs_sms"
     version: "1.0.0"
-    type: "sms"
+    type: "SMS"
