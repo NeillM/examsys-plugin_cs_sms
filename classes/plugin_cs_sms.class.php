@@ -177,20 +177,59 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     }
     /**
      * Enable this plugin
-     * Only one sms plugin should be enabled at anyone time
      */
     public function enable_plugin() {
-        $enabled = array($this->plugin);
+        $enabled = array();
+        $current = json_decode($this->config->get_setting($this->plugin_type, 'enabled_plugin'));
+        if (!is_null($current)) {
+            if(!array_search($this->plugin, $current)) {
+                $enabled = $current;
+                $enabled += $this->plugin;
+            }
+        } else {
+            $enabled = array($this->plugin);
+        }
         $this->config->set_setting('enabled_plugin', json_encode($enabled), 'json', 'plugin_' . $this->plugin_type);
     }
     /**
      * Disable this plugin
-     * Only one sms plugin should be enabled at anyone time
      */
     public function disable_plugin() {
+        $new = array();
         $enabled = json_decode($this->config->get_setting('plugin_' . $this->plugin_type, 'enabled_plugin'));
-        if ($this->plugin == $enabled[0]) {
-            $this->config->set_setting('enabled_plugin', json_encode(array()), 'json', 'plugin_' . $this->plugin_type);
+        foreach ($enabled as $p) {
+            if ($this->plugin != $p) {
+                $new += $p;
+            }
         }
+        $this->config->set_setting('enabled_plugin', json_encode($new), 'json', 'plugin_' . $this->plugin_type);
+    }
+    /**
+     * Check if module import is supported by the plugin
+     * @return bool true if module import supported
+     */
+    public function supports_module_import() {
+        return true;
+    }
+    /**
+     * Check if faculty/school import is supported by the plugin
+     * @return bool true if faculty/school import supported
+     */
+    public function supports_faculty_import() {
+        return true;
+    }
+    /**
+     * Check if course import is supported by the plugin
+     * @return bool true if course import supported
+     */
+    public function supports_course_import() {
+        return true;
+    }
+    /**
+     * Check if enorlment import is supported by the plugin
+     * @return bool true if enrolment import supported
+     */
+    public function supports_enrol_import() {
+        return true;
     }
 }
