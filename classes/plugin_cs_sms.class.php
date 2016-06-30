@@ -112,17 +112,31 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     /**
      * Get enrolments for academic session
      * @params integer $session academic session to sync enrolments with
+     * @params integer $externalid external system module id
      */
-    public function get_enrolments($session) {
+    public function get_enrolments($session, $externalid = null) {
         $logfile = log_helper::set_logfile($this->logdir, 'enrol');
         $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
         foreach ($campuslist as $campus) {
             $args = array('academic_session' => $session, 'campus' => $campus);
+            if (!is_null($externalid)) {
+                $args['externalid'] = $externalid;
+            }
             $response = $this->callws('RogoEnrolments', 'v1', $args);
             if ($response != '') {
                 enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation);
             }
         }
+    }
+    /**
+     * Update module in an academic session
+     * Updates module details and enrolments
+     * @params integer $externalid external system module id
+     * @params integer $session academic session to sync enrolments with
+     */
+    public function update_module_enrolments($externalid, $session) {
+        $this->get_modules($externalid, $session);
+        $this->get_enrolments($session, $externalid);
     }
     /**
      * Get faculties/schools.
@@ -146,12 +160,19 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     }
     /**
      * Get modules
+     * @params integer $externalid external system module id
      */
-    public function get_modules() {
+    public function get_modules($externalid = null, $session = null) {
+        $args = array();
         $logfile = log_helper::set_logfile($this->logdir, 'module');
-        $response = $this->callws('RogoClasses', 'v1');
+        $singleexternal = false;
+        if (!is_null($externalid) and !is_null($session)) {
+            $args = array('academic_session' => $session, 'externalid' => $externalid);
+            $singleexternal = true;
+        }
+        $response = $this->callws('RogoClasses', 'v1', $args);
         if ($response != '') {
-            modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+            modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $singleexternal);
         }
     }
     /**

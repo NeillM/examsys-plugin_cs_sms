@@ -187,7 +187,48 @@ class mappingcstest extends unittestdatabase {
         $this->assertTablesEqual($expectedTable, $queryTable);
     }
     /**
-     * Test get enrolments
+     * Test get modules with session and module as arguments
+     * @group sms
+     */
+    public function test_get_module() {
+        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
+            ->setMethods(array('callws'))
+            ->setConstructorArgs(array($this->db, 0))
+            ->getMock();
+        $sms->expects($this->once())
+            ->method('callws')
+            ->will($this->returnValue($this->modulexml));
+        $sms->get_modules('030003', 2016);
+        $queryTable = $this->getConnection()->createQueryTable('modules', 'SELECT id, moduleid, fullname, schoolid, externalid, academic_year_start FROM modules');
+        $expectedTable = $this->get_expected_data_set('faculty')->getTable("modules");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+    }
+    /**
+     * Test get enrolments with session only (all enrolments)
+     * @group sms
+     */
+    public function test_get_enrolments_all() {
+        $this->config->set_setting('campuslist', 'U', 'plugin_cs_sms');
+        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
+            ->setMethods(array('callws'))
+            ->setConstructorArgs(array($this->db, 0))
+            ->getMock();
+        $sms->expects($this->once())
+            ->method('callws')
+            ->will($this->returnValue($this->enrolxml));
+        $sms->get_enrolments(2016);
+        $queryTable = $this->getConnection()->createQueryTable('users', 'SELECT id, grade, surname, username, title, email, gender, roles, first_names, yearofstudy FROM users');
+        $expectedTable = $this->get_expected_data_set('faculty')->getTable("users");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->getConnection()->createQueryTable('sid', 'SELECT student_id, userID FROM sid');
+        $expectedTable = $this->get_expected_data_set('faculty')->getTable("sid");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->getConnection()->createQueryTable('modules_student', 'SELECT id, userID, idMod, calendar_year FROM modules_student');
+        $expectedTable = $this->get_expected_data_set('faculty')->getTable("modules_student");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+    }
+    /**
+     * Test get enrolments with session and moudle id
      * @group sms
      */
     public function test_get_enrolments() {
@@ -199,7 +240,7 @@ class mappingcstest extends unittestdatabase {
         $sms->expects($this->once())
             ->method('callws')
             ->will($this->returnValue($this->enrolxml));
-        $sms->get_enrolments(2016);
+        $sms->get_enrolments(2016, '00001111');
         $queryTable = $this->getConnection()->createQueryTable('users', 'SELECT id, grade, surname, username, title, email, gender, roles, first_names, yearofstudy FROM users');
         $expectedTable = $this->get_expected_data_set('faculty')->getTable("users");
         $this->assertTablesEqual($expectedTable, $queryTable);

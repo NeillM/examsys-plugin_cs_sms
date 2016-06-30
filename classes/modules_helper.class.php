@@ -35,17 +35,18 @@ class modules_helper {
      * @param mysqli $db db connection
      * @param string $logfile log file location
      * @param boolean $validation validate xml response against schema
+     * @param boolean $singleexternal true if updating single external module, false otherwise
      * @return boolean true on success, false on error
      */
-    static public function process($response, $userid, $strings, $db, $logfile, $validation) {
+    static public function process($response, $userid, $strings, $db, $logfile, $validation, $singleexternal) {
         // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
         $errornode = $data->getElementsByTagName('Error')->item(0);
         $errorline = __LINE__ - 1;
         if (!is_null($errornode)) {
-            foreach ($errorstring->childNodes as $childnode) {
-                if ($errornode->nodeName == 'Header') {
+            foreach ($errornode->childNodes as $childnode) {
+                if ($childnode->nodeName == 'Header') {
                     $errorline = __LINE__ - 1;
                     log_helper::log_app_warning($userid, $childnode->nodeValue, $errorline, $db);
                     return false;
@@ -99,16 +100,19 @@ class modules_helper {
             }
             log_helper::log($type, $params, $response, $logfile);
         }
+        // Do not diff modules on singel module update.
+        if (!$singleexternal) {
         // Delete modules that have been removed from CS.
-        $delete = \module_utils::diff_external_modules_to_internal_modules($currentmodules, $db);
-        // Try to delete course via modulemanagement delete api.
-        foreach ($delete as $deleteid) {
-            $params = array();
-            $params['externalid'] = $deleteid;
-            $params['nodeid'] = $node;
-            $node++;
-            $response = $mm->delete($params, $userid);
-            log_helper::log('Module Delete', $params, $response, $logfile);
+            $delete = \module_utils::diff_external_modules_to_internal_modules($currentmodules, $db);
+            // Try to delete course via modulemanagement delete api.
+            foreach ($delete as $deleteid) {
+                $params = array();
+                $params['externalid'] = $deleteid;
+                $params['nodeid'] = $node;
+                $node++;
+                $response = $mm->delete($params, $userid);
+                log_helper::log('Module Delete', $params, $response, $logfile);
+            }
         }
         return true;
     }
