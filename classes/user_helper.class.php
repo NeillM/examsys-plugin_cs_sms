@@ -28,7 +28,7 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class user_helper {
     /**
-     * Intergrate the user node of the membership xml
+     * Parse the user node of the membership xml and create/update users as required
      * @param simpleXMLObject $usernode xml for users
      * @param string $moduleextid external system module id
      * @param integer $userid user to log action to

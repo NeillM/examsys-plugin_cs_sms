@@ -28,7 +28,7 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class school_helper {
     /**
-     * Intergrate the school members node of the facultylist xml
+     * Parse the school members node of the facultylist xml and create/update schools where required
      * @param simpleXMLObject $schoolnode xml for schools
      * @param string $facultyextid external system id of faculty
      * @param mysqli $db db connection
@@ -36,7 +36,7 @@ class school_helper {
      * @param string $logfile log file location
      * @return array list of schools in faculty
      */
-    static public function get_schools ($schoolnode, $facultyextid, $db, $userid, $logfile) {
+    static public function get_schools($schoolnode, $facultyextid, $db, $userid, $logfile) {
         // Create / Update schools.
         $sm = new \api\schoolmanagement($db);
         $node = 1;
