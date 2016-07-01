@@ -41,27 +41,13 @@ class modules_helper {
         // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
-        $errornode = $data->getElementsByTagName('Error')->item(0);
-        if (!is_null($errornode)) {
-            foreach ($errornode->childNodes as $childnode) {
-                if ($childnode->nodeName == 'Header') {
-                    $errorline = __LINE__ - 1;
-                    log_helper::log_app_warning($userid, $childnode->nodeValue, $errorline, $db);
-                    return false;
-                }
-            }
+        if (xml_helper::check_for_error($data, $userid, $db)) {
+            return false;
         }
         if ($validation) {
-            // Enable user error handling.
-            libxml_use_internal_errors(true);
-            $schema = '..' . DIRECTORY_SEPARATOR . 'schema' . DIRECTORY_SEPARATOR . 'ModuleList.xsd';
-            if (!$data->schemaValidate($schema)) {
-                $errorline = __LINE__ - 1;
-                log_helper::log_app_warning($userid, $strings['restnotvalid'], $errorline, $db);
+            if (!xml_helper::validate($data, 'ModuleList', $userid, $strings, $db)) {
                 return false;
             }
-            // Disable user error handling.
-            libxml_use_internal_errors(false);
         }
         $modules = $data->getElementsByTagName('Module');
         $currentmodules = array();
