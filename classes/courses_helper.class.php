@@ -41,7 +41,6 @@ class courses_helper {
         $data = new \DOMDocument();
         $data->loadXML($response);
         $errornode = $data->getElementsByTagName('Error')->item(0);
-        $errorline = __LINE__ - 1;
         if (!is_null($errornode)) {
             foreach ($errornode->childNodes as $childnode) {
                 if ($childnode->nodeName == 'Header') {
