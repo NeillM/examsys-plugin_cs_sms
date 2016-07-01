@@ -51,30 +51,23 @@ class modules_helper {
         }
         $modules = $data->getElementsByTagName('Module');
         $currentmodules = array();
-        $modulearray = array();
-        foreach ($modules as $module) {
-            $m = array();
-            foreach ($module->childNodes as $childnode) {
-                $m[$childnode->nodeName] = $childnode->nodeValue;
-            }
-            $modulearray[] = $m;
-        }
         $node = 1;
         // Create / Update modules.
         $mm = new \api\modulemanagement($db);
-        foreach ($modulearray as $mod) {
+        foreach ($modules as $module) {
+            $xpath = new \DOMXPath($module->ownerDocument);
             // The ModuleID in Campus Solutions is the Module External ID in Rogo.
-            if (!empty($mod['ModuleID'])) {
-                $currentmodules[] = $mod['ModuleID'];
+            $externalid = $xpath->query('./ModuleID', $module)->item(0)->nodeValue;
+            if (!is_null($externalid)) {
+                $currentmodules[] = $externalid;
                 $params = array();
-                $modid = \module_utils::get_id_from_externalid($mod['ModuleID'], $db);
-                $params['modulecode'] = self::module_campus_mapping($mod['ModuleCode']);
-                $params['name'] = $mod['Description'];
-                $params['schoolextid'] = $mod['SchoolID'];
-                $params['externalid'] = $mod['ModuleID'];
+                $params['externalid'] = $externalid;
+                $params['modulecode'] = self::module_campus_mapping($xpath->query('./ModuleCode', $module)->item(0)->nodeValue);
+                $params['name'] = $xpath->query('./Description', $module)->item(0)->nodeValue;
+                $params['schoolextid'] = $xpath->query('./SchoolID', $module)->item(0)->nodeValue;
                 $params['nodeid'] = $node;
                 $params['sms'] = 'Campus Solutions';
-                $node++;
+                $modid = \module_utils::get_id_from_externalid($externalid, $db);
                 if ($modid) {
                     // If ExternalID exists call modulemanagement update api.
                     $response = $mm->update($params, $userid);
@@ -86,6 +79,7 @@ class modules_helper {
                 }
                 log_helper::log($type, $params, $response, $logfile);
             }
+
         }
         // Do not diff modules on singel module update.
         if (!$singleexternal) {

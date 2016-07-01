@@ -51,27 +51,21 @@ class courses_helper {
         // Courses in Rogo are Plans in Campus Solutions.
         $plans = $data->getElementsByTagName('Plan');
         $currentplans = array();
-        $courses = array();
-        foreach ($plans as $plan) {
-            $course = array();
-            foreach ($plan->childNodes as $childnode) {
-                $course[$childnode->nodeName] = $childnode->nodeValue;
-            }
-            $courses[] = $course;
-        }
         $node = 1;
         // Create / Update Courses.
         $cm = new \api\coursemanagement($db);
-        foreach ($courses as $coursedata) {
+        foreach ($plans as $plan) {
+            $xpath = new \DOMXPath($plan->ownerDocument);
             // The PlanID in Campus Solutions is the Course External ID in Rogo.
-            if (!empty($coursedata['PlanID'])) {
-                $currentplans[] = $coursedata['PlanID'];
+            $externalid = $xpath->query('./PlanID', $plan)->item(0)->nodeValue;
+            if (!is_null($externalid)) {
+                $currentplans[] = $externalid;
                 $params = array();
-                $courseid = \CourseUtils::get_courseid_from_externalid($coursedata['PlanID'], $db);
-                $params['name'] = $coursedata['PlanCode'];
-                $params['description'] = $coursedata['PlanDescr'];
-                $params['schoolextid'] = $coursedata['SchoolID'];
-                $params['externalid'] = $coursedata['PlanID'];
+                $courseid = \CourseUtils::get_courseid_from_externalid($externalid, $db);
+                $params['name'] = $xpath->query('./PlanCode', $plan)->item(0)->nodeValue;
+                $params['description'] = $xpath->query('./PlanDescr', $plan)->item(0)->nodeValue;
+                $params['schoolextid'] = $xpath->query('./SchoolID', $plan)->item(0)->nodeValue;
+                $params['externalid'] = $externalid;
                 $params['nodeid'] = $node;
                 $node++;
                 if ($courseid) {

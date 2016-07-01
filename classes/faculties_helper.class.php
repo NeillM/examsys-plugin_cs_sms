@@ -51,31 +51,21 @@ class faculties_helper {
         $faculties = $data->getElementsByTagName('Faculty');
         $currentfaculties = array();
         $currentschools = array();
-        $facs = array();
         $schools = array();
-        foreach ($faculties as $faculty) {
-            $fac = array();
-            foreach ($faculty->childNodes as $childnode) {
-                if ($childnode->nodeName == 'MemberSchools') {
-                    school_helper::get_schools($schools, $childnode->childNodes, $faculty);
-                } else {
-                    $fac[$childnode->nodeName] = $childnode->nodeValue;
-                }
-            }
-            $facs[] = $fac;
-        }
         $node = 1;
         // Create / Update faculties.
         $fm = new \api\facultymanagement($db);
-        foreach ($facs as $facultydata) {
+        foreach ($faculties as $faculty) {
+            $xpath = new \DOMXPath($faculty->ownerDocument);
             // The FacultyID in Campus Solutions is the Faculty External ID in Rogo.
-            if (!empty($facultydata['FacultyID'])) {
-                $currentfaculties[] = $facultydata['FacultyID'];
+            $externalid = $xpath->query('./FacultyID', $faculty)->item(0)->nodeValue;
+            if (!is_null($externalid)) {
+                $currentfaculties[] = $externalid;
                 $params = array();
-                $facultyid= \FacultyUtils::get_facultyid_from_externalid($facultydata['FacultyID'], $db);
-                $params['code'] = $facultydata['FacultyCode'];
-                $params['name'] = $facultydata['FacultyDescr'];
-                $params['externalid'] = $facultydata['FacultyID'];
+                $facultyid= \FacultyUtils::get_facultyid_from_externalid($externalid, $db);
+                $params['code'] = $xpath->query('./FacultyCode', $faculty)->item(0)->nodeValue;
+                $params['name'] = $xpath->query('./FacultyDescr', $faculty)->item(0)->nodeValue;
+                $params['externalid'] = $externalid;
                 $params['nodeid'] = $node;
                 $node++;
                 if ($facultyid) {
@@ -89,6 +79,8 @@ class faculties_helper {
                 }
                 log_helper::log($type, $params, $response, $logfile);
             }
+            $memberschools = $xpath->query('./MemberSchools', $faculty)->item(0)->childNodes;
+            school_helper::get_schools($schools, $memberschools, $faculty);
         }
         // Create / Update schools.
         $sm = new \api\schoolmanagement($db);
