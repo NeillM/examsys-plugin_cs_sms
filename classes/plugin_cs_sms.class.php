@@ -15,11 +15,6 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace plugins\SMS\plugin_cs_sms;
-use plugins\SMS\plugin_cs_sms\log_helper as log_helper,
-    plugins\SMS\plugin_cs_sms\enrolments_helper as enrolments_helper,
-    plugins\SMS\plugin_cs_sms\faculties_helper as faculties_helper,
-    plugins\SMS\plugin_cs_sms\courses_helper as courses_helper,
-    plugins\SMS\plugin_cs_sms\modules_helper as modules_helper;
 /**
 * SMS plugin helper file
 * 

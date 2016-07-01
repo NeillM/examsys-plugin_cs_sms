@@ -15,8 +15,6 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace plugins\SMS\plugin_cs_sms;
-use plugins\SMS\plugin_cs_sms\school_helper as school_helper,
-    plugins\SMS\plugin_cs_sms\log_helper as log_helper;
 /**
 * Faculties processig file
 * 
