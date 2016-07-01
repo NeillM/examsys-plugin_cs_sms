@@ -3,6 +3,14 @@ academic_year:
     calendar_year: 2016
     academic_year: "2016/17"
 config:
+  -
+    component: "plugin_sms"
+    setting: "enabled_plugin"
+    value: "[\"plugin_cs_sms\"]"
+  -
+    component: "plugin_cs_sms"
+    setting: "installed"
+    value: 1
 faculty:
   -
     id: 1

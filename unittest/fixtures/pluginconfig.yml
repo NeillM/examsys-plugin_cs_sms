@@ -35,6 +35,10 @@ config:
     component: "plugin_cs_sms"
     setting: "validate_schema"
     value: "1"
+  -
+    component: "plugin_sms"
+    setting: "enabled_plugin"
+    value: "[\"plugin_cs_sms\"]"
 plugins:
   -
     component: "plugin_cs_sms"
