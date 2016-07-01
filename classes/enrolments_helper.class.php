@@ -178,7 +178,6 @@ class enrolments_helper {
                             }
                         }
                     }
-                    // Log SMS import info.
                     $smsimports[$moduleid]['enrolusers'] = rtrim($smsimports[$moduleid]['enrolusers'], ',');
                     $smsimports[$moduleid]['unenrolusers'] = rtrim($smsimports[$moduleid]['unenrolusers'], ',');
                 }
