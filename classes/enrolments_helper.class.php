@@ -51,69 +51,20 @@ class enrolments_helper {
         }
         $enrolments = $data->getElementsByTagName('Module');
         $current_enrols = array();
-        $users = array();
         // Enrol/UnEnrol users on to modules.
         $mm = new \api\modulemanagement($db);
         $smsimports = array();
         $node = 1;
+        $userupdated = array();
         foreach ($enrolments as $enrolment) {
+            $currentenrols = array();
             $xpath = new \DOMXPath($enrolment->ownerDocument);
             // The ModuleID in Campus Solutions is the Module External ID in Rogo.
             $externalid = $xpath->query('./ModuleID', $enrolment)->item(0)->nodeValue;
             if (!is_null($externalid)) {
                 // Create/update users.
                 $usermembership = $xpath->query('./Membership', $enrolment)->item(0)->childNodes;
-                user_helper::get_users($users, $usermembership, $enrolment);
-                $um = new \api\usermanagement($db);
-                $userupdated = array();
-                foreach ($users as $moduleextid => $moduleenroldata) {
-                    foreach ($moduleenroldata as $useridx => $userdata) {
-                        if (!empty($userdata['UserId'])) {
-                            // Only update a user once per enrolment import.
-                            if (!in_array($userdata['UserId'], $userupdated)) {
-                                $params = array();
-                                // Status affects Role.
-                                if ($userdata['Role'] == 'Student') {
-                                    $params['role'] = user_helper::map_student_status($userdata['Status']);
-                                } else {
-                                    //Non Students not supported.
-                                    continue;
-                                }
-                                $currentenrols[$moduleextid][] = $userdata['UserId'];
-                                $id = \UserUtils::studentid_exists($userdata['UserId'], $db);
-                                // Student IDs in Rogo are User IDs in Campus Solutions.
-                                $params['studentid'] = $userdata['UserId'];
-                                $params['username'] = $userdata['Username'];
-                                $params['forename'] = $userdata['ForeName'];
-                                $params['surname'] = $userdata['Surname'];
-                                $params['title'] = user_helper::map_title($userdata['Title']);
-                                $params['email'] = $userdata['Email'];
-                                $params['gender'] = user_helper::map_gender($userdata['Gender'], $params['title']);
-                                $params['course'] = $userdata['PlanID']; 
-                                $params['year'] = user_helper::map_yearofstudy($userdata['YearOfStudy']);
-                                $params['nodeid'] = $node;
-                                $node++;
-                                if ($id) {
-                                    // Update User.
-                                    $params['id'] = $id;
-                                    $response = $um->update($params, $userid);
-                                    if ($response['status'] === 100) {
-                                        $userupdated[] = $userdata['UserId'];
-                                    }
-                                    $type = 'User Update';
-                                } else {
-                                    //Create User.
-                                    $response = $um->create($params, $userid);
-                                    if ($response['status'] === 100) {
-                                        $userupdated[] = $userdata['UserId'];
-                                    }
-                                    $type = 'User Create';
-                                }
-                                log_helper::log($type, $params, $response, $logfile);
-                            }
-                        }
-                    }
-                }
+                $currentenrols = user_helper::get_users($usermembership, $externalid, $userid, $logfile, $db, $userupdated);
                 // Enrol / Unerol users.
                 $moduleid = \module_utils::get_id_from_externalid($externalid, $db);
                 // We only enrol/unenrol if the module exists in rogo.
@@ -126,9 +77,9 @@ class enrolments_helper {
                     $params['moduleextid'] = $externalid;
                     $params['session'] = $session;
                     // Enrol.
-                    foreach ($users[$externalid] as $useridx => $userdata) {
+                    foreach ($currentenrols[$externalid] as $userexternalid => $username) {
                         // Student IDs in Rogo are User IDs in Campus Solutions.
-                        $params['studentid'] = $userdata['UserId'];
+                        $params['studentid'] = $userexternalid;
                         $params['session'] = $xpath->query('./Year', $enrolment)->item(0)->nodeValue;
                         $params['attempt'] = 1;
                         $params['nodeid'] = $node;
@@ -137,7 +88,7 @@ class enrolments_helper {
                         log_helper::log('Enrol', $params, $response, $logfile);
                         if ($response['statuscode'] === 100) {
                             $smsimports[$moduleid]['enrolcount']++;
-                            $smsimports[$moduleid]['enrolusers'] .= $userdata['Username'] . ',';
+                            $smsimports[$moduleid]['enrolusers'] .= $username . ',';
                         }
                     }
                     // Unenrol.
@@ -147,7 +98,7 @@ class enrolments_helper {
                     $membership = \module_utils::get_student_members($session, $moduleid, $db);
                     foreach ($membership as $idx => $member) {
                         $details = \UserUtils::get_full_details_by_ID($member['userID'], $db);
-                        if (!in_array($details['studentid'], $currentenrols[$externalid])) {
+                        if (!key_exists($details['studentid'], $currentenrols[$externalid])) {
                             $params['studentid'] = $details['studentid'];
                             $params['nodeid'] = $node;
                             $response = $mm->unenrol($params, $userid);

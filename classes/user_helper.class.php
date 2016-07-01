@@ -29,26 +29,69 @@ namespace plugins\SMS\plugin_cs_sms;
 class user_helper {
     /**
      * Intergrate the user node of the membership xml
-     * @param array $users users array to populate
-     * @param simpleXMLObject $membership xml for user membership
-     * @param simpleXMLObject $parentnode xml for enrolment
+     * @param simpleXMLObject $usernode xml for users
+     * @param string $moduleextid external system module id
+     * @param integer $userid user to log action to
+     * @param string $logfile log file location
+     * @param mysqli $db db connection
+     * @param array $userupdated list of users already updated so we can skip
+     * @return array list of enrolled users
      */
-    static public function get_users(&$users, $membershipnode, $parentnode) {
-        $xpath = new \DOMXPath($parentnode->ownerDocument);
-        $results = $xpath->query('./ModuleID', $parentnode);
-        if ($results->length > 0) {
-            $moduleid = $results->item(0)->nodeValue;
-        }
-        $i = 0;
-        foreach ($membershipnode as $membership) {
-            // Should only be user nodes
-            if ($membership->nodeName == 'User') {
-                foreach ($membership->childNodes as $userdetails) {
-                    $users[$moduleid][$i][$userdetails->nodeName] = $userdetails->nodeValue;
+    static public function get_users($usernode, $moduleextid, $userid, $logfile, $db, &$userupdated) {
+        $currentenrols = array();
+        foreach ($usernode as $users) {
+            if ($users->hasChildNodes()) {
+                $xpath = new \DOMXPath($users->ownerDocument);
+                // Student IDs in Rogo are User IDs in Campus Solutions.
+                $externalid = $xpath->query('./UserId', $users)->item(0)->nodeValue;
+                $node = 1;
+                if (!is_null($externalid)) {
+                    $um = new \api\usermanagement($db);
+                    // Only update a user once per enrolment import.
+                    if (!in_array($externalid, $userupdated)) {
+                        $params = array();
+                        // Status affects Role.
+                        if ($xpath->query('./Role', $users)->item(0)->nodeValue == 'Student') {
+                            $params['role'] = self::map_student_status($xpath->query('./Status', $users)->item(0)->nodeValue);
+                        } else {
+                            //Non Students not supported.
+                            continue;
+                        }
+                        $id = \UserUtils::studentid_exists($externalid, $db);
+                        $params['studentid'] = $externalid;
+                        $params['username'] = $xpath->query('./Username', $users)->item(0)->nodeValue;
+                        $params['forename'] = $xpath->query('./ForeName', $users)->item(0)->nodeValue;
+                        $params['surname'] = $xpath->query('./Surname', $users)->item(0)->nodeValue;
+                        $params['title'] = self::map_title($xpath->query('./Title', $users)->item(0)->nodeValue);
+                        $params['email'] = $xpath->query('./Email', $users)->item(0)->nodeValue;
+                        $params['gender'] = self::map_gender($xpath->query('./Gender', $users)->item(0)->nodeValue, $params['title']);
+                        $params['course'] = $xpath->query('./PlanID', $users)->item(0)->nodeValue;
+                        $params['year'] = self::map_yearofstudy($xpath->query('./YearOfStudy', $users)->item(0)->nodeValue);
+                        $params['nodeid'] = $node;
+                        $currentenrols[$moduleextid][$externalid] = $params['username'];
+                        $node++;
+                        if ($id) {
+                            // Update User.
+                            $params['id'] = $id;
+                            $response = $um->update($params, $userid);
+                            if ($response['status'] === 100) {
+                                $userupdated[] = $externalid;
+                            }
+                            $type = 'User Update';
+                        } else {
+                            //Create User.
+                            $response = $um->create($params, $userid);
+                            if ($response['status'] === 100) {
+                                $userupdated[] = $externalid;
+                            }
+                            $type = 'User Create';
+                        }
+                        log_helper::log($type, $params, $response, $logfile);
+                    }
                 }
-                $i++;
             }
         }
+        return $currentenrols;
     }
     /**
      * Function to map gender supplied by CS to gender in Rogo

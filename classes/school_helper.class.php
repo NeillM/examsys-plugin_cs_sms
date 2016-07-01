@@ -29,24 +29,46 @@ namespace plugins\SMS\plugin_cs_sms;
 class school_helper {
     /**
      * Intergrate the school members node of the facultylist xml
-     * @param array $schoools schools array to populate
      * @param simpleXMLObject $schoolnode xml for schools
-     * @param simpleXMLObject $parentnode xml for schools faculty
+     * @param string $facultyextid external system id of faculty
+     * @param mysqli $db db connection
+     * @param integer $userid user to log action to
+     * @param string $logfile log file location
+     * @return array list of schools in faculty
      */
-    static public function get_schools(&$schools, $schoolnode, $parentnode) {
-        $xpath = new \DOMXPath($parentnode->ownerDocument);
-        $results = $xpath->query('./FacultyID', $parentnode);
-        if ($results->length > 0) {
-            $facultyid = $results->item(0)->nodeValue;
-        }
-        $i = 0;
+    static public function get_schools ($schoolnode, $facultyextid, $db, $userid, $logfile) {
+        // Create / Update schools.
+        $sm = new \api\schoolmanagement($db);
+        $node = 1;
+        $currentschools = array();
         foreach ($schoolnode as $school) {
+            $xpath = new \DOMXPath($school->ownerDocument);
             if ($school->hasChildNodes()) {
-                foreach ($school->childNodes as $childnode) {
-                    $schools[$facultyid][$i][$childnode->nodeName] = $childnode->nodeValue;
+                // The SchoolID in Campus Solutions is the School External ID in Rogo.
+                $externalid = $xpath->query('./SchoolID', $school)->item(0)->nodeValue;
+                if (!is_null($externalid)) {
+                    $currentschools[] = $externalid;
+                    $params = array();
+                    $schoolid = \SchoolUtils::get_schoolid_from_externalid($externalid, $db);
+                    $params['code'] = $xpath->query('./SchoolCode', $school)->item(0)->nodeValue;
+                    $params['name'] = $xpath->query('./SchoolDescr', $school)->item(0)->nodeValue;
+                    $params['externalid'] = $externalid;
+                    $params['facultyextid'] = $facultyextid;
+                    $params['nodeid'] = $node;
+                    $node++;
+                    if ($schoolid) {
+                        // If ExternalID exists call schoolmanagement update api.
+                        $response = $sm->update($params, $userid);
+                        $type = 'School Update';
+                    } else {
+                        // If ExternalID new call schoolmanagement create api.
+                        $response = $sm->create($params, $userid);
+                        $type = 'School Create';
+                    }
+                    log_helper::log($type, $params, $response, $logfile);
                 }
-                $i++;
             }
         }
+        return $currentschools;
     }
 }

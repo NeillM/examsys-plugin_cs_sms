@@ -51,7 +51,6 @@ class faculties_helper {
         $faculties = $data->getElementsByTagName('Faculty');
         $currentfaculties = array();
         $currentschools = array();
-        $schools = array();
         $node = 1;
         // Create / Update faculties.
         $fm = new \api\facultymanagement($db);
@@ -78,39 +77,12 @@ class faculties_helper {
                     $type = 'Faculty Create';
                 }
                 log_helper::log($type, $params, $response, $logfile);
-            }
-            $memberschools = $xpath->query('./MemberSchools', $faculty)->item(0)->childNodes;
-            school_helper::get_schools($schools, $memberschools, $faculty);
-        }
-        // Create / Update schools.
-        $sm = new \api\schoolmanagement($db);
-        foreach ($schools as $facultyextid => $facultydata) {
-            foreach ($facultydata as $schoolidx => $schooldata) {
-                // The SchoolID in Campus Solutions is the School External ID in Rogo.
-                if (!empty($schooldata['SchoolID'])) {
-                    $currentschools[] = $schooldata['SchoolID'];
-                    $params = array();
-                    $schoolid = \SchoolUtils::get_schoolid_from_externalid($schooldata['SchoolID'], $db);
-                    $params['code'] = $schooldata['SchoolCode'];
-                    $params['name'] = $schooldata['SchoolDescr'];
-                    $params['externalid'] = $schooldata['SchoolID'];
-                    $params['facultyextid'] = $facultyextid;
-                    $params['nodeid'] = $node;
-                    $node++;
-                    if ($schoolid) {
-                        // If ExternalID exists call schoolmanagement update api.
-                        $response = $sm->update($params, $userid);
-                        $type = 'School Update';
-                    } else {
-                        // If ExternalID new call schoolmanagement create api.
-                        $response = $sm->create($params, $userid);
-                        $type = 'School Create';
-                    }
-                    log_helper::log($type, $params, $response, $logfile);
-                }
+                $memberschools = $xpath->query('./MemberSchools', $faculty)->item(0)->childNodes;
+                $currentschools = array_merge($currentschools, school_helper::get_schools($memberschools, $externalid, $db, $userid, $logfile));
             }
         }
         // Delete schools that have been removed from CS.
+        $sm = new \api\schoolmanagement($db);
         $delete = \SchoolUtils::diff_external_schools_to_internal_schools($currentschools, $db);
         // Try to delete course via schoolmanagement delete api.
         foreach ($delete as $deleteid) {
