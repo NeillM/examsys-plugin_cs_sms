@@ -83,49 +83,53 @@ class faculties_helper {
         $fm = new \api\facultymanagement($db);
         foreach ($facs as $facultydata) {
             // The FacultyID in Campus Solutions is the Faculty External ID in Rogo.
-            $currentfaculties[] = $facultydata['FacultyID'];
-            $params = array();
-            $facultyid= \FacultyUtils::get_facultyid_from_externalid($facultydata['FacultyID'], $db);
-            $params['code'] = $facultydata['FacultyCode'];
-            $params['name'] = $facultydata['FacultyDescr'];
-            $params['externalid'] = $facultydata['FacultyID'];
-            $params['nodeid'] = $node;
-            $node++;
-            if ($facultyid) {
-                // If ExternalID exists call facultymanagement update api.
-                $response = $fm->update($params, $userid);
-                $type = 'Faculty Update';
-            } else {
-                // If ExternalID new call facultymanagement create api.
-                $response = $fm->create($params, $userid);
-                $type = 'Faculty Create';
+            if (!empty($facultydata['FacultyID'])) {
+                $currentfaculties[] = $facultydata['FacultyID'];
+                $params = array();
+                $facultyid= \FacultyUtils::get_facultyid_from_externalid($facultydata['FacultyID'], $db);
+                $params['code'] = $facultydata['FacultyCode'];
+                $params['name'] = $facultydata['FacultyDescr'];
+                $params['externalid'] = $facultydata['FacultyID'];
+                $params['nodeid'] = $node;
+                $node++;
+                if ($facultyid) {
+                    // If ExternalID exists call facultymanagement update api.
+                    $response = $fm->update($params, $userid);
+                    $type = 'Faculty Update';
+                } else {
+                    // If ExternalID new call facultymanagement create api.
+                    $response = $fm->create($params, $userid);
+                    $type = 'Faculty Create';
+                }
+                log_helper::log($type, $params, $response, $logfile);
             }
-            log_helper::log($type, $params, $response, $logfile);
         }
         // Create / Update schools.
         $sm = new \api\schoolmanagement($db);
         foreach ($schools as $facultyextid => $facultydata) {
             foreach ($facultydata as $schoolidx => $schooldata) {
-            // The SchoolID in Campus Solutions is the School External ID in Rogo.
-                $currentschools[] = $schooldata['SchoolID'];
-                $params = array();
-                $schoolid = \SchoolUtils::get_schoolid_from_externalid($schooldata['SchoolID'], $db);
-                $params['code'] = $schooldata['SchoolCode'];
-                $params['name'] = $schooldata['SchoolDescr'];
-                $params['externalid'] = $schooldata['SchoolID'];
-                $params['facultyextid'] = $facultyextid;
-                $params['nodeid'] = $node;
-                $node++;
-                if ($schoolid) {
-                    // If ExternalID exists call schoolmanagement update api.
-                    $response = $sm->update($params, $userid);
-                    $type = 'School Update';
-                } else {
-                    // If ExternalID new call schoolmanagement create api.
-                    $response = $sm->create($params, $userid);
-                    $type = 'School Create';
+                // The SchoolID in Campus Solutions is the School External ID in Rogo.
+                if (!empty($schooldata['SchoolID'])) {
+                    $currentschools[] = $schooldata['SchoolID'];
+                    $params = array();
+                    $schoolid = \SchoolUtils::get_schoolid_from_externalid($schooldata['SchoolID'], $db);
+                    $params['code'] = $schooldata['SchoolCode'];
+                    $params['name'] = $schooldata['SchoolDescr'];
+                    $params['externalid'] = $schooldata['SchoolID'];
+                    $params['facultyextid'] = $facultyextid;
+                    $params['nodeid'] = $node;
+                    $node++;
+                    if ($schoolid) {
+                        // If ExternalID exists call schoolmanagement update api.
+                        $response = $sm->update($params, $userid);
+                        $type = 'School Update';
+                    } else {
+                        // If ExternalID new call schoolmanagement create api.
+                        $response = $sm->create($params, $userid);
+                        $type = 'School Create';
+                    }
+                    log_helper::log($type, $params, $response, $logfile);
                 }
-                log_helper::log($type, $params, $response, $logfile);
             }
         }
         // Delete schools that have been removed from CS.

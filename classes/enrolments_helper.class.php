@@ -81,97 +81,107 @@ class enrolments_helper {
         $node = 1;
         // Create/update users.
         $um = new \api\usermanagement($db);
+        $userupdated = array();
         foreach ($users as $moduleextid => $moduleenroldata) {
             foreach ($moduleenroldata as $useridx => $userdata) {
-                $params = array();
-                // Status affects Role.
-                if ($userdata['Role'] == 'Student') {
-                    $params['role'] = user_helper::map_student_status($userdata['Status']);
-                } else {
-                    //Non Students not supported.
-                    continue;
+                if (!empty($userdata['UserId'])) {
+                    // Only update a user once per enrolment import.
+                    if (!in_array($userdata['UserId'], $userupdated)) {
+                        $params = array();
+                        // Status affects Role.
+                        if ($userdata['Role'] == 'Student') {
+                            $params['role'] = user_helper::map_student_status($userdata['Status']);
+                        } else {
+                            //Non Students not supported.
+                            continue;
+                        }
+                        $currentenrols[$moduleextid][] = $userdata['UserId'];
+                        $id = \UserUtils::studentid_exists($userdata['UserId'], $db);
+                        // Student IDs in Rogo are User IDs in Campus Solutions.
+                        $params['studentid'] = $userdata['UserId'];
+                        $params['username'] = $userdata['Username'];
+                        $params['forename'] = $userdata['ForeName'];
+                        $params['surname'] = $userdata['Surname'];
+                        $params['title'] = user_helper::map_title($userdata['Title']);
+                        $params['email'] = $userdata['Email'];
+                        $params['gender'] = user_helper::map_gender($userdata['Gender'], $params['title']);
+                        $params['course'] = $userdata['PlanID']; 
+                        $params['year'] = user_helper::map_yearofstudy($userdata['YearOfStudy']);
+                        $params['nodeid'] = $node;
+                        $node++;
+                        if ($id) {
+                            // Update User.
+                            $params['id'] = $id;
+                            $response = $um->update($params, $userid);
+                            if ($response['status'] === 100) {
+                                $userupdated[] = $userdata['UserId'];
+                            }
+                            $type = 'User Update';
+                        } else {
+                            //Create User.
+                            $response = $um->create($params, $userid);
+                            if ($response['status'] === 100) {
+                                $userupdated[] = $userdata['UserId'];
+                            }
+                            $type = 'User Create';
+                        }
+                        log_helper::log($type, $params, $response, $logfile);
+                    }
                 }
-                $currentenrols[$moduleextid][] = $userdata['UserId'];
-                $id = \UserUtils::studentid_exists($userdata['UserId'], $db);
-                // Student IDs in Rogo are User IDs in Campus Solutions.
-                $params['studentid'] = $userdata['UserId'];
-                $params['username'] = $userdata['Username'];
-                $params['forename'] = $userdata['ForeName'];
-                $params['surname'] = $userdata['Surname'];
-                $params['title'] = user_helper::map_title($userdata['Title']);
-                $params['email'] = $userdata['Email'];
-                $params['gender'] = user_helper::map_gender($userdata['Gender'], $params['title']);
-                $params['course'] = $userdata['PlanID']; 
-                $params['year'] = user_helper::map_yearofstudy($userdata['YearOfStudy']);
-                $params['nodeid'] = $node;
-                $node++;
-                if ($id) {
-                    // Update User.
-                    $params['id'] = $id;
-                    $response = $um->update($params, $userid);
-                    $type = 'User Update';
-                } else {
-                    //Create User.
-                    $response = $um->create($params, $userid);
-                    $type = 'User Create';
-                }
-                log_helper::log($type, $params, $response, $logfile);
             }
         }
-        // Enrol users on to modules.
+        // Enrol/UnEnrol users on to modules.
         $mm = new \api\modulemanagement($db);
         $smsimports = array();
         foreach ($enrols as $enroldata) {
-            $moduleid = \module_utils::get_id_from_externalid($enroldata['ModuleID'], $db);
-            // We only enrol if the module exists in rogo.
-            if ($moduleid) {
-                $smsimports[$moduleid]['enrolcount'] = 0;
-                $smsimports[$moduleid]['enrolusers'] = '';
-                foreach ($users[$enroldata['ModuleID']] as $useridx => $userdata) {
+            if (!empty($enroldata['ModuleID'])) {
+                $moduleid = \module_utils::get_id_from_externalid($enroldata['ModuleID'], $db);
+                // We only enrol/unenrol if the module exists in rogo.
+                if ($moduleid) {
+                    $smsimports[$moduleid]['enrolcount'] = 0;
+                    $smsimports[$moduleid]['enrolusers'] = '';
+                    $smsimports[$moduleid]['unenrolcount'] = 0;
+                    $smsimports[$moduleid]['unenrolusers'] = '';
                     $params = array();
-                    $params['studentid'] = $userdata['UserId'];
                     $params['moduleextid'] = $enroldata['ModuleID'];
-                    $params['session'] = $enroldata['Year'];
-                    $params['attempt'] = 1;
-                    $params['nodeid'] = $node;
-                    $node++;
-                    $response = $mm->enrol($params, $userid);
-                    log_helper::log('Enrol', $params, $response, $logfile);
-                    if ($response['statuscode'] === 100) {
-                        $smsimports[$moduleid]['enrolcount']++;
-                        $id = \UserUtils::studentid_exists($userdata['UserId'], $db);
-                        $details = \UserUtils::get_full_details_by_ID($id, $db);
-                        $smsimports[$moduleid]['enrolusers'] .= $details['username'] . ',';
-                    }
-                }
-                $smsimports[$moduleid]['enrolusers'] = rtrim($smsimports[$moduleid]['enrolusers'], ',');
-            }
-        }
-        // UnEnrol users from modules.
-        foreach ($currentenrols as $module => $users) {
-            $params = array();
-            $params['moduleextid'] = $module;
-            $params['session'] = $session;
-            $params['nodeid'] = $node;
-            $moduleid = \module_utils::get_id_from_externalid($module, $db);
-            // We only unenrol if the module exists in rogo.
-            if ($moduleid) {
-                $smsimports[$moduleid]['unenrolcount'] = 0;
-                $smsimports[$moduleid]['unenrolusers'] = '';
-                $membership = \module_utils::get_student_members($session, $moduleid, $db);
-                foreach ($membership as $idx => $member) {
-                    $details = \UserUtils::get_full_details_by_ID($member['userID'], $db);
-                    if (!in_array($details['studentid'], $currentenrols[$module])) {
-                        $params['studentid'] = $details['studentid'];
-                        $response = $mm->unenrol($params, $userid);
-                        log_helper::log('UnEnrol', $params, $response, $logfile);
+                    $params['session'] = $session;
+                    // Enrol.
+                    foreach ($users[$enroldata['ModuleID']] as $useridx => $userdata) {
+                        $params['studentid'] = $userdata['UserId'];
+                        $params['session'] = $enroldata['Year'];
+                        $params['attempt'] = 1;
+                        $params['nodeid'] = $node;
+                        $node++;
+                        $response = $mm->enrol($params, $userid);
+                        log_helper::log('Enrol', $params, $response, $logfile);
                         if ($response['statuscode'] === 100) {
-                            $smsimports[$moduleid]['unenrolcount']++;
-                            $smsimports[$moduleid]['unenrolusers'] .= $details['username'] . ',';
+                            $smsimports[$moduleid]['enrolcount']++;
+                            $smsimports[$moduleid]['enrolusers'] .= $userdata['Username'] . ',';
                         }
                     }
+                    // Unenrol.
+                    $params = array();
+                    $params['moduleextid'] = $enroldata['ModuleID'];
+                    $params['session'] = $session;
+                    $membership = \module_utils::get_student_members($session, $moduleid, $db);
+                    foreach ($membership as $idx => $member) {
+                        $details = \UserUtils::get_full_details_by_ID($member['userID'], $db);
+                        if (!in_array($details['studentid'], $currentenrols[$enroldata['ModuleID']])) {
+                            $params['studentid'] = $details['studentid'];
+                            $params['nodeid'] = $node;
+                            $response = $mm->unenrol($params, $userid);
+                            $node++;
+                            log_helper::log('UnEnrol', $params, $response, $logfile);
+                            if ($response['statuscode'] === 100) {
+                                $smsimports[$moduleid]['unenrolcount']++;
+                                $smsimports[$moduleid]['unenrolusers'] .= $details['username'] . ',';
+                            }
+                        }
+                    }
+                    // Log SMS import info.
+                    $smsimports[$moduleid]['enrolusers'] = rtrim($smsimports[$moduleid]['enrolusers'], ',');
+                    $smsimports[$moduleid]['unenrolusers'] = rtrim($smsimports[$moduleid]['unenrolusers'], ',');
                 }
-                $smsimports[$moduleid]['unenrolusers'] = rtrim($smsimports[$moduleid]['unenrolusers'], ',');
             }
         }
         foreach ($smsimports as $idMod => $details) {

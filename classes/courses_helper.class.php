@@ -78,25 +78,27 @@ class courses_helper {
         $cm = new \api\coursemanagement($db);
         foreach ($courses as $coursedata) {
             // The PlanID in Campus Solutions is the Course External ID in Rogo.
-            $currentplans[] = $coursedata['PlanID'];
-            $params = array();
-            $courseid = \CourseUtils::get_courseid_from_externalid($coursedata['PlanID'], $db);
-            $params['name'] = $coursedata['PlanCode'];
-            $params['description'] = $coursedata['PlanDescr'];
-            $params['schoolextid'] = $coursedata['SchoolID'];
-            $params['externalid'] = $coursedata['PlanID'];
-            $params['nodeid'] = $node;
-            $node++;
-            if ($courseid) {
-                // If ExternalID exists call coursemanagement update api.
-                $response = $cm->update($params, $userid);
-                $type = 'Course Update';
-            } else {
-                // If ExternalID new call coursemanagement create api.
-                $response = $cm->create($params, $userid);
-                $type = 'Course Create';
+            if (!empty($coursedata['PlanID'])) {
+                $currentplans[] = $coursedata['PlanID'];
+                $params = array();
+                $courseid = \CourseUtils::get_courseid_from_externalid($coursedata['PlanID'], $db);
+                $params['name'] = $coursedata['PlanCode'];
+                $params['description'] = $coursedata['PlanDescr'];
+                $params['schoolextid'] = $coursedata['SchoolID'];
+                $params['externalid'] = $coursedata['PlanID'];
+                $params['nodeid'] = $node;
+                $node++;
+                if ($courseid) {
+                    // If ExternalID exists call coursemanagement update api.
+                    $response = $cm->update($params, $userid);
+                    $type = 'Course Update';
+                } else {
+                    // If ExternalID new call coursemanagement create api.
+                    $response = $cm->create($params, $userid);
+                    $type = 'Course Create';
+                }
+                log_helper::log($type, $params, $response, $logfile);
             }
-            log_helper::log($type, $params, $response, $logfile);
         }
         // Delete courses that have been removed from CS.
         $delete = \CourseUtils::diff_external_courses_to_internal_courses($currentplans, $db);
