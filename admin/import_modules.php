@@ -36,15 +36,10 @@ if (!array_key_exists($session, $supported_sessions)) {
 }
 
 $userObj = \UserObject::get_instance();
-$mappingplugin_name = plugin_manager::get_plugin_type_enabled('plugin_sms');
-if (count($mappingplugin_name) > 0) {
-    if ($mappingplugin_name[0] == 'plugin_cs_sms') {
-        $sms = new plugin_cs_sms($mysqli, $userObj->get_user_ID());
-        // Get modules.
-        $sms->get_modules();
-        // Get enrolments.
-        $sms->get_enrolments($session);
-        header("location: " . $configObject->get('cfg_root_path') . "/admin/list_modules.php", true, 303);
-    }
-}
+$sms = new plugin_cs_sms($mysqli, $userObj->get_user_ID());
+// Get modules.
+$sms->get_modules();
+// Get enrolments.
+$sms->get_enrolments($session);
+header("location: " . $configObject->get('cfg_root_path') . "/admin/list_modules.php", true, 303);
 exit();

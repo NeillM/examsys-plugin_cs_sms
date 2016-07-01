@@ -58,7 +58,17 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $langpack = new \langpack();
         $this->strings = $langpack->get_all_strings($this->langcomponent);
     }
-    
+    /**
+     * Is this plugin enabled
+     * @return boolean true if enabled
+     */
+    private function is_enabled() {
+        $enabledplugins = \plugin_manager::get_plugin_type_enabled('plugin_' . $this->plugin_type);
+        if (in_array($this->plugin, $enabledplugins)) {
+            return true;
+        }
+        return false;
+    }
     /**
      * Constructor
      * @param mysqli $mysqli db connection
@@ -110,6 +120,9 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @params integer $externalid external system module id
      */
     public function get_enrolments($session, $externalid = null) {
+        if (!$this->is_enabled()) {
+            exit();
+        }
         $logfile = log_helper::set_logfile($this->logdir, 'enrol');
         $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
         foreach ($campuslist as $campus) {
@@ -130,6 +143,9 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @params integer $session academic session to sync enrolments with
      */
     public function update_module_enrolments($externalid, $session) {
+        if (!$this->is_enabled()) {
+            exit();
+        }
         $this->get_modules($externalid, $session);
         $this->get_enrolments($session, $externalid);
     }
@@ -137,6 +153,9 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * Get faculties/schools.
      */
     public function get_faculties() {
+        if (!$this->is_enabled()) {
+            exit();
+        }
         $logfile = log_helper::set_logfile($this->logdir, 'faculty');
         $response = $this->callws('RogoSchools', 'v1');
         if ($response != '') {
@@ -147,6 +166,9 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * Get courses
      */
     public function get_courses() {
+        if (!$this->is_enabled()) {
+            exit();
+        }
         $logfile = log_helper::set_logfile($this->logdir, 'course');
         $response = $this->callws('RogoProgPlan', 'v1');
         if ($response != '') {
@@ -158,6 +180,9 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @params integer $externalid external system module id
      */
     public function get_modules($externalid = null, $session = null) {
+        if (!$this->is_enabled()) {
+            exit();
+        }
         $args = array();
         $logfile = log_helper::set_logfile($this->logdir, 'module');
         $singleexternal = false;
