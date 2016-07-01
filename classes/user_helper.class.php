@@ -34,10 +34,10 @@ class user_helper {
      * @param simpleXMLObject $parentnode xml for enrolment
      */
     static public function get_users(&$users, $membershipnode, $parentnode) {
-        foreach ($parentnode->childNodes as $childnode) {
-            if ($childnode->nodeName == 'ModuleID') {
-                $moduleid = $childnode->nodeValue;
-            }
+        $xpath = new \DOMXPath($parentnode->ownerDocument);
+        $results = $xpath->query('./ModuleID', $parentnode);
+        if ($results->length > 0) {
+            $moduleid = $results->item(0)->nodeValue;
         }
         $i = 0;
         foreach ($membershipnode as $membership) {

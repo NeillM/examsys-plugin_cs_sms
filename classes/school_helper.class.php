@@ -34,10 +34,10 @@ class school_helper {
      * @param simpleXMLObject $parentnode xml for schools faculty
      */
     static public function get_schools(&$schools, $schoolnode, $parentnode) {
-        foreach ($parentnode->childNodes as $childnode) {
-            if ($childnode->nodeName == 'FacultyID') {
-                $facultyid = $childnode->nodeValue;
-            }
+        $xpath = new \DOMXPath($parentnode->ownerDocument);
+        $results = $xpath->query('./FacultyID', $parentnode);
+        if ($results->length > 0) {
+            $facultyid = $results->item(0)->nodeValue;
         }
         $i = 0;
         foreach ($schoolnode as $school) {
