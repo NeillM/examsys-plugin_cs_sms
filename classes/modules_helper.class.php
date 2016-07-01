@@ -77,6 +77,7 @@ class modules_helper {
         // Create / Update modules.
         $mm = new \api\modulemanagement($db);
         foreach ($modulearray as $mod) {
+            // The ModuleID in Campus Solutions is the Module External ID in Rogo.
             $currentmodules[] = $mod['ModuleID'];
             $params = array();
             $modid = \module_utils::get_id_from_externalid($mod['ModuleID'], $db);

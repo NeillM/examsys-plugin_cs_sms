@@ -82,6 +82,7 @@ class faculties_helper {
         // Create / Update faculties.
         $fm = new \api\facultymanagement($db);
         foreach ($facs as $facultydata) {
+            // The FacultyID in Campus Solutions is the Faculty External ID in Rogo.
             $currentfaculties[] = $facultydata['FacultyID'];
             $params = array();
             $facultyid= \FacultyUtils::get_facultyid_from_externalid($facultydata['FacultyID'], $db);
@@ -105,6 +106,7 @@ class faculties_helper {
         $sm = new \api\schoolmanagement($db);
         foreach ($schools as $facultyextid => $facultydata) {
             foreach ($facultydata as $schoolidx => $schooldata) {
+            // The SchoolID in Campus Solutions is the School External ID in Rogo.
                 $currentschools[] = $schooldata['SchoolID'];
                 $params = array();
                 $schoolid = \SchoolUtils::get_schoolid_from_externalid($schooldata['SchoolID'], $db);

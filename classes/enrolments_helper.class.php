@@ -93,6 +93,7 @@ class enrolments_helper {
                 }
                 $currentenrols[$moduleextid][] = $userdata['UserId'];
                 $id = \UserUtils::studentid_exists($userdata['UserId'], $db);
+                // Student IDs in Rogo are User IDs in Campus Solutions.
                 $params['studentid'] = $userdata['UserId'];
                 $params['username'] = $userdata['Username'];
                 $params['forename'] = $userdata['ForeName'];

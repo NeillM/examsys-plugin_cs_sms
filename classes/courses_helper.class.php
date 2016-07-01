@@ -62,6 +62,7 @@ class courses_helper {
             // Disable user error handling.
             libxml_use_internal_errors(false);
         }
+        // Courses in Rogo are Plans in Campus Solutions.
         $plans = $data->getElementsByTagName('Plan');
         $currentplans = array();
         $courses = array();
@@ -76,6 +77,7 @@ class courses_helper {
         // Create / Update Courses.
         $cm = new \api\coursemanagement($db);
         foreach ($courses as $coursedata) {
+            // The PlanID in Campus Solutions is the Course External ID in Rogo.
             $currentplans[] = $coursedata['PlanID'];
             $params = array();
             $courseid = \CourseUtils::get_courseid_from_externalid($coursedata['PlanID'], $db);
