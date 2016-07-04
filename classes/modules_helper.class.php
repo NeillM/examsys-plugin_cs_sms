@@ -105,14 +105,16 @@ class modules_helper {
      */
     static public function module_campus_mapping($sourcecode) {
         // Check if source is campus solutions module code.
-        preg_match("/^(?P<module>[A-Z]{4}[F1-5][0-9]{3})(_(?P<country>UNUK|UNNC|UNMC))?$/", $sourcecode, $info);
+        preg_match("/^(?P<module>[A-Z]{4}[F1-5][0-9]{3})(_(?P<country>U|C|M))?$/", $sourcecode, $info);
         if (count($info) > 0) {
             $modulecode = $info['module'];
             if (isset($info['country'])) {
                 switch ($info['country']) {
-                    case 'UNNC':
-                    case 'UNMC':
-                        $modulecode .= '_' . $info['country'];
+                    case 'C':
+                        $modulecode .= '_UNNC';
+                        break;
+                    case 'M':
+                        $modulecode .= '_UNMC';
                         break;
                     default:
                         break;
