@@ -217,12 +217,14 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     public function disable_plugin() {
         $new = array();
         $enabled = json_decode($this->config->get_setting('plugin_' . $this->plugin_type, 'enabled_plugin'));
-        foreach ($enabled as $p) {
-            if ($this->plugin != $p) {
-                $new += $p;
+        if (!is_null($enabled)) {
+            foreach ($enabled as $p) {
+                if ($this->plugin != $p) {
+                    $new += $p;
+                }
             }
+            $this->config->set_setting('enabled_plugin', json_encode($new), 'json', 'plugin_' . $this->plugin_type);
         }
-        $this->config->set_setting('enabled_plugin', json_encode($new), 'json', 'plugin_' . $this->plugin_type);
     }
     /**
      * Check if module import is supported by the plugin
