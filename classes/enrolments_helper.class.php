@@ -110,24 +110,14 @@ class enrolments_helper {
                             }
                         }
                     }
+                    // Update SMS import log table.
                     $smsimports[$moduleid]['enrolusers'] = rtrim($smsimports[$moduleid]['enrolusers'], ',');
                     $smsimports[$moduleid]['unenrolusers'] = rtrim($smsimports[$moduleid]['unenrolusers'], ',');
+                    if ($smsimports[$moduleid]['unenrolcount'] > 0 or $smsimports[$moduleid]['enrolcount'] > 0) {
+                        \module_utils::log_sms_imports($moduleid, $smsimports[$moduleid]['enrolcount'], $smsimports[$moduleid]['enrolusers'], 
+                            $smsimports[$moduleid]['unenrolcount'], $smsimports[$moduleid]['unenrolusers'], 'Campus Solutions', $session, $db);
+                    }
                 }
-            }
-        }
-        // Update SMS import log table.
-        foreach ($smsimports as $idMod => $details) {
-            if (!isset($details['enrolcount'])) {
-                $details['enrolcount'] = 0;
-                $details['enrolusers'] = '';
-            }
-            if (!isset($details['unenrolcount'])) {
-                $details['unenrolcount'] = 0;
-                $details['unenrolusers'] = '';
-            }
-            if ($details['unenrolcount'] > 0 or $details['enrolcount'] > 0) {
-                \module_utils::log_sms_imports($idMod, $details['enrolcount'], $details['enrolusers'], 
-                    $details['unenrolcount'], $details['unenrolusers'], 'Campus Solutions', $session, $db);
             }
         }
         return true;
