@@ -52,6 +52,11 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      */
     private $validation;
     /**
+     * Campus Solutions web service version.
+     * @var string
+     */
+    const CSVERSIONONE = 'v1';
+    /**
      * Set the availbe land pack strings for the plugin
      */
     private function set_lang_strings() {
@@ -130,7 +135,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             if (!is_null($externalid)) {
                 $args['externalid'] = $externalid;
             }
-            $response = $this->callws('RogoEnrolments', 'v1', $args);
+            $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
             if ($response != '') {
                 enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation);
             }
@@ -157,7 +162,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             exit();
         }
         $logfile = log_helper::set_logfile($this->logdir, 'faculty');
-        $response = $this->callws('RogoSchools', 'v1');
+        $response = $this->callws('RogoSchools', self::CSVERSIONONE);
         if ($response != '') {
             faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
         }
@@ -170,7 +175,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             exit();
         }
         $logfile = log_helper::set_logfile($this->logdir, 'course');
-        $response = $this->callws('RogoProgPlan', 'v1');
+        $response = $this->callws('RogoProgPlan', self::CSVERSIONONE);
         if ($response != '') {
             courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
         }
@@ -190,7 +195,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             $args = array('academic_session' => $session, 'externalid' => $externalid);
             $singleexternal = true;
         }
-        $response = $this->callws('RogoClasses', 'v1', $args);
+        $response = $this->callws('RogoClasses', self::CSVERSIONONE, $args);
         if ($response != '') {
             modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $singleexternal);
         }
