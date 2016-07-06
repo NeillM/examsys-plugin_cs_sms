@@ -24,7 +24,7 @@ use testing\unittest\unittestdatabase;
  * @copyright Copyright (c) 2016 onwards The University of Nottingham
  * @package tests
  */
-class mappingcstest extends unittestdatabase {
+class cssmstest extends unittestdatabase {
     /**
      * Mock faculty xml
      * @var string

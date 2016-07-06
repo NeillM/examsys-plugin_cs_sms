@@ -31,11 +31,11 @@ class modules_helpertest extends UnitTest {
      */
     public function test_module_campus_mapping() {
         // UK CS module code.
-        $this->assertEquals('COMP1001', modules_helper::module_campus_mapping('COMP1001_UNUK'));
+        $this->assertEquals('COMP1001', modules_helper::module_campus_mapping('COMP1001_U'));
         // CN CS module code.
-        $this->assertEquals('COMP1001_UNNC', modules_helper::module_campus_mapping('COMP1001_UNNC'));
+        $this->assertEquals('COMP1001_UNNC', modules_helper::module_campus_mapping('COMP1001_C'));
         // MY CS module code.
-        $this->assertEquals('COMP1001_UNMC', modules_helper::module_campus_mapping('COMP1001_UNMC'));
+        $this->assertEquals('COMP1001_UNMC', modules_helper::module_campus_mapping('COMP1001_M'));
         // Non naming convention module code.
         $this->assertEquals('ABCDEF', modules_helper::module_campus_mapping('ABCDEF'));
     }
