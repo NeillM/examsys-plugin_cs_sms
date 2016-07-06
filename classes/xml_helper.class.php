@@ -29,7 +29,7 @@ namespace plugins\SMS\plugin_cs_sms;
 class xml_helper {
     /**
      * Check if xml response is an error.
-     * @param simpleXMLElement $data xml response
+     * @param DOMDocument $data xml response
      * @param integer $userid user used to log error to
      * @param mysqli $db db connection
      * @return boolean true on error
@@ -47,9 +47,10 @@ class xml_helper {
         }
         return false;
     }
+    
     /**
      * Check if xml validates against schema
-     * @param simpleXMLElement $data xml response
+     * @param DOMDocument $data xml response
      * @param string $schemaname name of schema file
      * @param integer $userid user used to log error to
      * @param mysqli $db db connection

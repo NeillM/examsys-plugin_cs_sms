@@ -81,9 +81,9 @@ class modules_helper {
             }
 
         }
-        // Do not diff modules on singel module update.
+        // Do not diff modules on single module update.
         if (!$singleexternal) {
-        // Delete modules that have been removed from CS.
+            // Delete modules that have been removed from CS.
             $delete = \module_utils::diff_external_modules_to_internal_modules($currentmodules, plugin_cs_sms::SMS, $db);
             // Try to delete course via modulemanagement delete api.
             foreach ($delete as $deleteid) {
@@ -97,6 +97,7 @@ class modules_helper {
         }
         return true;
     }
+
     /**
      * Map campus solutions module code to rogo module code
      * Rogo appends campus name to module code for China and Malaysia

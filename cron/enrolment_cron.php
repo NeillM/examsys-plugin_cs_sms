@@ -47,13 +47,8 @@ $mysqli = \DBUtils::get_mysqli_link($configObject->get('cfg_db_host'), $configOb
 
 $configObject->set_db_object($mysqli);
 // Run sms if enabled.
-$mappingplugin_name = \plugin_manager::get_plugin_type_enabled('plugin_sms');
-if (count($mappingplugin_name) > 0) {
-    if ($mappingplugin_name[0] == 'plugin_cs_sms') {
-        $sms = new plugin_cs_sms($mysqli, 0);
-        $yearutils = new \yearutils($mysqli);
-        $current_year = $yearutils->get_current_session();
-        $sms->get_enrolments($current_year);
-    }
-}
+$sms = new plugin_cs_sms($mysqli, 0);
+$yearutils = new \yearutils($mysqli);
+$current_year = $yearutils->get_current_session();
+$sms->get_enrolments($current_year);
 $mysqli->close();

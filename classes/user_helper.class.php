@@ -29,7 +29,7 @@ namespace plugins\SMS\plugin_cs_sms;
 class user_helper {
     /**
      * Parse the user node of the membership xml and create/update users as required
-     * @param simpleXMLObject $usernode xml for users
+     * @param DOMNodeList $usernode xml for users
      * @param string $moduleextid external system module id
      * @param integer $userid user to log action to
      * @param string $logfile log file location
@@ -93,6 +93,7 @@ class user_helper {
         }
         return $currentenrols;
     }
+
     /**
      * Function to map gender supplied by CS to gender in Rogo
      * @param string $csgender gender in CS
@@ -118,6 +119,7 @@ class user_helper {
         }
         return $gender;
     }
+    
     /**
      * Function to map title supplied by CS to title in Rogo
      * @param string $cstitle title in CS
@@ -132,6 +134,7 @@ class user_helper {
         }
         return $title;
     }
+    
     /**
      * Function to map title to gender
      * @param string $csgender gender in CS
@@ -158,6 +161,7 @@ class user_helper {
         }
         return $gender;
     }
+    
     /**
      * Function to map status supplied by CS to role in Rogo
      * @param string $csstatus status in CS
@@ -199,6 +203,7 @@ class user_helper {
         }
         return $role;
     }
+
     /**
      * Function to map year of study supplied by CS to year of study in Rogo
      * @param string $csyear year in CS

@@ -40,6 +40,7 @@ class log_helper {
         $errorfile = $_SERVER['PHP_SELF'];
         $log->record_application_warning($userid, $username, $string, $errorfile, $errorline);
     }
+    
     /**
      * Set the log file for the was service call
      * @param string logdir log directory location
@@ -54,6 +55,7 @@ class log_helper {
         }
         return $logfile;
     }
+    
     /**
      * Log response to file
      * @param string $type action type

@@ -47,11 +47,6 @@ $mysqli = \DBUtils::get_mysqli_link($configObject->get('cfg_db_host'), $configOb
 
 $configObject->set_db_object($mysqli);
 // Run sms if enabled.
-$mappingplugin_name = \plugin_manager::get_plugin_type_enabled('plugin_sms');
-if (count($mappingplugin_name) > 0) {
-    if ($mappingplugin_name[0] == 'plugin_cs_sms') {
-        $sms = new plugin_cs_sms($mysqli, 0);
-        $sms->get_courses();
-    }
-}
+$sms = new plugin_cs_sms($mysqli, 0);
+$sms->get_courses();
 $mysqli->close();
