@@ -214,7 +214,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         } else {
             $enabled = array($this->plugin);
         }
-        $this->config->set_setting('enabled_plugin', json_encode($enabled), 'json', 'plugin_' . $this->plugin_type);
+        $this->config->set_setting('enabled_plugin', json_encode($enabled), \Config::JSON, 'plugin_' . $this->plugin_type);
     }
     /**
      * Disable this plugin
@@ -228,7 +228,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                     $new += $p;
                 }
             }
-            $this->config->set_setting('enabled_plugin', json_encode($new), 'json', 'plugin_' . $this->plugin_type);
+            $this->config->set_setting('enabled_plugin', json_encode($new), \Config::JSON, 'plugin_' . $this->plugin_type);
         }
     }
     /**
