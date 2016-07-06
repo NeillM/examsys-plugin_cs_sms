@@ -66,7 +66,7 @@ class modules_helper {
                 $params['name'] = $xpath->query('./Description', $module)->item(0)->nodeValue;
                 $params['schoolextid'] = $xpath->query('./SchoolID', $module)->item(0)->nodeValue;
                 $params['nodeid'] = $node;
-                $params['sms'] = 'Campus Solutions';
+                $params['sms'] = $this->sms;
                 $modid = \module_utils::get_id_from_externalid($externalid, $db);
                 if ($modid) {
                     // If ExternalID exists call modulemanagement update api.
@@ -84,7 +84,7 @@ class modules_helper {
         // Do not diff modules on singel module update.
         if (!$singleexternal) {
         // Delete modules that have been removed from CS.
-            $delete = \module_utils::diff_external_modules_to_internal_modules($currentmodules, $db);
+            $delete = \module_utils::diff_external_modules_to_internal_modules($currentmodules, $this->sms, $db);
             // Try to delete course via modulemanagement delete api.
             foreach ($delete as $deleteid) {
                 $params = array();

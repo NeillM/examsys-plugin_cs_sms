@@ -52,6 +52,11 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      */
     private $validation;
     /**
+     * Name of external student management system.
+     * @var string
+     */
+    private $sms = 'Campus Solutions';
+    /**
      * Campus Solutions web service version.
      * @var string
      */
