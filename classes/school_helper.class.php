@@ -53,6 +53,7 @@ class school_helper {
                     $params['code'] = $xpath->query('./SchoolCode', $school)->item(0)->nodeValue;
                     $params['name'] = $xpath->query('./SchoolDescr', $school)->item(0)->nodeValue;
                     $params['externalid'] = $externalid;
+                    $params['externalsys'] = plugin_cs_sms::SMS;
                     $params['facultyextid'] = $facultyextid;
                     $params['nodeid'] = $node;
                     $node++;

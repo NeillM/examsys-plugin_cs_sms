@@ -65,6 +65,7 @@ class faculties_helper {
                 $params['code'] = $xpath->query('./FacultyCode', $faculty)->item(0)->nodeValue;
                 $params['name'] = $xpath->query('./FacultyDescr', $faculty)->item(0)->nodeValue;
                 $params['externalid'] = $externalid;
+                $params['externalsys'] = plugin_cs_sms::SMS;
                 $params['nodeid'] = $node;
                 $node++;
                 if ($facultyid) {
@@ -83,7 +84,7 @@ class faculties_helper {
         }
         // Delete schools that have been removed from CS.
         $sm = new \api\schoolmanagement($db);
-        $delete = \SchoolUtils::diff_external_schools_to_internal_schools($currentschools, $db);
+        $delete = \SchoolUtils::diff_external_schools_to_internal_schools($currentschools, plugin_cs_sms::SMS, $db);
         // Try to delete course via schoolmanagement delete api.
         foreach ($delete as $deleteid) {
             $params = array();
@@ -94,7 +95,7 @@ class faculties_helper {
             log_helper::log('School Delete', $params, $response, $logfile);
         }
         // Delete faculties that have been removed from CS.
-        $delete = \FacultyUtils::diff_external_faculties_to_internal_faculties($currentfaculties, $db);
+        $delete = \FacultyUtils::diff_external_faculties_to_internal_faculties($currentfaculties, plugin_cs_sms::SMS, $db);
         // Try to delete course via facultymanagement delete api.
         foreach ($delete as $deleteid) {
             $params = array();

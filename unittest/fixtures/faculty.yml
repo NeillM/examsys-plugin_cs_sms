@@ -4,11 +4,13 @@ faculty:
     code: "TEST"
     name: "Faculty of Testing"
     externalid: "TESTECT"
+    externalsys: "Campus Solutions"
   -
     id: 2
     code: "CFY-AE"
     name: "Faculty of Arts and Education"
     externalid: "CFY-AE"
+    externalsys: "Campus Solutions"
 schools:
   -
     id: 1
@@ -16,18 +18,21 @@ schools:
     school: "Centre for Testing"
     facultyID: 1
     externalid: "USC-MED"
+    externalsys: "Campus Solutions"
   -
     id: 2
     code: "CSC-CELE"
     school: "Centre for English Language Education"
     facultyID: 2
     externalid: "CSC-CELE"
+    externalsys: "Campus Solutions"
   -
     id: 3
     code: "CSC-EDU"
     school: "School of Education"
     facultyID: 2
     externalid: "CSC-EDU"
+    externalsys: "Campus Solutions"
 courses:
   -
     id: 1
@@ -35,18 +40,21 @@ courses:
     description: "Nutrition"
     schoolid: 1
     externalid: "M6UNUTRN"
+    externalsys: "Campus Solutions"
   -
     id: 2
     name: "M6UCVENG"
     description: "Civil Engineering"
     schoolid: 1
     externalid: "M6UCVENG"
+    externalsys: "Campus Solutions"
   -
     id: 3
     name: "U8PBRSGY"
     description: "Breast Surgery"
     schoolid: 1
     externalid: "UON|U8PBRSGY"
+    externalsys: "Campus Solutions"
 modules:
   -
     id: 1
@@ -55,6 +63,7 @@ modules:
     schoolid: 1
     externalid: "00001111"
     academic_year_start: "07/01"
+    sms: "Campus Solutions"
   -
     id: 2
     moduleid: "NAAAXXXX"
@@ -62,6 +71,7 @@ modules:
     schoolid: 1
     externalid: "030003"
     academic_year_start: "07/01"
+    sms: "Campus Solutions"
 users:
   -
     id: 1

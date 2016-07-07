@@ -145,10 +145,10 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->facultyxml));
         $sms->get_faculties();
-        $queryTable = $this->getConnection()->createQueryTable('faculty', 'SELECT id, code, name, externalid FROM faculty');
+        $queryTable = $this->getConnection()->createQueryTable('faculty', 'SELECT id, code, name, externalid, externalsys FROM faculty');
         $expectedTable = $this->get_expected_data_set('faculty')->getTable("faculty");
         $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('schools', 'SELECT id, code, school, facultyID, externalid FROM schools');
+        $queryTable = $this->getConnection()->createQueryTable('schools', 'SELECT id, code, school, facultyID, externalid, externalsys FROM schools');
         $expectedTable = $this->get_expected_data_set('faculty')->getTable("schools");
         $this->assertTablesEqual($expectedTable, $queryTable);
     }
@@ -165,7 +165,7 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->coursexml));
         $sms->get_courses();
-        $queryTable = $this->getConnection()->createQueryTable('courses', 'SELECT id, name, description, schoolid, externalid FROM courses');
+        $queryTable = $this->getConnection()->createQueryTable('courses', 'SELECT id, name, description, schoolid, externalid, externalsys FROM courses');
         $expectedTable = $this->get_expected_data_set('faculty')->getTable("courses");
         $this->assertTablesEqual($expectedTable, $queryTable);
     }
@@ -182,7 +182,7 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->modulexml));
         $sms->get_modules();
-        $queryTable = $this->getConnection()->createQueryTable('modules', 'SELECT id, moduleid, fullname, schoolid, externalid, academic_year_start FROM modules');
+        $queryTable = $this->getConnection()->createQueryTable('modules', 'SELECT id, moduleid, fullname, schoolid, externalid, academic_year_start, sms FROM modules');
         $expectedTable = $this->get_expected_data_set('faculty')->getTable("modules");
         $this->assertTablesEqual($expectedTable, $queryTable);
     }
@@ -199,7 +199,7 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->modulexml));
         $sms->get_modules('030003', 2016);
-        $queryTable = $this->getConnection()->createQueryTable('modules', 'SELECT id, moduleid, fullname, schoolid, externalid, academic_year_start FROM modules');
+        $queryTable = $this->getConnection()->createQueryTable('modules', 'SELECT id, moduleid, fullname, schoolid, externalid, academic_year_start, sms FROM modules');
         $expectedTable = $this->get_expected_data_set('faculty')->getTable("modules");
         $this->assertTablesEqual($expectedTable, $queryTable);
     }

@@ -17,6 +17,7 @@ faculty:
     code: "TEST"
     name: "Faculty of Testing"
     externalid: "TESTECT"
+    externalsys: "Campus Solutions"
 schools:
   -
     id: 1
@@ -24,6 +25,7 @@ schools:
     school: "Centre for Testing"
     facultyID: 1
     externalid: "USC-MED"
+    externalsys: "Campus Solutions"
 courses:
   -
     id: 1
@@ -31,12 +33,14 @@ courses:
     description: "Nutrition"
     schoolid: 1
     externalid: "M6UNUTRN"
+    externalsys: "Campus Solutions"
   -
     id: 2
     name: "M6UCVENG"
     description: "Civil Engineering"
     schoolid: 1
     externalid: "M6UCVENG"
+    externalsys: "Campus Solutions"
 modules:
   -
     id: 1
@@ -45,6 +49,7 @@ modules:
     schoolid: 1
     externalid: "00001111"
     academic_year_start: "07/01"
+    sms: "Campus Solutions"
 users:
 sid:
 modules_student:
