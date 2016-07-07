@@ -253,7 +253,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @return array|bool import url and translation strings, false  if module import not supported
      */
     public function supports_module_import() {
-        return array('url' => '../plugins/SMS/' . $this->plugin . '/admin/import_modules.php', 'blurb' => $this->strings['importmodules'], 'tooltip' => $this->strings['importmodulestooltip']);
+        return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_modules.php', 'blurb' => $this->strings['importmodules'], 'tooltip' => $this->strings['importmodulestooltip']);
     }
     
     /**
@@ -261,7 +261,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @return array|bool import url and translation strings, false if faculty/school import not supported
      */
     public function supports_faculty_import() {
-        return array('url' => '../plugins/SMS/' . $this->plugin . '/admin/import_faculties.php', 'blurb' => $this->strings['importfaculties'], 'tooltip' => $this->strings['importfacultiestooltip']);
+        return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_faculties.php', 'blurb' => $this->strings['importfaculties'], 'tooltip' => $this->strings['importfacultiestooltip']);
     }
     
     /**
@@ -269,7 +269,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @return array|bool import url and translation strings, false  if course import not supported
      */
     public function supports_course_import() {
-        return array('url' => '../plugins/SMS/' . $this->plugin . '/admin/import_courses.php', 'blurb' => $this->strings['importcourses'], 'tooltip' => $this->strings['importcoursestooltip']);
+        return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_courses.php', 'blurb' => $this->strings['importcourses'], 'tooltip' => $this->strings['importcoursestooltip']);
     }
     
     /**
