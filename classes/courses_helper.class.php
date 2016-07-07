@@ -66,6 +66,7 @@ class courses_helper {
                 $params['description'] = $xpath->query('./PlanDescr', $plan)->item(0)->nodeValue;
                 $params['schoolextid'] = $xpath->query('./SchoolID', $plan)->item(0)->nodeValue;
                 $params['externalid'] = $externalid;
+                $params['externalsys'] = plugin_cs_sms::SMS;
                 $params['nodeid'] = $node;
                 $node++;
                 if ($courseid) {
@@ -81,7 +82,7 @@ class courses_helper {
             }
         }
         // Delete courses that have been removed from CS.
-        $delete = \CourseUtils::diff_external_courses_to_internal_courses($currentplans, $db);
+        $delete = \CourseUtils::diff_external_courses_to_internal_courses($currentplans, plugin_cs_sms::SMS, $db);
         // Try to delete course via coursemanagement delete api.
         foreach ($delete as $deleteid) {
             $params = array();

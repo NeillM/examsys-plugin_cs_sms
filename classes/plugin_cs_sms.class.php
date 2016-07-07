@@ -280,4 +280,12 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     public function supports_enrol_import() {
         return false;
     }
+    
+    /**
+     * Get name of sms
+     * @return string name of sms
+     */
+    public function get_name() {
+        return self::SMS;
+    }
 }
