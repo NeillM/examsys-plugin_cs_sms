@@ -35,14 +35,14 @@ class xml_helper {
      * @return boolean true on error
      */
     static public function check_for_error($data, $userid, $db) {
-        $errornode = $data->getElementsByTagName('Error')->item(0);
-        if (!is_null($errornode)) {
-            foreach ($errornode->childNodes as $childnode) {
-                if ($childnode->nodeName == 'Header') {
-                    $errorline = __LINE__ - 1;
-                    log_helper::log_app_warning($userid, $childnode->nodeValue, $errorline, $db);
-                    return true;
-                }
+        $errornode = $data->getElementsByTagName('Error');
+        foreach ($errornode as $error) {
+            $xpath = new \DOMXPath($error->ownerDocument);
+            $header = $xpath->query('./Header', $error)->item(0)->nodeValue;
+            if (!is_null($header)) {
+                $errorline = __LINE__ - 1;
+                log_helper::log_app_warning($userid, $header, $errorline, $db);
+                return true;
             }
         }
         return false;
@@ -59,7 +59,7 @@ class xml_helper {
     static public function validate($data, $schemaname, $userid, $strings, $db) {
         // Enable user error handling.
         libxml_use_internal_errors(true);
-        $schema = '..' . DIRECTORY_SEPARATOR . 'schema' . DIRECTORY_SEPARATOR . $schemaname . '.xsd';
+        $schema = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'schema' . DIRECTORY_SEPARATOR . $schemaname . '.xsd';
         if (!$data->schemaValidate($schema)) {
             $errorline = __LINE__ - 1;
             log_helper::log_app_warning($userid, $strings['restnotvalid'], $errorline, $db);
