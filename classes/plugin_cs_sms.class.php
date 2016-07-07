@@ -240,10 +240,9 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $new = array();
         $enabled = json_decode($this->config->get_setting('plugin_' . $this->plugin_type, 'enabled_plugin'));
         if (!is_null($enabled)) {
-            foreach ($enabled as $p) {
-                if ($this->plugin != $p) {
-                    $new[] = $p;
-                }
+            $key = array_search($this->plugin, $enabled);
+            if ($key !== false) {
+                unset($enabled[$key]);
             }
             $this->config->set_setting('enabled_plugin', json_encode($new), \Config::JSON, 'plugin_' . $this->plugin_type);
         }
