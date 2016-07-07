@@ -97,16 +97,15 @@ class enrolments_helper {
                     $params['session'] = $session;
                     $membership = \module_utils::get_student_members($session, $moduleid, $db);
                     foreach ($membership as $idx => $member) {
-                        $details = \UserUtils::get_full_details_by_ID($member['userID'], $db);
-                        if (!key_exists($details['studentid'], $currentenrols[$externalid])) {
-                            $params['studentid'] = $details['studentid'];
+                        if (!key_exists($member['studentid'], $currentenrols[$externalid])) {
+                            $params['studentid'] = $member['studentid'];
                             $params['nodeid'] = $node;
                             $response = $mm->unenrol($params, $userid);
                             $node++;
                             log_helper::log('UnEnrol', $params, $response, $logfile);
                             if ($response['statuscode'] === 100) {
                                 $smsimports[$moduleid]['unenrolcount']++;
-                                $smsimports[$moduleid]['unenrolusers'] .= $details['username'] . ',';
+                                $smsimports[$moduleid]['unenrolusers'] .= $member['username'] . ',';
                             }
                         }
                     }
