@@ -53,3 +53,4 @@ modules:
 users:
 sid:
 modules_student:
+sys_errors:

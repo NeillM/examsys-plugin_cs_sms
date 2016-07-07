@@ -33,6 +33,14 @@ class xml_helpertest extends unittestdatabase {
         return new PHPUnit_Extensions_Database_DataSet_YamlDataSet(dirname(__DIR__) . DIRECTORY_SEPARATOR  . "fixtures" . DIRECTORY_SEPARATOR . "sms.yml");
     }
     /**
+     * Get expected data set from yml
+     * @param string $name fixture file name
+     * @return dataset
+     */
+    public function get_expected_data_set($name) {
+        return new PHPUnit_Extensions_Database_DataSet_YamlDataSet(dirname(__DIR__) . DIRECTORY_SEPARATOR  . "fixtures" . DIRECTORY_SEPARATOR . $name . ".yml");
+    }
+    /**
      * Test map gender
      * @group sms
      * @group plugin_cs_sms
@@ -45,6 +53,9 @@ class xml_helpertest extends unittestdatabase {
         $doc = new DOMDocument();
         $doc->loadXML($data);
         $this->assertTrue(xml_helper::check_for_error($doc, $userid, $this->db));
+        $queryTable = $this->getConnection()->createQueryTable('sys_errors', 'SELECT auth_user, errtype, errstr FROM sys_errors');
+        $expectedTable = $this->get_expected_data_set('xmlhelper')->getTable("sys_errors");
+        $this->assertTablesEqual($expectedTable, $queryTable);
         // No Error.
         $data = '<?xml version="1.0"?>
             <FacultyList></FacultyList>';
