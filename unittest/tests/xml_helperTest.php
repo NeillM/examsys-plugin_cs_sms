@@ -35,6 +35,7 @@ class xml_helpertest extends unittestdatabase {
     /**
      * Test map gender
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_check_for_error() {
         $userid = 0;

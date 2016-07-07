@@ -127,7 +127,7 @@ class user_helper {
      */
     static public function map_title($cstitle) {
         // Valid Rogo titles Mx|Mr|Mrs|Miss|Ms|Dr|Professor
-        if (preg_match("/^Mx|Mr|Mrs|Miss|Ms|Dr|Professor$/", $cstitle)) {
+        if (preg_match("/^(Mx|Mr|Mrs|Miss|Ms|Dr|Professor)$/", $cstitle)) {
             $title = $cstitle;
         } else {
             $title = null;

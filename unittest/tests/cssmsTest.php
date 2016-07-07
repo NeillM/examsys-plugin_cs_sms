@@ -135,6 +135,7 @@ class cssmstest extends unittestdatabase {
     /**
      * Test get faculties
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_get_faculties() {
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
@@ -155,6 +156,7 @@ class cssmstest extends unittestdatabase {
     /**
      * Test get courses
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_get_courses() {
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
@@ -172,6 +174,7 @@ class cssmstest extends unittestdatabase {
     /**
      * Test get modules
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_get_modules() {
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
@@ -189,6 +192,7 @@ class cssmstest extends unittestdatabase {
     /**
      * Test get modules with session and module as arguments
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_get_module() {
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
@@ -206,6 +210,7 @@ class cssmstest extends unittestdatabase {
     /**
      * Test get enrolments with session only (all enrolments)
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_get_enrolments_all() {
         $this->config->set_setting('campuslist', 'U', 'plugin_cs_sms');
@@ -230,6 +235,7 @@ class cssmstest extends unittestdatabase {
     /**
      * Test get enrolments with session and moudle id
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_get_enrolments() {
         $this->config->set_setting('campuslist', 'U', 'plugin_cs_sms');
@@ -254,6 +260,7 @@ class cssmstest extends unittestdatabase {
     /**
      * Test install mapping plugin - already installed on setup
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_install() {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
@@ -270,6 +277,7 @@ class cssmstest extends unittestdatabase {
     /**
      * Test uninstall mapping plugin - already installed on setup
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_uninstall() {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
@@ -285,6 +293,7 @@ class cssmstest extends unittestdatabase {
     /**
      * Test check plugin version
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_get_plugin_version() {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);

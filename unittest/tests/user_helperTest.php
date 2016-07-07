@@ -28,6 +28,7 @@ class user_helpertest extends UnitTest {
     /**
      * Test map gender
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_map_gender() {
         // Other gender.
@@ -44,16 +45,26 @@ class user_helpertest extends UnitTest {
     /**
      * Test map title
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_map_title() {
-        // Known title.
+        // Known titles.Mx|Mr|Mrs|Miss|Ms|Dr|Professor
         $this->assertEquals('Professor', user_helper::map_title('Professor'));
-        // Unknown title.
+        $this->assertEquals('Dr', user_helper::map_title('Dr'));
+        $this->assertEquals('Miss', user_helper::map_title('Miss'));
+        $this->assertEquals('Mrs', user_helper::map_title('Mrs'));
+        $this->assertEquals('Ms', user_helper::map_title('Ms'));
+        $this->assertEquals('Mr', user_helper::map_title('Mr'));
+        $this->assertEquals('Mx', user_helper::map_title('Mx'));
+        // Unknown titles.
         $this->assertEquals(null, user_helper::map_title('Prof'));
+        $this->assertEquals(null, user_helper::map_title('Mrx'));
+        $this->assertEquals(null, user_helper::map_title('xMrs'));
     }
     /**
      * Test map title to gender
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_title_to_gender() {
         // Other gender.
@@ -62,12 +73,18 @@ class user_helpertest extends UnitTest {
         $this->assertEquals('Male', user_helper::title_to_gender('Mr'));
         // Female gender.
         $this->assertEquals('Female', user_helper::title_to_gender('Miss'));
+        $this->assertEquals('Female', user_helper::title_to_gender('Mrs'));
+        $this->assertEquals('Female', user_helper::title_to_gender('Ms'));
         // Null gender
         $this->assertEquals(null, user_helper::title_to_gender('Dr'));
+        $this->assertEquals(null, user_helper::title_to_gender('Professor'));
+        // Unknown title, null gender.
+        $this->assertEquals(null, user_helper::title_to_gender('Prof'));
     }
     /**
      * Test map student status
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_map_student_status() {
         // User Cancelled.
@@ -98,6 +115,7 @@ class user_helpertest extends UnitTest {
     /**
      * Test map year of study
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_map_yearofstudy() {
         // Valid year.

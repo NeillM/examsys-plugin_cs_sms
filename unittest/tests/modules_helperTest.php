@@ -28,6 +28,7 @@ class modules_helpertest extends UnitTest {
     /**
      * Test module mapping
      * @group sms
+     * @group plugin_cs_sms
      */
     public function test_module_campus_mapping() {
         // UK CS module code.
