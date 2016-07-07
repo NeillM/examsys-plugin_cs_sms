@@ -70,12 +70,28 @@ class user_helpertest extends UnitTest {
      * @group sms
      */
     public function test_map_student_status() {
+        // User Cancelled.
+        $this->assertEquals('Left', user_helper::map_student_status('CN'));
+        // User Discontinued.
+        $this->assertEquals('Left', user_helper::map_student_status('DC'));
+        // User Deceased.
+        $this->assertEquals('Left', user_helper::map_student_status('DE'));
         // User Dismissed.
         $this->assertEquals('Left', user_helper::map_student_status('DM'));
         // Completed Program.
         $this->assertEquals('Graduate', user_helper::map_student_status('CM'));
+        // User Admitted.
+        $this->assertEquals('Suspended', user_helper::map_student_status('AD'));
+        // User Applicant.
+        $this->assertEquals('Suspended', user_helper::map_student_status('AP'));
+        // User Leave of absence.
+        $this->assertEquals('Suspended', user_helper::map_student_status('LA'));
+        // User Prematriculant.
+        $this->assertEquals('Suspended', user_helper::map_student_status('PM'));
         // User Suspended.
         $this->assertEquals('Suspended', user_helper::map_student_status('SP'));
+        // User Waitlisted.
+        $this->assertEquals('Suspended', user_helper::map_student_status('WT'));
         // User Active.
         $this->assertEquals('Student', user_helper::map_student_status('AC'));
     }

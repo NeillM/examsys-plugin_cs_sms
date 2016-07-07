@@ -171,17 +171,17 @@ class user_helper {
         /*  
         Possible Statuses from CS
         AC  Active in Program
-        AD  Admitted - should not be sent to rogo so deafults to student
-        AP  Applicant - should not be sent to rogo so deafults to student
+        AD  Admitted - should not be sent to rogo so deafults to suspended
+        AP  Applicant - should not be sent to rogo so deafults to suspended
         CM  Completed Program
         CN  Cancelled
         DC  Discontinued
         DE  Deceased
         DM  Dismissed
         LA  Leave of Absence
-        PM  Prematriculant - should not be sent to rogo so deafults to student
+        PM  Prematriculant - should not be sent to rogo so deafults to suspended
         SP  Suspended
-        WT  Waitlisted - should not be sent to rogo so deafults to student
+        WT  Waitlisted - should not be sent to rogo so deafults to suspended
         */
         switch ($csstatus) {
             case 'CN':
@@ -193,8 +193,12 @@ class user_helper {
             case 'CM':
                 $role = 'Graduate';
                 break;
+            case 'AD':
+            case 'AP':
             case 'LA':
+            case 'PM':
             case 'SP':
+            case 'WT':
                 $role = 'Suspended';
                 break;
             default:
