@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
-use testing\unittest\unittest,
+use testing\unittest\unittestdatabase,
     plugins\SMS\plugin_cs_sms\user_helper as user_helper;
 /**
  * Test user helper functions
@@ -24,7 +24,14 @@ use testing\unittest\unittest,
  * @copyright Copyright (c) 2016 onwards The University of Nottingham
  * @package tests
  */
-class user_helpertest extends UnitTest {
+class user_helpertest extends unittestdatabase {
+    /**
+     * Get init data set from yml
+     * @return dataset
+     */
+    public function getDataSet() {
+        return new PHPUnit_Extensions_Database_DataSet_YamlDataSet(dirname(__DIR__) . DIRECTORY_SEPARATOR  . "fixtures" . DIRECTORY_SEPARATOR . "userhelper.yml");
+    }
     /**
      * Test map gender
      * @group sms
@@ -88,29 +95,31 @@ class user_helpertest extends UnitTest {
      */
     public function test_map_student_status() {
         // User Cancelled.
-        $this->assertEquals('Left', user_helper::map_student_status('CN'));
+        $this->assertEquals('Left', user_helper::map_student_status('CN', 1, $this->db));
         // User Discontinued.
-        $this->assertEquals('Left', user_helper::map_student_status('DC'));
+        $this->assertEquals('Left', user_helper::map_student_status('DC', 2, $this->db));
         // User Deceased.
-        $this->assertEquals('Left', user_helper::map_student_status('DE'));
+        $this->assertEquals('Left', user_helper::map_student_status('DE', 3, $this->db));
         // User Dismissed.
-        $this->assertEquals('Left', user_helper::map_student_status('DM'));
+        $this->assertEquals('Left', user_helper::map_student_status('DM', 4, $this->db));
         // Completed Program.
-        $this->assertEquals('Graduate', user_helper::map_student_status('CM'));
+        $this->assertEquals('Graduate', user_helper::map_student_status('CM', 5, $this->db));
         // User Admitted.
-        $this->assertEquals('Suspended', user_helper::map_student_status('AD'));
+        $this->assertEquals('Suspended', user_helper::map_student_status('AD', 6, $this->db));
         // User Applicant.
-        $this->assertEquals('Suspended', user_helper::map_student_status('AP'));
+        $this->assertEquals('Suspended', user_helper::map_student_status('AP', 7, $this->db));
         // User Leave of absence.
-        $this->assertEquals('Suspended', user_helper::map_student_status('LA'));
+        $this->assertEquals('Suspended', user_helper::map_student_status('LA', 8, $this->db));
         // User Prematriculant.
-        $this->assertEquals('Suspended', user_helper::map_student_status('PM'));
+        $this->assertEquals('Suspended', user_helper::map_student_status('PM', 9, $this->db));
         // User Suspended.
-        $this->assertEquals('Suspended', user_helper::map_student_status('SP'));
+        $this->assertEquals('Suspended', user_helper::map_student_status('SP', 10, $this->db));
         // User Waitlisted.
-        $this->assertEquals('Suspended', user_helper::map_student_status('WT'));
+        $this->assertEquals('Suspended', user_helper::map_student_status('WT', 11, $this->db));
         // User Active.
-        $this->assertEquals('Student', user_helper::map_student_status('AC'));
+        $this->assertEquals('Student', user_helper::map_student_status('AC', 12, $this->db));
+        // User Locked interanlly in Rogo
+        $this->assertEquals('Locked', user_helper::map_student_status('AC', 13, $this->db));
     }
     /**
      * Test map year of study

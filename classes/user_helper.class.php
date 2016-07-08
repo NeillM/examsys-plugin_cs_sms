@@ -49,15 +49,15 @@ class user_helper {
                     $um = new \api\usermanagement($db);
                     // Only update a user once per enrolment import.
                     if (!in_array($externalid, $userupdated)) {
+                        $id = \UserUtils::studentid_exists($externalid, $db);
                         $params = array();
                         // Status affects Role.
                         if ($xpath->query('./Role', $users)->item(0)->nodeValue == 'Student') {
-                            $params['role'] = self::map_student_status($xpath->query('./Status', $users)->item(0)->nodeValue);
+                            $params['role'] = self::map_student_status($xpath->query('./Status', $users)->item(0)->nodeValue, $id, $db);
                         } else {
                             //Non Students not supported.
                             continue;
                         }
-                        $id = \UserUtils::studentid_exists($externalid, $db);
                         $params['studentid'] = $externalid;
                         $params['username'] = $xpath->query('./Username', $users)->item(0)->nodeValue;
                         $params['forename'] = $xpath->query('./ForeName', $users)->item(0)->nodeValue;
@@ -165,9 +165,15 @@ class user_helper {
     /**
      * Function to map status supplied by CS to role in Rogo
      * @param string $csstatus status in CS
+     * @param integer $userid users rogo internal id
+     * @param mysqli $db database connection
      * @return string|null rogo role or null if not mapped
      */
-    static public function map_student_status($csstatus) {
+    static public function map_student_status($csstatus, $userid, $db) {
+        // Users locked internally in Rogo can only be unlocked manually within Rogo.
+        if (\UserUtils::has_user_role($userid, 'Locked', $db)) {
+            return 'Locked';
+        }
         /*  
         Possible Statuses from CS
         AC  Active in Program
