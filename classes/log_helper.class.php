@@ -49,6 +49,9 @@ class log_helper {
      */
     static public function set_logfile($logdir, $type) {
         if ($logdir != '') {
+            if (PHP_SAPI == 'cli') {
+                $type .= '-cli';
+            }
             $logfile = $logdir . DIRECTORY_SEPARATOR . $type . '.log.' . date("Ymd");
         } else {
             $logfile = '';
