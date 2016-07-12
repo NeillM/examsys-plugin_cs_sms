@@ -1,0 +1,56 @@
+academic_year:
+  -
+    calendar_year: 2016
+    academic_year: "2016/17"
+config:
+  -
+    component: "plugin_sms"
+    setting: "enabled_plugin"
+    value: "[\"plugin_cs_sms\"]"
+  -
+    component: "plugin_cs_sms"
+    setting: "installed"
+    value: 1
+faculty:
+  -
+    id: 1
+    code: "TEST"
+    name: "Faculty of Testing"
+    externalid: "TESTECT"
+    externalsys: "Campus Solutions"
+schools:
+  -
+    id: 1
+    code: "TEST"
+    school: "Centre for Testing"
+    facultyID: 1
+    externalid: "USC-MED"
+    externalsys: "Campus Solutions"
+courses:
+  -
+    id: 1
+    name: "M6UNUTRN"
+    description: "Nutrition"
+    schoolid: 1
+    externalid: "M6UNUTRN"
+    externalsys: "Campus Solutions"
+  -
+    id: 2
+    name: "M6UCVENG"
+    description: "Civil Engineering"
+    schoolid: 1
+    externalid: "M6UCVENG"
+    externalsys: "Campus Solutions"
+modules:
+  -
+    id: 1
+    moduleid: "TESTMOD"
+    fullname: "Testing skills"
+    schoolid: 1
+    externalid: "00001111"
+    academic_year_start: "07/01"
+    sms: "Campus Solutions"
+users:
+sid:
+modules_student:
+sys_errors:

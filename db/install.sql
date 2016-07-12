@@ -1,0 +1,8 @@
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'url', 'https://www.example.com', 'url');
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'username', 'username', 'string');
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'password', 'password', 'password');
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'timeout', 10, 'integer');
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'loglocation', '', 'string');
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'ssl_verify', 1, 'boolean');
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'campuslist', 'C,M,U', 'string');
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'validate_schema', 1, 'boolean');
