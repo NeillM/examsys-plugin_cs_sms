@@ -43,7 +43,12 @@ class user_helper {
             if ($users->hasChildNodes()) {
                 $xpath = new \DOMXPath($users->ownerDocument);
                 // Student IDs in Rogo are User IDs in Campus Solutions.
-                $externalid = $xpath->query('./UserId', $users)->item(0)->nodeValue;
+                try {
+                    $externalid = $xpath->query('./UserId', $users)->item(0)->nodeValue;
+                } catch (\exception $e) {
+                    // If externalid not provided skip to next user.
+                    continue;
+                }
                 $node = 1;
                 if (!is_null($externalid)) {
                     $um = new \api\usermanagement($db);
@@ -51,22 +56,27 @@ class user_helper {
                     if (!in_array($externalid, $userupdated)) {
                         $id = \UserUtils::studentid_exists($externalid, $db);
                         $params = array();
-                        // Status affects Role.
-                        if ($xpath->query('./Role', $users)->item(0)->nodeValue == 'Student') {
-                            $params['role'] = self::map_student_status($xpath->query('./Status', $users)->item(0)->nodeValue, $id, $db);
-                        } else {
-                            //Non Students not supported.
+                        try {
+                            // Status affects Role.
+                            if ($xpath->query('./Role', $users)->item(0)->nodeValue == 'Student') {
+                                $params['role'] = self::map_student_status($xpath->query('./Status', $users)->item(0)->nodeValue, $id, $db);
+                            } else {
+                                //Non Students not supported.
+                                continue;
+                            }
+                            $params['studentid'] = $externalid;
+                            $params['username'] = $xpath->query('./Username', $users)->item(0)->nodeValue;
+                            $params['forename'] = $xpath->query('./ForeName', $users)->item(0)->nodeValue;
+                            $params['surname'] = $xpath->query('./Surname', $users)->item(0)->nodeValue;
+                            $params['title'] = self::map_title($xpath->query('./Title', $users)->item(0)->nodeValue);
+                            $params['email'] = $xpath->query('./Email', $users)->item(0)->nodeValue;
+                            $params['gender'] = self::map_gender($xpath->query('./Gender', $users)->item(0)->nodeValue, $params['title']);
+                            $params['course'] = $xpath->query('./PlanID', $users)->item(0)->nodeValue;
+                            $params['year'] = self::map_yearofstudy($xpath->query('./YearOfStudy', $users)->item(0)->nodeValue);
+                        } catch (\exception $e) {
+                            // If user data not provided skip to next user.
                             continue;
                         }
-                        $params['studentid'] = $externalid;
-                        $params['username'] = $xpath->query('./Username', $users)->item(0)->nodeValue;
-                        $params['forename'] = $xpath->query('./ForeName', $users)->item(0)->nodeValue;
-                        $params['surname'] = $xpath->query('./Surname', $users)->item(0)->nodeValue;
-                        $params['title'] = self::map_title($xpath->query('./Title', $users)->item(0)->nodeValue);
-                        $params['email'] = $xpath->query('./Email', $users)->item(0)->nodeValue;
-                        $params['gender'] = self::map_gender($xpath->query('./Gender', $users)->item(0)->nodeValue, $params['title']);
-                        $params['course'] = $xpath->query('./PlanID', $users)->item(0)->nodeValue;
-                        $params['year'] = self::map_yearofstudy($xpath->query('./YearOfStudy', $users)->item(0)->nodeValue);
                         $params['nodeid'] = $node;
                         $currentenrols[$moduleextid][$externalid] = $params['username'];
                         $node++;

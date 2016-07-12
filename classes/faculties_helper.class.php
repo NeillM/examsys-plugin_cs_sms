@@ -57,13 +57,23 @@ class faculties_helper {
         foreach ($faculties as $faculty) {
             $xpath = new \DOMXPath($faculty->ownerDocument);
             // The FacultyID in Campus Solutions is the Faculty External ID in Rogo.
-            $externalid = $xpath->query('./FacultyID', $faculty)->item(0)->nodeValue;
+            try {
+                $externalid = $xpath->query('./FacultyID', $faculty)->item(0)->nodeValue;
+            } catch (\exception $e) {
+                // If externalid not provided skip to next faculty.
+                continue;
+            }
             if (!is_null($externalid)) {
                 $currentfaculties[] = $externalid;
                 $params = array();
                 $facultyid= \FacultyUtils::get_facultyid_from_externalid($externalid, $db);
-                $params['code'] = $xpath->query('./FacultyCode', $faculty)->item(0)->nodeValue;
-                $params['name'] = $xpath->query('./FacultyDescr', $faculty)->item(0)->nodeValue;
+                try {
+                    $params['code'] = $xpath->query('./FacultyCode', $faculty)->item(0)->nodeValue;
+                    $params['name'] = $xpath->query('./FacultyDescr', $faculty)->item(0)->nodeValue;
+                } catch (\exception $e) {
+                    // If data not provided skip to next faculty.
+                    continue;
+                }
                 $params['externalid'] = $externalid;
                 $params['externalsys'] = plugin_cs_sms::SMS;
                 $params['nodeid'] = $node;
@@ -78,7 +88,12 @@ class faculties_helper {
                     $type = 'Faculty Create';
                 }
                 log_helper::log($type, $params, $response, $logfile);
-                $memberschools = $xpath->query('./MemberSchools', $faculty)->item(0)->childNodes;
+                try {
+                    $memberschools = $xpath->query('./MemberSchools', $faculty)->item(0)->childNodes;
+                 } catch (\exception $e) {
+                    // If school data not provided skip to next faculty.
+                    continue;
+                }
                 $currentschools = array_merge($currentschools, school_helper::get_schools($memberschools, $externalid, $db, $userid, $logfile));
             }
         }

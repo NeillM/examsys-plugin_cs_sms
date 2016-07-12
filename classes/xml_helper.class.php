@@ -37,13 +37,15 @@ class xml_helper {
     static public function check_for_error($data, $userid, $db) {
         $errornode = $data->getElementsByTagName('Error');
         foreach ($errornode as $error) {
+            $errorstring = null;
             $xpath = new \DOMXPath($error->ownerDocument);
-            $header = $xpath->query('./Header', $error)->item(0)->nodeValue;
+            $header = $xpath->query('./Header', $error)->item(0);
             if (!is_null($header)) {
-                $errorline = __LINE__ - 1;
-                log_helper::log_app_warning($userid, $header, $errorline, $db);
-                return true;
+                $errorstring = $header->nodeValue;
             }
+            $errorline = __LINE__ - 1;
+            log_helper::log_app_warning($userid, $errorstring, $errorline, $db);
+            return true;
         }
         return false;
     }

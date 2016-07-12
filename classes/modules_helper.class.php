@@ -57,14 +57,24 @@ class modules_helper {
         foreach ($modules as $module) {
             $xpath = new \DOMXPath($module->ownerDocument);
             // The ModuleID in Campus Solutions is the Module External ID in Rogo.
-            $externalid = $xpath->query('./ModuleID', $module)->item(0)->nodeValue;
+            try {
+                $externalid = $xpath->query('./ModuleID', $module)->item(0)->nodeValue;
+            } catch (\exception $e) {
+                // If externalid not provided skip to next module.
+                continue;
+            }
             if (!is_null($externalid)) {
                 $currentmodules[] = $externalid;
                 $params = array();
                 $params['externalid'] = $externalid;
-                $params['modulecode'] = self::module_campus_mapping($xpath->query('./ModuleCode', $module)->item(0)->nodeValue);
-                $params['name'] = $xpath->query('./Description', $module)->item(0)->nodeValue;
-                $params['schoolextid'] = $xpath->query('./SchoolID', $module)->item(0)->nodeValue;
+                try {
+                    $params['modulecode'] = self::module_campus_mapping($xpath->query('./ModuleCode', $module)->item(0)->nodeValue);
+                    $params['name'] = $xpath->query('./Description', $module)->item(0)->nodeValue;
+                    $params['schoolextid'] = $xpath->query('./SchoolID', $module)->item(0)->nodeValue;
+                } catch (\exception $e) {
+                    // If module data not provided skip to next module.
+                    continue;
+                }
                 $params['nodeid'] = $node;
                 $params['sms'] = plugin_cs_sms::SMS;
                 $modid = \module_utils::get_id_from_externalid($externalid, $db);

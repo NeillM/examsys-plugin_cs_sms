@@ -60,10 +60,20 @@ class enrolments_helper {
             $currentenrols = array();
             $xpath = new \DOMXPath($enrolment->ownerDocument);
             // The ModuleID in Campus Solutions is the Module External ID in Rogo.
-            $externalid = $xpath->query('./ModuleID', $enrolment)->item(0)->nodeValue;
+            try {
+                $externalid = $xpath->query('./ModuleID', $enrolment)->item(0)->nodeValue;
+            } catch (\exception $e) {
+                // If externalid not provided skip to next module.
+                continue;
+            }
             if (!is_null($externalid)) {
                 // Create/update users.
-                $usermembership = $xpath->query('./Membership', $enrolment)->item(0)->childNodes;
+                try {
+                    $usermembership = $xpath->query('./Membership', $enrolment)->item(0)->childNodes;
+                } catch (\exception $e) {
+                    // If membership node not provided cannot proceed with current module enrolments.
+                    continue;
+                }
                 $currentenrols = user_helper::get_users($usermembership, $externalid, $userid, $logfile, $db, $userupdated);
                 // Enrol / Unerol users.
                 $moduleid = \module_utils::get_id_from_externalid($externalid, $db);
@@ -80,7 +90,12 @@ class enrolments_helper {
                     foreach ($currentenrols[$externalid] as $userexternalid => $username) {
                         // Student IDs in Rogo are User IDs in Campus Solutions.
                         $params['studentid'] = $userexternalid;
-                        $params['session'] = $xpath->query('./Year', $enrolment)->item(0)->nodeValue;
+                        try {
+                            $params['session'] = $xpath->query('./Year', $enrolment)->item(0)->nodeValue;
+                        } catch (\exception $e) {
+                            // If session not provided no enrolments can take place.
+                            break;
+                        }
                         $params['attempt'] = 1;
                         $params['nodeid'] = $node;
                         $node++;

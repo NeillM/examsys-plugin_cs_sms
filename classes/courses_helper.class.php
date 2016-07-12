@@ -57,14 +57,24 @@ class courses_helper {
         foreach ($plans as $plan) {
             $xpath = new \DOMXPath($plan->ownerDocument);
             // The PlanID in Campus Solutions is the Course External ID in Rogo.
-            $externalid = $xpath->query('./PlanID', $plan)->item(0)->nodeValue;
+            try {
+                $externalid = $xpath->query('./PlanID', $plan)->item(0)->nodeValue;
+            } catch (\exception $e) {
+                // If externalid not provided skip to next course.
+                continue;
+            }
             if (!is_null($externalid)) {
                 $currentplans[] = $externalid;
                 $params = array();
                 $courseid = \CourseUtils::get_courseid_from_externalid($externalid, $db);
-                $params['name'] = $xpath->query('./PlanCode', $plan)->item(0)->nodeValue;
-                $params['description'] = $xpath->query('./PlanDescr', $plan)->item(0)->nodeValue;
-                $params['schoolextid'] = $xpath->query('./SchoolID', $plan)->item(0)->nodeValue;
+                try {
+                    $params['name'] = $xpath->query('./PlanCode', $plan)->item(0)->nodeValue;
+                    $params['description'] = $xpath->query('./PlanDescr', $plan)->item(0)->nodeValue;
+                    $params['schoolextid'] = $xpath->query('./SchoolID', $plan)->item(0)->nodeValue;
+                } catch (\exception $e) {
+                    // If course data not provided skip to next course.
+                    continue;
+                }
                 $params['externalid'] = $externalid;
                 $params['externalsys'] = plugin_cs_sms::SMS;
                 $params['nodeid'] = $node;

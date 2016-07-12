@@ -45,13 +45,23 @@ class school_helper {
             $xpath = new \DOMXPath($school->ownerDocument);
             if ($school->hasChildNodes()) {
                 // The SchoolID in Campus Solutions is the School External ID in Rogo.
-                $externalid = $xpath->query('./SchoolID', $school)->item(0)->nodeValue;
+                try {
+                    $externalid = $xpath->query('./SchoolID', $school)->item(0)->nodeValue;
+                } catch (\exception $e) {
+                    // If externalid not provided skip to next school.
+                    continue;
+                }
                 if (!is_null($externalid)) {
                     $currentschools[] = $externalid;
                     $params = array();
                     $schoolid = \SchoolUtils::get_schoolid_from_externalid($externalid, $db);
-                    $params['code'] = $xpath->query('./SchoolCode', $school)->item(0)->nodeValue;
-                    $params['name'] = $xpath->query('./SchoolDescr', $school)->item(0)->nodeValue;
+                    try {
+                        $params['code'] = $xpath->query('./SchoolCode', $school)->item(0)->nodeValue;
+                        $params['name'] = $xpath->query('./SchoolDescr', $school)->item(0)->nodeValue;
+                    } catch (\exception $e) {
+                        // If missing data nodes skip to next school.
+                        continue;
+                    }   
                     $params['externalid'] = $externalid;
                     $params['externalsys'] = plugin_cs_sms::SMS;
                     $params['facultyextid'] = $facultyextid;

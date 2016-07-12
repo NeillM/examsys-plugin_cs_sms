@@ -32,6 +32,53 @@ class cssmstest extends unittestdatabase {
     private $facultyxml = '<?xml version="1.0"?>
         <FacultyList>
             <Faculty>
+                <FacultyCode>CFY-AE</FacultyCode>
+                <FacultyDescr>Faculty of Arts and Education</FacultyDescr>
+                <MemberSchools>
+                    <School>
+                        <SchoolID>CSC-CELE</SchoolID>
+                        <SchoolCode>CSC-CELE</SchoolCode>
+                        <SchoolDescr>Centre for English Language Education</SchoolDescr>
+                    </School>
+                    <School>
+                        <SchoolCode>CSC-EDU</SchoolCode>
+                        <SchoolDescr>School of Education</SchoolDescr>
+                    </School>
+                    <School>
+                        <SchoolID>CSC-CELD</SchoolID>
+                        <SchoolDescr>Centre for English Language Education D</SchoolDescr>
+                    </School>
+                    <School>
+                        <SchoolID>CSC-EDU</SchoolID>
+                        <SchoolCode>CSC-EDU</SchoolCode>
+                        <SchoolDescr>School of Education</SchoolDescr>
+                    </School>
+                </MemberSchools>
+            </Faculty>
+            <Faculty>
+                <FacultyID>CFY-AE</FacultyID>
+                <MemberSchools>
+                    <School>
+                        <SchoolID>CSC-CELE</SchoolID>
+                        <SchoolCode>CSC-CELE</SchoolCode>
+                        <SchoolDescr>Centre for English Language Education</SchoolDescr>
+                    </School>
+                    <School>
+                        <SchoolCode>CSC-EDU</SchoolCode>
+                        <SchoolDescr>School of Education</SchoolDescr>
+                    </School>
+                    <School>
+                        <SchoolID>CSC-CELD</SchoolID>
+                        <SchoolDescr>Centre for English Language Education D</SchoolDescr>
+                    </School>
+                    <School>
+                        <SchoolID>CSC-EDU</SchoolID>
+                        <SchoolCode>CSC-EDU</SchoolCode>
+                        <SchoolDescr>School of Education</SchoolDescr>
+                    </School>
+                </MemberSchools>
+            </Faculty>
+            <Faculty>
                 <FacultyID>CFY-AE</FacultyID>
                 <FacultyCode>CFY-AE</FacultyCode>
                 <FacultyDescr>Faculty of Arts and Education</FacultyDescr>
@@ -42,11 +89,27 @@ class cssmstest extends unittestdatabase {
                         <SchoolDescr>Centre for English Language Education</SchoolDescr>
                     </School>
                     <School>
+                        <SchoolCode>CSC-EDU</SchoolCode>
+                        <SchoolDescr>School of Education</SchoolDescr>
+                    </School>
+                    <School>
+                        <SchoolID>CSC-CELD</SchoolID>
+                        <SchoolDescr>Centre for English Language Education D</SchoolDescr>
+                    </School>
+                    <School>
                         <SchoolID>CSC-EDU</SchoolID>
                         <SchoolCode>CSC-EDU</SchoolCode>
                         <SchoolDescr>School of Education</SchoolDescr>
                     </School>
                 </MemberSchools>
+            </Faculty>
+        </FacultyList>';
+    private $facultyxml2 = '<?xml version="1.0"?>
+        <FacultyList>
+            <Faculty>
+                <FacultyID>CFY-AE</FacultyID>
+                <FacultyCode>CFY-AE</FacultyCode>
+                <FacultyDescr>Faculty of Arts and Education</FacultyDescr>
             </Faculty>
         </FacultyList>';
     /**
@@ -55,6 +118,33 @@ class cssmstest extends unittestdatabase {
      */   
     private $coursexml = '<?xml version="1.0"?>
         <PlanList>
+            <Plan>
+                <PlanCode>U8PBRSGY</PlanCode>
+                <PlanDescr>Breast Surgery</PlanDescr>
+                <FacultyID>UFY-MHS</FacultyID>
+                <SchoolID>USC-MED</SchoolID>
+                <ProgramID>UON|U1509</ProgramID>
+                <ProgramCode>U1509</ProgramCode>
+                <ProgramDescr>Breast Surgery</ProgramDescr>
+            </Plan>
+            <Plan>
+                <PlanID>UON|U8PBRSGY</PlanID>
+                <PlanDescr>Breast Surgery</PlanDescr>
+                <FacultyID>UFY-MHS</FacultyID>
+                <SchoolID>USC-MED</SchoolID>
+                <ProgramID>UON|U1509</ProgramID>
+                <ProgramCode>U1509</ProgramCode>
+                <ProgramDescr>Breast Surgery</ProgramDescr>
+            </Plan>
+            <Plan>
+                <PlanID>UON|U8PBRSGY</PlanID>
+                <PlanCode>U8PBRSGY</PlanCode>
+                <PlanDescr>Breast Surgery</PlanDescr>
+                <FacultyID>UFY-MHS</FacultyID>
+                <ProgramID>UON|U1509</ProgramID>
+                <ProgramCode>U1509</ProgramCode>
+                <ProgramDescr>Breast Surgery</ProgramDescr>
+            </Plan>
             <Plan>
                 <PlanID>UON|U8PBRSGY</PlanID>
                 <PlanCode>U8PBRSGY</PlanCode>
@@ -73,6 +163,24 @@ class cssmstest extends unittestdatabase {
     private $modulexml = '<?xml version="1.0"?>
         <ModuleList>
             <Module>
+                <ModuleCode>NAAAXXXX</ModuleCode>
+                <Description>Self-marketing skills</Description>
+                <FacultyID>TESTECT</FacultyID>
+                <SchoolID>USC-MED</SchoolID>
+            </Module>
+            <Module>
+                <ModuleID>030003</ModuleID>
+                <ModuleCode>NAAAXXXX</ModuleCode>
+                <FacultyID>TESTECT</FacultyID>
+                <SchoolID>USC-MED</SchoolID>
+            </Module>
+            <Module>
+                <ModuleID>030003</ModuleID>
+                <ModuleCode>NAAAXXXX</ModuleCode>
+                <Description>Self-marketing skills</Description>
+                <FacultyID>TESTECT</FacultyID>
+            </Module>
+            <Module>
                 <ModuleID>030003</ModuleID>
                 <ModuleCode>NAAAXXXX</ModuleCode>
                 <Description>Self-marketing skills</Description>
@@ -83,6 +191,134 @@ class cssmstest extends unittestdatabase {
         
     private $enrolxml = '<?xml version="1.0"?>
         <ModuleEnrolments>
+            <Module>
+                <ModuleCode>MISSING</ModuleCode>
+                <Membership>
+                    <User>
+                        <UserId>10000667</UserId>
+                        <Title/>
+                        <ForeName>Lewis</ForeName>
+                        <Surname>John</Surname>
+                        <Username>brzhs5</Username>
+                        <Email/>
+                        <Gender/>
+                        <PlanID>M6UNUTRN</PlanID>
+                        <YearOfStudy>1</YearOfStudy>
+                        <Status>Enrolled</Status>
+                        <Role>Student</Role>
+                    </User>
+                </Membership>
+            </Module>
+            <Module>
+                <ModuleID>00001111</ModuleID>
+                <ModuleCode>TESTMOD</ModuleCode>
+                <Year>2016</Year>
+                <Membership>
+                    <User>
+                        <Title/>
+                        <ForeName>Lewis</ForeName>
+                        <Surname>John</Surname>
+                        <Username>brzhs5</Username>
+                        <Email/>
+                        <Gender/>
+                        <PlanID>M6UNUTRN</PlanID>
+                        <YearOfStudy>1</YearOfStudy>
+                        <Status>Enrolled</Status>
+                        <Role>Student</Role>
+                    </User>
+                    <User>
+                        <UserId>10000667</UserId>
+                        <Title/>
+                        <ForeName>Lewis</ForeName>
+                        <Surname>John</Surname>
+                        <Username>brzhs5</Username>
+                        <Email/>
+                        <Gender/>
+                        <PlanID>M6UNUTRN</PlanID>
+                        <YearOfStudy>1</YearOfStudy>
+                        <Status>Enrolled</Status>
+                        <Role>Student</Role>
+                    </User>
+                    <User>
+                        <UserId>10000670</UserId>
+                        <Title/>
+                        <ForeName>Daniel</ForeName>
+                        <Surname>Watson</Surname>
+                        <Username>brzamh</Username>
+                        <Email/>
+                        <Gender/>
+                        <PlanID>M6UCVENG</PlanID>
+                        <YearOfStudy>1</YearOfStudy>
+                        <Status>Enrolled</Status>
+                    </User>
+                    <User>
+                        <UserId>10000670</UserId>
+                        <ForeName>Daniel</ForeName>
+                        <Surname>Watson</Surname>
+                        <Username>brzamh</Username>
+                        <PlanID>M6UCVENG</PlanID>
+                        <YearOfStudy>1</YearOfStudy>
+                        <Status>Enrolled</Status>
+                        <Role>Student</Role>
+                    </User>
+                    <User>
+                        <UserId>10000670</UserId>
+                        <Title/>
+                        <ForeName>Daniel</ForeName>
+                        <Surname>Watson</Surname>
+                        <Username>brzamh</Username>
+                        <Email/>
+                        <Gender/>
+                        <PlanID>M6UCVENG</PlanID>
+                        <YearOfStudy>1</YearOfStudy>
+                        <Status>Enrolled</Status>
+                        <Role>Student</Role>
+                    </User>
+                </Membership>
+            </Module>
+        </ModuleEnrolments>';
+    private $enrolxml2 = '<?xml version="1.0"?>
+        <ModuleEnrolments>
+            <Module>
+                <ModuleID>00001111</ModuleID>
+                <ModuleCode>TESTMOD</ModuleCode>
+                <Membership>
+                    <User>
+                        <UserId>10000667</UserId>
+                        <Title/>
+                        <ForeName>Lewis</ForeName>
+                        <Surname>John</Surname>
+                        <Username>brzhs5</Username>
+                        <Email/>
+                        <Gender/>
+                        <PlanID>M6UNUTRN</PlanID>
+                        <YearOfStudy>1</YearOfStudy>
+                        <Status>Enrolled</Status>
+                        <Role>Student</Role>
+                    </User>
+                    <User>
+                        <UserId>10000670</UserId>
+                        <Title/>
+                        <ForeName>Daniel</ForeName>
+                        <Surname>Watson</Surname>
+                        <Username>brzamh</Username>
+                        <Email/>
+                        <Gender/>
+                        <PlanID>M6UCVENG</PlanID>
+                        <YearOfStudy>1</YearOfStudy>
+                        <Status>Enrolled</Status>
+                        <Role>Student</Role>
+                    </User>
+                </Membership>
+            </Module>
+        </ModuleEnrolments>';
+    private $enrolxml3 = '<?xml version="1.0"?>
+        <ModuleEnrolments>
+            <Module>
+                <ModuleID>00001111</ModuleID>
+                <ModuleCode>TESTMOD</ModuleCode>
+                <Year>2016</Year>
+            </Module>
             <Module>
                 <ModuleID>00001111</ModuleID>
                 <ModuleCode>TESTMOD</ModuleCode>
@@ -154,6 +390,27 @@ class cssmstest extends unittestdatabase {
         $this->assertTablesEqual($expectedTable, $queryTable);
     }
     /**
+     * Test get faculties - missing schools
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_get_faculties_missing_schools() {
+        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
+            ->setMethods(array('callws'))
+            ->setConstructorArgs(array($this->db, 0))
+            ->getMock();
+        $sms->expects($this->once())
+            ->method('callws')
+            ->will($this->returnValue($this->facultyxml2));
+        $sms->get_faculties();
+        // Faculties provided so created.
+        $queryTable = $this->getConnection()->createQueryTable('faculty', 'SELECT id, code, name, externalid, externalsys FROM faculty');
+        $expectedTable = $this->get_expected_data_set('faculty')->getTable("faculty");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+        // Missing schools so no schools created.
+        $this->assertEquals(1, $this->getConnection()->getRowCount('schools'));
+    }
+    /**
      * Test get courses
      * @group sms
      * @group plugin_cs_sms
@@ -221,6 +478,56 @@ class cssmstest extends unittestdatabase {
         $sms->expects($this->once())
             ->method('callws')
             ->will($this->returnValue($this->enrolxml));
+        $sms->get_enrolments(2016);
+        $queryTable = $this->getConnection()->createQueryTable('users', 'SELECT id, grade, surname, username, title, email, gender, roles, first_names, yearofstudy FROM users');
+        $expectedTable = $this->get_expected_data_set('faculty')->getTable("users");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->getConnection()->createQueryTable('sid', 'SELECT student_id, userID FROM sid');
+        $expectedTable = $this->get_expected_data_set('faculty')->getTable("sid");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->getConnection()->createQueryTable('modules_student', 'SELECT id, userID, idMod, calendar_year FROM modules_student');
+        $expectedTable = $this->get_expected_data_set('faculty')->getTable("modules_student");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+    }
+    /**
+     * Test get enrolments with missing year node
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_get_enrolments_all_missing_nodes() {
+        $this->config->set_setting('campuslist', 'U', 'plugin_cs_sms');
+        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
+            ->setMethods(array('callws'))
+            ->setConstructorArgs(array($this->db, 0))
+            ->getMock();
+        $sms->expects($this->once())
+            ->method('callws')
+            ->will($this->returnValue($this->enrolxml2));
+        $sms->get_enrolments(2016);
+        // Users should still be created.
+        $queryTable = $this->getConnection()->createQueryTable('users', 'SELECT id, grade, surname, username, title, email, gender, roles, first_names, yearofstudy FROM users');
+        $expectedTable = $this->get_expected_data_set('faculty')->getTable("users");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->getConnection()->createQueryTable('sid', 'SELECT student_id, userID FROM sid');
+        $expectedTable = $this->get_expected_data_set('faculty')->getTable("sid");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+        // Enrolments should not be created as missing session.
+        $this->assertEquals(0, $this->getConnection()->getRowCount('modules_student'));
+    }
+    /**
+     * Test get enrolments with session only (all enrolments) - skip module with missing members nodes
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_get_enrolments_all_skip_missing_members() {
+        $this->config->set_setting('campuslist', 'U', 'plugin_cs_sms');
+        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
+            ->setMethods(array('callws'))
+            ->setConstructorArgs(array($this->db, 0))
+            ->getMock();
+        $sms->expects($this->once())
+            ->method('callws')
+            ->will($this->returnValue($this->enrolxml3));
         $sms->get_enrolments(2016);
         $queryTable = $this->getConnection()->createQueryTable('users', 'SELECT id, grade, surname, username, title, email, gender, roles, first_names, yearofstudy FROM users');
         $expectedTable = $this->get_expected_data_set('faculty')->getTable("users");
