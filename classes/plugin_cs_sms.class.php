@@ -130,6 +130,25 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     }
 
     /**
+     * Get all assessments for academic session
+     * @params integer $session academic session to sync assessments with
+     */
+    public function get_assessments($session) {
+        if (!$this->is_enabled()) {
+            return;
+        }
+        $logfile = log_helper::set_logfile($this->logdir, 'assessment');
+        $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+        foreach ($campuslist as $campus) {
+            $args = array('academic_session' => $session, 'campus' => $campus);
+            $response = $this->callws('RogoAssessments', self::CSVERSIONONE, $args);
+            if ($response != '') {
+                assessments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation);
+            }
+        }
+    }
+
+    /**
      * Get enrolments for academic session
      * @params integer $session academic session to sync enrolments with
      * @params integer $externalid external system module id
