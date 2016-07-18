@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+         <xs:element name="AssessmentList">
+               <xs:complexType>
+                     <xs:sequence>
+                           <xs:element name="Assessment" maxOccurs="unbounded" minOccurs="0">
+                                 <xs:complexType>
+                                       <xs:sequence>
+                                             <xs:element name="AssessmentID" type="externalid"></xs:element>
+                                             <xs:element name="AssessmentType" type="xs:string"></xs:element>
+                                             <xs:element name="AssessmentDesc" type="xs:string"></xs:element>
+                                             <xs:element name="DurationHours" type="xs:int"></xs:element>
+                                             <xs:element name="DurationMinutes" type="xs:int"></xs:element>
+                                             <xs:element name="Modules">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="Module" maxOccurs="unbounded">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                 <xs:element name="ModuleID" type="externalid"></xs:element>
+                                                                                 <xs:element name="ModuleCode" type="xs:string"></xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="Owner" maxOccurs="1">
+                                                   <xs:complexType>
+                                                         <xs:sequence>
+                                                               <xs:element name="UserID" type="studentid"></xs:element>
+                                                               <xs:element name="UserName" type="username"></xs:element>
+                                                         </xs:sequence>
+                                                   </xs:complexType>
+                                             </xs:element>
+                                             <xs:element name="AcademicSession" type="year"></xs:element>
+                                             <xs:element name="Month" type="month" minOccurs="0"></xs:element>
+                                             <xs:element name="Campus" type="campus" minOccurs="0"></xs:element>
+                                             <xs:element name="CohortSize" type="cohort" minOccurs="0"></xs:element>
+                                             <xs:element name="Sittings" type="xs:integer"></xs:element>
+                                             <xs:element name="Barriers" type="xs:boolean" minOccurs="0"></xs:element>
+                                             <xs:element name="Notes" type="notes" minOccurs="0"></xs:element>
+                                       </xs:sequence>
+                                 </xs:complexType>
+                           </xs:element>
+                     </xs:sequence>
+               </xs:complexType>
+         </xs:element>       
+        <xs:simpleType name="externalid">
+             <xs:restriction base="xs:string">
+                 <xs:minLength value="1"/>
+                 <xs:maxLength value="255"/>
+             </xs:restriction>
+        </xs:simpleType>
+        <xs:simpleType name="studentid">
+             <xs:restriction base="xs:string">
+                 <xs:minLength value="1"/>
+                 <xs:maxLength value="15"/>
+             </xs:restriction>
+        </xs:simpleType>
+        <xs:simpleType name="year">
+            <xs:restriction base="xs:integer">
+                <xs:minInclusive value="0"/>
+                <xs:maxInclusive value="6"/>
+            </xs:restriction>
+        </xs:simpleType>
+        <xs:simpleType name="username">
+            <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="60"/>
+            </xs:restriction>
+        </xs:simpleType>
+        <xs:simpleType name="campus">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="255"/>
+        </xs:restriction>
+        </xs:simpleType>
+        <xs:simpleType name="notes">
+            <xs:restriction base="xs:string">
+                <xs:minLength value="1"/>
+                <xs:maxLength value="255"/>
+            </xs:restriction>
+        </xs:simpleType>
+        <xs:simpleType name="cohort">
+            <xs:restriction base="xs:string">
+                <xs:pattern value="0-10|11-20|21-30|31-40|41-50|51-75|76-100|101-150|151-200|201-300|301-400|401-500"/>
+            </xs:restriction>
+        </xs:simpleType>
+        <xs:simpleType name="month">
+            <xs:restriction base="xs:integer">
+                <xs:minInclusive value="0"/>
+                <xs:maxInclusive value="11"/>
+            </xs:restriction>
+        </xs:simpleType>
+   </xs:schema>
