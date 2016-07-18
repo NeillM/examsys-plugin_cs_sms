@@ -300,6 +300,14 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     }
     
     /**
+     * Check if assessment import is supported by the plugin
+     * @return array|bool import url and translation strings, false  if assessment import not supported
+     */
+    public function supports_assessment_import() {
+        return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_assessments.php', 'blurb' => $this->strings['importassessments'], 'tooltip' => $this->strings['importassessmentstooltip']);
+    }
+    
+    /**
      * Get name of sms
      * @return string name of sms
      */

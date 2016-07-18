@@ -22,3 +22,5 @@ $string['importmodules'] = 'Import modules from SMS';
 $string['importmodulestooltip']  = 'Sync Modules and Module Enrolments with the connected Student Management System';
 $string['importcourses'] = 'Import courses from SMS';
 $string['importcoursestooltip'] = 'Sync Courses with the connected Student Management System';
+$string['importassessments'] = 'Import assessments from SMS';
+$string['importassessmentstooltip'] = 'Sync Assessments with the connected Student Management System';
