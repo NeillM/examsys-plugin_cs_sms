@@ -57,7 +57,6 @@ class assessments_helper {
             }
         }
         $assessments = $data->getElementsByTagName('Assessment');
-        $currentassessments = array();
         // Schedule assessments.
         $am = new \api\assessmentmanagement($db);
         $node = 1;
@@ -77,7 +76,6 @@ class assessments_helper {
             }
             if (!is_null($externalid)) {
                 // Schedule assessment.
-                $currentassessments[] = $externalid;
                 $params = array();
                 $params['externalid'] = $externalid;
                 $params['externalsys'] = plugin_cs_sms::SMS;
@@ -133,17 +131,6 @@ class assessments_helper {
                 var_dump($response);
                 log_helper::log('Schedule', $params, $response, $logfile);
             }
-        }
-        // Diff and delete assessments not longer required.
-        $delete = \Paper_utils::diff_external_assessments_to_internal_assessments($currentassessments, plugin_cs_sms::SMS, $db);
-        // Try to delete assessment via assessmentmanagement delete api.
-        foreach ($delete as $deleteid) {
-            $params = array();
-            $params['externalid'] = $deleteid;
-            $params['nodeid'] = $node;
-            $node++;
-            $response = $am->delete($params, $userid);
-            log_helper::log('Schedule Delete', $params, $response, $logfile);
         }
         return true;
     }
