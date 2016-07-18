@@ -8,7 +8,7 @@
                                        <xs:sequence>
                                              <xs:element name="AssessmentID" type="externalid"></xs:element>
                                              <xs:element name="AssessmentType" type="xs:string"></xs:element>
-                                             <xs:element name="AssessmentDesc" type="xs:string"></xs:element>
+                                             <xs:element name="AssessmentDescr" type="xs:string"></xs:element>
                                              <xs:element name="DurationHours" type="xs:int"></xs:element>
                                              <xs:element name="DurationMinutes" type="xs:int"></xs:element>
                                              <xs:element name="Modules">

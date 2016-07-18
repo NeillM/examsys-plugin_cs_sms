@@ -26,6 +26,13 @@ namespace plugins\SMS\plugin_cs_sms;
  * Assessments helper class.
  */
 class assessments_helper {
+    
+    /**
+     * TODO List of valid assessment types.
+     * @var array $validtypes
+     */
+    private static $validtypes = array('ABCD');
+    
     /**
      * Process assessment WS response
      * @param string xml $response xml from enrolment WS
@@ -59,13 +66,16 @@ class assessments_helper {
             // The AssessmentID in Campus Solutions is the Properties External ID in Rogo.
             try {
                 $externalid = $xpath->query('./AssessmentID', $assessment)->item(0)->nodeValue;
-                // TODO what assessment types do we care about.
+                // Skip invalid assessment types.
                 $assessmenttype = $xpath->query('./AssessmentType', $assessment)->item(0)->nodeValue;
+                if (!self::validate_type($assessmenttype)) {
+                    continue;
+                }
             } catch (\exception $e) {
                 // If externalid not provided skip to next assessment.
                 continue;
             }
-            if (!is_null($externalid) and $assessmenttype == 'TBC') {
+            if (!is_null($externalid)) {
                 // Schedule assessment.
                 $currentassessments[] = $externalid;
                 $params = array();
@@ -74,30 +84,53 @@ class assessments_helper {
                 try {
                     $params['title'] = $xpath->query('./AssessmentDescr', $assessment)->item(0)->nodeValue;
                     $hours = $xpath->query('./DurationHours', $assessment)->item(0)->nodeValue;
-                    $mintues = $xpath->query('./DurationMinutes', $assessment)->item(0)->nodeValue;
+                    $minutes = $xpath->query('./DurationMinutes', $assessment)->item(0)->nodeValue;
                     $params['duration'] = ($hours * 60) + $minutes;
                     $params['session'] = $xpath->query('./AcademicSession', $assessment)->item(0)->nodeValue;
                     $params['sittings'] = $xpath->query('./Sittings', $assessment)->item(0)->nodeValue;
-                    $username = $xpath->query('./Owner/UserName', $assessment)->item(0)->nodeValue;
-                    $param['owner'] = \UserUtils::username_exists($username, $db);
+                    $user = $xpath->query('./Owner', $assessment)->item(0)->childNodes;
+                    $param['owner'] = self::get_owner($user, $db);
                     $modules = $xpath->query('./Modules', $assessment)->item(0)->childNodes;
-                    $params['modules'] = $this->process_module($modules);
+                    $params['extmodules'] = self::process_module($modules);
                 } catch (\exception $e) {
                     // If session not provided no enrolments can take place.
                     break;
                 }
                 try {
                     $params['month'] = $xpath->query('./Month', $assessment)->item(0)->nodeValue;
+                } catch (\exception $e) {
+                    // Optional so dont care.
+                    $params['month'] = null;
+                }
+                try {
                     $params['cohort_size'] = $xpath->query('./CohortSize', $assessment)->item(0)->nodeValue;
+                } catch (\exception $e) {
+                    // Optional so dont care.
+                    $params['cohort_size'] = null;
+                }
+                try {
                     $params['barriers'] = $xpath->query('./Barriers', $assessment)->item(0)->nodeValue;
+                } catch (\exception $e) {
+                    // Optional so dont care.
+                    $params['barriers'] = null;
+                }
+                try {
                     $params['campus'] = $xpath->query('./Campus', $assessment)->item(0)->nodeValue;
+                } catch (\exception $e) {
+                    // Optional so dont care.
+                    $params['campus'] = null;
+                }
+                try {
                     $params['notes'] = $xpath->query('./Notes', $assessment)->item(0)->nodeValue;
                 } catch (\exception $e) {
                     // Optional so dont care.
-                } 
+                    $params['notes'] = null;
+                }
                 $params['nodeid'] = $node;
                 $node++;
+                var_dump($params);
                 $response = $am->schedule($params, $userid);
+                var_dump($response);
                 log_helper::log('Schedule', $params, $response, $logfile);
             }
         }
@@ -116,17 +149,39 @@ class assessments_helper {
     }
 
     /**
+     * Get owner from nodelist
+     * @param DOMNodeList $usernode xml for user
+     * @param mysqli $db db connection
+     * @return string username.
+     */
+    static private function get_owner($usernode, $db) {
+        $username = "";
+        foreach ($usernode as $user) {
+            if ($user->hasChildNodes()) {
+                $xpath = new \DOMXPath($user->ownerDocument);
+                try {
+                    $username = $xpath->query('./UserName', $user)->item(0)->nodeValue;
+                } catch (\exception $e) {
+                    // Should not get here but fail gracefully later on.
+                }
+            }
+        }
+        return \UserUtils::username_exists($username, $db);
+    }
+     
+    /**
      * Process modules node
      * @param DOMNodeList $modulenode xml for modules
      * @return array list of module external ids.
      */
-    private function process_module($modulenode) {
+    static private function process_module($modulenode) {
         $modulesarray = array();
+        $i = 0;
         foreach ($modulenode as $module) {
             if ($module->hasChildNodes()) {
                 $xpath = new \DOMXPath($module->ownerDocument);
                 try {
-                    $modulesarray[] = $xpath->query('./ModuleID', $module)->item(0)->nodeValue;
+                    $modulesarray[] = array('id' => $i,'value' => $xpath->query('./ModuleID', $module)->item(0)->nodeValue);
                 } catch (\exception $e) {
                     // If ModuleID not provided skip to next module.
                     continue;
@@ -134,5 +189,14 @@ class assessments_helper {
             }
         }
         return $modulesarray;
+    }
+
+    /**
+     * Check if valid assessment type
+     * @param string $type assessment type.
+     * @return boolean true if valid, false otherwise
+     */
+    static private function validate_type($type) {
+        return in_array($type, self::$validtypes);
     }
 }

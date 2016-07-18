@@ -26,6 +26,32 @@ use testing\unittest\unittestdatabase;
  */
 class cssmstest extends unittestdatabase {
     /**
+     * TODO Mock assessment xml
+     * @var string
+     */
+    private $assessmentxml = '<?xml version="1.0" encoding="utf-8"?>
+        <AssessmentList>
+          <Assessment>
+            <AssessmentID>C-00000000033</AssessmentID>
+            <AssessmentType>ABCD</AssessmentType>
+            <AssessmentDescr>Test Exam</AssessmentDescr>
+            <DurationHours>1</DurationHours>
+            <DurationMinutes>30</DurationMinutes>
+            <Modules>
+              <Module>
+                <ModuleID>00001111</ModuleID>
+                <ModuleCode>TESTMOD</ModuleCode>
+              </Module>
+            </Modules>
+            <Owner>
+              <UserID>91234567</UserID>
+              <UserName>staff</UserName>
+            </Owner>
+            <AcademicSession>2016</AcademicSession>
+            <Sittings>1</Sittings>
+          </Assessment>
+        </AssessmentList>';
+    /**
      * Mock faculty xml
      * @var string
      */
@@ -104,6 +130,10 @@ class cssmstest extends unittestdatabase {
                 </MemberSchools>
             </Faculty>
         </FacultyList>';
+    /**
+     * Mock faculty xml
+     * @var string
+     */
     private $facultyxml2 = '<?xml version="1.0"?>
         <FacultyList>
             <Faculty>
@@ -188,7 +218,10 @@ class cssmstest extends unittestdatabase {
                 <SchoolID>USC-MED</SchoolID>
             </Module>
         </ModuleList>';
-        
+    /**
+     * Mock enrolment xml
+     * @var string
+     */    
     private $enrolxml = '<?xml version="1.0"?>
         <ModuleEnrolments>
             <Module>
@@ -277,6 +310,10 @@ class cssmstest extends unittestdatabase {
                 </Membership>
             </Module>
         </ModuleEnrolments>';
+    /**
+     * Mock enrolment xml
+     * @var string
+     */  
     private $enrolxml2 = '<?xml version="1.0"?>
         <ModuleEnrolments>
             <Module>
@@ -312,6 +349,10 @@ class cssmstest extends unittestdatabase {
                 </Membership>
             </Module>
         </ModuleEnrolments>';
+    /**
+     * Mock enrolment xml
+     * @var string
+     */  
     private $enrolxml3 = '<?xml version="1.0"?>
         <ModuleEnrolments>
             <Module>
@@ -367,6 +408,30 @@ class cssmstest extends unittestdatabase {
      */
     public function get_expected_data_set($name) {
         return new PHPUnit_Extensions_Database_DataSet_YamlDataSet(dirname(__DIR__) . DIRECTORY_SEPARATOR  . "fixtures" . DIRECTORY_SEPARATOR . $name . ".yml");
+    }
+    /**
+     * Test get assessments
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_get_assessments() {
+        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
+            ->setMethods(array('callws'))
+            ->setConstructorArgs(array($this->db, 0))
+            ->getMock();
+        $sms->expects($this->once())
+            ->method('callws')
+            ->will($this->returnValue($this->assessmentxml));
+        $sms->get_assessments(2016);
+        $queryTable = $this->getConnection()->createQueryTable('scheduling', 'SELECT paperID, sittings FROM scheduling');
+        $expectedTable = $this->get_expected_data_set('scheduling')->getTable("scheduling");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->getConnection()->createQueryTable('properties', 'SELECT paper_title, paper_type, exam_duration, paper_ownerID, calendar_year, externalid, externalsys FROM properties');
+        $expectedTable = $this->get_expected_data_set('scheduling')->getTable("properties");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->getConnection()->createQueryTable('properties_modules', 'SELECT property_id, idMod FROM properties_modules');
+        $expectedTable = $this->get_expected_data_set('scheduling')->getTable("properties_modules");
+        $this->assertTablesEqual($expectedTable, $queryTable);
     }
     /**
      * Test get faculties

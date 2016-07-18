@@ -1,78 +1,84 @@
 users:
   -
     id: 1
-    roles: 'Student'
+    roles: 'Staff'
     password: '12345678'
-    surname: "tester"
-    username: "test1"
+    surname: "staff"
+    username: "staff"
   -
     id: 2
     roles: 'Student'
     password: '12345678'
     surname: "tester"
-    username: "test2"
+    username: "test1"
   -
     id: 3
     roles: 'Student'
     password: '12345678'
     surname: "tester"
-    username: "test3"
+    username: "test2"
   -
     id: 4
     roles: 'Student'
     password: '12345678'
     surname: "tester"
-    username: "test4"
+    username: "test3"
   -
     id: 5
     roles: 'Student'
     password: '12345678'
     surname: "tester"
-    username: "test5"
+    username: "test4"
   -
     id: 6
     roles: 'Student'
     password: '12345678'
     surname: "tester"
-    username: "test6"
+    username: "test5"
   -
     id: 7
     roles: 'Student'
     password: '12345678'
     surname: "tester"
-    username: "test7"
+    username: "test6"
   -
     id: 8
     roles: 'Student'
     password: '12345678'
     surname: "tester"
-    username: "test8"
+    username: "test7"
   -
     id: 9
     roles: 'Student'
     password: '12345678'
     surname: "tester"
-    username: "test9"
+    username: "test8"
   -
     id: 10
     roles: 'Student'
     password: '12345678'
     surname: "tester"
-    username: "test10"
+    username: "test9"
   -
     id: 11
     roles: 'Student'
     password: '12345678'
     surname: "tester"
-    username: "test11"
+    username: "test10"
   -
     id: 12
+    roles: 'Student'
+    password: '12345678'
+    surname: "tester"
+    username: "test11"
+  -
+    id: 13
     roles: 'Suspended'
     password: '12345678'
     surname: "tester"
     username: "test12"
   -
-    id: 13
+    id: 14
     roles: 'Locked'
     password: '12345678'
     surname: "tester"
