@@ -126,9 +126,7 @@ class assessments_helper {
                 }
                 $params['nodeid'] = $node;
                 $node++;
-                var_dump($params);
                 $response = $am->schedule($params, $userid);
-                var_dump($response);
                 log_helper::log('Schedule', $params, $response, $logfile);
             }
         }
