@@ -423,10 +423,10 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->assessmentxml));
         $sms->get_assessments(2016);
-        $queryTable = $this->getConnection()->createQueryTable('scheduling', 'SELECT paperID, sittings FROM scheduling');
+        $queryTable = $this->getConnection()->createQueryTable('scheduling', 'SELECT id, paperID, sittings FROM scheduling');
         $expectedTable = $this->get_expected_data_set('scheduling')->getTable("scheduling");
         $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('properties', 'SELECT paper_title, paper_type, exam_duration, paper_ownerID, calendar_year, externalid, externalsys FROM properties');
+        $queryTable = $this->getConnection()->createQueryTable('properties', 'SELECT property_id, paper_title, paper_type, exam_duration, paper_ownerID, calendar_year, externalid, externalsys FROM properties');
         $expectedTable = $this->get_expected_data_set('scheduling')->getTable("properties");
         $this->assertTablesEqual($expectedTable, $queryTable);
         $queryTable = $this->getConnection()->createQueryTable('properties_modules', 'SELECT property_id, idMod FROM properties_modules');

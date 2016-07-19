@@ -86,8 +86,8 @@ class assessments_helper {
                     $params['duration'] = ($hours * 60) + $minutes;
                     $params['session'] = $xpath->query('./AcademicSession', $assessment)->item(0)->nodeValue;
                     $params['sittings'] = $xpath->query('./Sittings', $assessment)->item(0)->nodeValue;
-                    $user = $xpath->query('./Owner', $assessment)->item(0)->childNodes;
-                    $param['owner'] = self::get_owner($user, $db);
+                    $user = $xpath->query('./Owner', $assessment)->item(0);
+                    $params['owner'] = self::get_owner($user, $db);
                     $modules = $xpath->query('./Modules', $assessment)->item(0)->childNodes;
                     $params['extmodules'] = self::process_module($modules);
                 } catch (\exception $e) {
@@ -137,19 +137,15 @@ class assessments_helper {
      * Get owner from nodelist
      * @param DOMNodeList $usernode xml for user
      * @param mysqli $db db connection
-     * @return string username.
+     * @return integer|false user rogo id or false if not found.
      */
     static private function get_owner($usernode, $db) {
-        $username = "";
-        foreach ($usernode as $user) {
-            if ($user->hasChildNodes()) {
-                $xpath = new \DOMXPath($user->ownerDocument);
-                try {
-                    $username = $xpath->query('./UserName', $user)->item(0)->nodeValue;
-                } catch (\exception $e) {
-                    // Should not get here but fail gracefully later on.
-                }
-            }
+        $xpath = new \DOMXPath($usernode->ownerDocument);
+        try {
+            $username = $xpath->query('./UserName', $usernode)->item(0)->nodeValue;
+        } catch (\exception $e) {
+            // Should not get here but fail gracefully later on.
+            $username = null;
         }
         return \UserUtils::username_exists($username, $db);
     }
