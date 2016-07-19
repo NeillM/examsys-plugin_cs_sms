@@ -730,4 +730,83 @@ class cssmstest extends unittestdatabase {
         $this->assertEquals($sms->get_installed_version(), $sms->get_plugin_version('plugin_cs_sms'));
         $sms->uninstall($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
     }
+    /**
+     * Test supports_module_import
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_module_import() {
+        $lang = new \langpack();
+        $component = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
+        $strings = $lang->get_all_strings($component);
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $array = array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/plugin_cs_sms/admin/import_modules.php',
+         'blurb' => $strings['importmodules'],
+         'tooltip' => $strings['importmodulestooltip']);
+        $this->assertEquals($array, $sms->supports_module_import());
+        
+    }
+    /**
+     * Test supports_faculty_import
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_faculty_import() {
+        $lang = new \langpack();
+        $component = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
+        $strings = $lang->get_all_strings($component);
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $array = array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/plugin_cs_sms/admin/import_faculties.php',
+         'blurb' => $strings['importfaculties'],
+         'tooltip' => $strings['importfacultiestooltip']);
+        $this->assertEquals($array, $sms->supports_faculty_import());
+    }
+    /**
+     * Test supports_course_import
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_course_import() {
+        $lang = new \langpack();
+        $component = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
+        $strings = $lang->get_all_strings($component);
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $array = array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/plugin_cs_sms/admin/import_courses.php',
+         'blurb' => $strings['importcourses'],
+         'tooltip' => $strings['importcoursestooltip']);
+        $this->assertEquals($array, $sms->supports_course_import());
+    }
+    /**
+     * Test supports_enrol_import
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_enrol_import() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->assertFalse($sms->supports_enrol_import());
+    }
+    /**
+     * Test supports_assessment_import
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_assessment_import() {
+        $lang = new \langpack();
+        $component = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
+        $strings = $lang->get_all_strings($component);
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $array = array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/plugin_cs_sms/admin/import_assessments.php',
+         'blurb' => $strings['importassessments'],
+         'tooltip' => $strings['importassessmentstooltip']);
+        $this->assertEquals($array, $sms->supports_assessment_import());
+    }
+     /**
+     * Test get_anme
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_get_name() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->assertEquals('Campus Solutions', $sms->get_name());
+    }
 }
