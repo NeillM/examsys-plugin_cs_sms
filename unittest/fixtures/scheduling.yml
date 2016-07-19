@@ -2,6 +2,12 @@ scheduling:
   -
     id: 1
     paperID: 1
+    notes: null
+    sittings: 1
+  -
+    id: 2
+    paperID: 2
+    notes: "meh"
     sittings: 1
 properties:
   -
@@ -13,7 +19,19 @@ properties:
     calendar_year: 2016
     externalid: "C-00000000033"
     externalsys: "Campus Solutions"
+  -
+    property_id: 2
+    paper_title: "Test Exam 2"
+    paper_type: 2
+    exam_duration: 60
+    paper_ownerID: 1
+    calendar_year: 2016
+    externalid: "C-00000000035"
+    externalsys: "Campus Solutions"
 properties_modules:
   -
     property_id: 1
+    idMod: 1
+  -
+    property_id: 2
     idMod: 1

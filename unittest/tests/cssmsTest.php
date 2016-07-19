@@ -32,6 +32,24 @@ class cssmstest extends unittestdatabase {
     private $assessmentxml = '<?xml version="1.0" encoding="utf-8"?>
         <AssessmentList>
           <Assessment>
+            <AssessmentID>C-00000000032</AssessmentID>
+            <AssessmentType>ABCD</AssessmentType>
+            <DurationHours>1</DurationHours>
+            <DurationMinutes>30</DurationMinutes>
+            <Modules>
+              <Module>
+                <ModuleID>00001111</ModuleID>
+                <ModuleCode>TESTMOD</ModuleCode>
+              </Module>
+            </Modules>
+            <Owner>
+              <UserID>91234567</UserID>
+              <UserName>staff</UserName>
+            </Owner>
+            <AcademicSession>2016</AcademicSession>
+            <Sittings>1</Sittings>
+          </Assessment>
+          <Assessment>
             <AssessmentID>C-00000000033</AssessmentID>
             <AssessmentType>ABCD</AssessmentType>
             <AssessmentDescr>Test Exam</AssessmentDescr>
@@ -49,6 +67,45 @@ class cssmstest extends unittestdatabase {
             </Owner>
             <AcademicSession>2016</AcademicSession>
             <Sittings>1</Sittings>
+          </Assessment>
+          <Assessment>
+            <AssessmentID>C-00000000034</AssessmentID>
+            <AssessmentType>CRSE</AssessmentType>
+            <AssessmentDescr>Test Coursework</AssessmentDescr>
+            <DurationHours>0</DurationHours>
+            <DurationMinutes>0</DurationMinutes>
+            <Modules>
+              <Module>
+                <ModuleID>00001111</ModuleID>
+                <ModuleCode>TESTMOD</ModuleCode>
+              </Module>
+            </Modules>
+            <Owner>
+              <UserID>91234567</UserID>
+              <UserName>staff</UserName>
+            </Owner>
+            <AcademicSession>2016</AcademicSession>
+            <Sittings>1</Sittings>
+          </Assessment>
+          <Assessment>
+            <AssessmentID>C-00000000035</AssessmentID>
+            <AssessmentType>ABCD</AssessmentType>
+            <AssessmentDescr>Test Exam 2</AssessmentDescr>
+            <DurationHours>1</DurationHours>
+            <DurationMinutes>0</DurationMinutes>
+            <Modules>
+              <Module>
+                <ModuleID>00001111</ModuleID>
+                <ModuleCode>TESTMOD</ModuleCode>
+              </Module>
+            </Modules>
+            <Owner>
+              <UserID>91234567</UserID>
+              <UserName>staff</UserName>
+            </Owner>
+            <AcademicSession>2016</AcademicSession>
+            <Sittings>1</Sittings>
+            <Notes>meh</Notes>
           </Assessment>
         </AssessmentList>';
     /**
@@ -423,7 +480,7 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->assessmentxml));
         $sms->get_assessments(2016);
-        $queryTable = $this->getConnection()->createQueryTable('scheduling', 'SELECT id, paperID, sittings FROM scheduling');
+        $queryTable = $this->getConnection()->createQueryTable('scheduling', 'SELECT id, paperID, notes, sittings FROM scheduling');
         $expectedTable = $this->get_expected_data_set('scheduling')->getTable("scheduling");
         $this->assertTablesEqual($expectedTable, $queryTable);
         $queryTable = $this->getConnection()->createQueryTable('properties', 'SELECT property_id, paper_title, paper_type, exam_duration, paper_ownerID, calendar_year, externalid, externalsys FROM properties');

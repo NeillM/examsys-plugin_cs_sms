@@ -91,8 +91,8 @@ class assessments_helper {
                     $modules = $xpath->query('./Modules', $assessment)->item(0)->childNodes;
                     $params['extmodules'] = self::process_module($modules);
                 } catch (\exception $e) {
-                    // If session not provided no enrolments can take place.
-                    break;
+                    // If the above are not provided we cannto create the assessment.
+                    continue;
                 }
                 try {
                     $params['month'] = $xpath->query('./Month', $assessment)->item(0)->nodeValue;
