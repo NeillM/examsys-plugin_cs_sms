@@ -800,13 +800,40 @@ class cssmstest extends unittestdatabase {
          'tooltip' => $strings['importassessmentstooltip']);
         $this->assertEquals($array, $sms->supports_assessment_import());
     }
-     /**
-     * Test get_anme
+    /**
+     * Test get_name
      * @group sms
      * @group plugin_cs_sms
      */
     public function test_get_name() {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
         $this->assertEquals('Campus Solutions', $sms->get_name());
+    }
+    /**
+     * Test enable_plugin
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_enable_plugin() {
+        $config = json_decode($this->config->get_setting('plugin_sms', 'enabled_plugin'));
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        // Check already enabled.
+        $sms->enable_plugin();
+        $this->assertEquals(array('plugin_cs_sms'), $config);
+        // Disable so we can test enabling.
+        $sms->disable_plugin();
+        $sms->enable_plugin();
+        $this->assertEquals(array('plugin_cs_sms'), $config);
+    }
+    /**
+     * Test disable_plugin
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_disable_plugin() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $sms->disable_plugin();
+        $config = json_decode($this->config->get_setting('plugin_sms', 'enabled_plugin'));
+        $this->assertEquals(array(), $config);
     }
 }
