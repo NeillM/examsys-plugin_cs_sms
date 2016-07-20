@@ -70,6 +70,19 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     }
     
     /**
+     * Is the plugin function configured
+     * @param stiring $function name of function
+     * @return boolean true if configured
+     */
+    private function is_configured($function) {
+        $configured = $this->config->get_setting($this->plugin, 'enable_' . $function);
+        if (!is_null($configured) and $configured == true) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
      * Is this plugin enabled
      * @return boolean true if enabled
      */
@@ -134,7 +147,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @params integer $session academic session to sync assessments with
      */
     public function get_assessments($session) {
-        if (!$this->is_enabled()) {
+        if (!$this->is_enabled() or !$this->is_configured('assessment')) {
             return;
         }
         $logfile = log_helper::set_logfile($this->logdir, 'assessment');
@@ -154,7 +167,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @params integer $externalid external system module id
      */
     public function get_enrolments($session, $externalid = null) {
-        if (!$this->is_enabled()) {
+        if (!$this->is_enabled() or !$this->is_configured('enrolment')) {
             return;
         }
         $logfile = log_helper::set_logfile($this->logdir, 'enrol');
@@ -189,7 +202,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * Get faculties/schools.
      */
     public function get_faculties() {
-        if (!$this->is_enabled()) {
+        if (!$this->is_enabled() or !$this->is_configured('faculty')) {
             return;
         }
         $logfile = log_helper::set_logfile($this->logdir, 'faculty');
@@ -203,7 +216,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * Get courses
      */
     public function get_courses() {
-        if (!$this->is_enabled()) {
+        if (!$this->is_enabled() or !$this->is_configured('course')) {
             return;
         }
         $logfile = log_helper::set_logfile($this->logdir, 'course');
@@ -219,7 +232,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @params integer $session academic session for the module
      */
     public function get_modules($externalid = null, $session = null) {
-        if (!$this->is_enabled()) {
+        if (!$this->is_enabled() or !$this->is_configured('module')) {
             return;
         }
         $args = array();
@@ -272,7 +285,11 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @return array|bool import url and translation strings, false  if module import not supported
      */
     public function supports_module_import() {
-        return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_modules.php', 'blurb' => $this->strings['importmodules'], 'tooltip' => $this->strings['importmodulestooltip']);
+        if ($this->is_configured('module') or $this->is_configured('enrolment')) {
+            return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_modules.php', 'blurb' => $this->strings['importmodules'], 'tooltip' => $this->strings['importmodulestooltip']);
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -280,7 +297,11 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @return array|bool import url and translation strings, false if faculty/school import not supported
      */
     public function supports_faculty_import() {
-        return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_faculties.php', 'blurb' => $this->strings['importfaculties'], 'tooltip' => $this->strings['importfacultiestooltip']);
+        if ($this->is_configured('faculty')) {
+            return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_faculties.php', 'blurb' => $this->strings['importfaculties'], 'tooltip' => $this->strings['importfacultiestooltip']);
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -288,7 +309,11 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @return array|bool import url and translation strings, false  if course import not supported
      */
     public function supports_course_import() {
-        return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_courses.php', 'blurb' => $this->strings['importcourses'], 'tooltip' => $this->strings['importcoursestooltip']);
+        if ($this->is_configured('course')) {
+            return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_courses.php', 'blurb' => $this->strings['importcourses'], 'tooltip' => $this->strings['importcoursestooltip']);
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -296,7 +321,11 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @return array|bool import url and translation strings, false  if enrolment import not supported
      */
     public function supports_enrol_import() {
-        return false;
+        if ($this->is_configured('enrolment')) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -304,7 +333,11 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @return array|bool import url and translation strings, false  if assessment import not supported
      */
     public function supports_assessment_import() {
-        return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_assessments.php', 'blurb' => $this->strings['importassessments'], 'tooltip' => $this->strings['importassessmentstooltip']);
+        if ($this->is_configured('assessment')) {
+            return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_assessments.php', 'blurb' => $this->strings['importassessments'], 'tooltip' => $this->strings['importassessmentstooltip']);
+        } else {
+            return false;
+        }
     }
     
     /**

@@ -747,6 +747,18 @@ class cssmstest extends unittestdatabase {
         
     }
     /**
+     * Test supports_module_import - disabled in config
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_module_import_disabled() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->config->set_setting('enable_module', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('enable_enrolment', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->assertFalse($sms->supports_module_import());
+        
+    }
+    /**
      * Test supports_faculty_import
      * @group sms
      * @group plugin_cs_sms
@@ -760,6 +772,16 @@ class cssmstest extends unittestdatabase {
          'blurb' => $strings['importfaculties'],
          'tooltip' => $strings['importfacultiestooltip']);
         $this->assertEquals($array, $sms->supports_faculty_import());
+    }
+    /**
+     * Test supports_faculty_import - disabled in config
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_faculty_import_disabled() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->config->set_setting('enable_faculty', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->assertFalse($sms->supports_faculty_import());
     }
     /**
      * Test supports_course_import
@@ -777,12 +799,32 @@ class cssmstest extends unittestdatabase {
         $this->assertEquals($array, $sms->supports_course_import());
     }
     /**
+     * Test supports_course_import - disabled in config
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_course_import_disabled() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->config->set_setting('enable_course', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->assertFalse($sms->supports_course_import());
+    }
+    /**
      * Test supports_enrol_import
      * @group sms
      * @group plugin_cs_sms
      */
     public function test_supports_enrol_import() {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->assertTrue($sms->supports_enrol_import());
+    }
+    /**
+     * Test supports_enrol_import - disabled in config
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_enrol_import_disabled() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->config->set_setting('enable_enrolment', 0, \Config::BOOLEAN, 'plugin_cs_sms');
         $this->assertFalse($sms->supports_enrol_import());
     }
     /**
@@ -799,6 +841,16 @@ class cssmstest extends unittestdatabase {
          'blurb' => $strings['importassessments'],
          'tooltip' => $strings['importassessmentstooltip']);
         $this->assertEquals($array, $sms->supports_assessment_import());
+    }
+    /**
+     * Test supports_assessment_import - disabled in config
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_assessment_import_disabled() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->config->set_setting('enable_assessment', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->assertFalse($sms->supports_assessment_import());
     }
     /**
      * Test get_name

@@ -21,6 +21,26 @@ config:
     value: "C,M,U"
   -
     component: "plugin_cs_sms"
+    setting: "enable_assessment"
+    value: 1
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_course"
+    value: 1
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_enrolment"
+    value: 1
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_faculty"
+    value: 1
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_module"
+    value: 1
+  -
+    component: "plugin_cs_sms"
     setting: "installed"
     value: 1
   -
