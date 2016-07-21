@@ -35,7 +35,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * Language pack component.
      * @var string
      */
-    private $langcomponent = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
+    protected $langcomponent = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
     /**
      * Land pack strings.
      * @var string
