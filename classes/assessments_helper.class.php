@@ -134,8 +134,8 @@ class assessments_helper {
     }
 
     /**
-     * Get owner from nodelist
-     * @param DOMNodeList $usernode xml for user
+     * Get owner from node
+     * @param DOMNode $usernode xml for user
      * @param mysqli $db db connection
      * @return integer|false user rogo id or false if not found.
      */
