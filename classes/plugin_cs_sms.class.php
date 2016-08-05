@@ -125,8 +125,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         // Strip last &.
         $url = rtrim($url, '/');
         $username = $this->config->get_setting($this->plugin, 'username');
-        $encryp = new \encryp();
-        $password = $encryp->mdecrypt_password($this->config->get_setting($this->plugin, 'password'));
+        $password = $this->config->get_setting($this->plugin, 'password');
         $timeout = $this->config->get_setting($this->plugin, 'timeout');
         $options = array(CURLOPT_TIMEOUT => $timeout,
             CURLOPT_SSL_VERIFYPEER => $this->config->get_setting($this->plugin, 'ssl_verify')
