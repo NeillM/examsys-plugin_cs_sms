@@ -698,7 +698,7 @@ class cssmstest extends unittestdatabase {
         $queryTable = $this->getConnection()->createQueryTable('plugins', 'SELECT component, version, type FROM plugins');
         $expectedTable = $this->get_expected_data_set('pluginconfig')->getTable("plugins");
         $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('config', 'SELECT component, setting, value FROM config order by 1, 2');
+        $queryTable = $this->getConnection()->createQueryTable('config', 'SELECT component, setting, value, type FROM config order by 1, 2');
         $expectedTable = $this->get_expected_data_set('pluginconfig')->getTable("config");
         $this->assertTablesEqual($expectedTable, $queryTable);
         $sms->uninstall($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
@@ -715,7 +715,7 @@ class cssmstest extends unittestdatabase {
         // Check tables are correct.
         $queryTable = $this->getConnection()->getRowCount('plugins');
         $this->assertEquals(0, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('config', 'SELECT component, setting, value FROM config  order by 1, 2');
+        $queryTable = $this->getConnection()->createQueryTable('config', 'SELECT component, setting, value, type FROM config  order by 1, 2');
         $expectedTable = $this->get_expected_data_set('nopluginconfig')->getTable("config");
         $this->assertTablesEqual($expectedTable, $queryTable);
     }
@@ -867,7 +867,7 @@ class cssmstest extends unittestdatabase {
      * @group plugin_cs_sms
      */
     public function test_enable_plugin() {
-        $config = json_decode($this->config->get_setting('plugin_sms', 'enabled_plugin'));
+        $config = $this->config->get_setting('plugin_sms', 'enabled_plugin');
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
         // Check already enabled.
         $sms->enable_plugin();
@@ -885,7 +885,7 @@ class cssmstest extends unittestdatabase {
     public function test_disable_plugin() {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
         $sms->disable_plugin();
-        $config = json_decode($this->config->get_setting('plugin_sms', 'enabled_plugin'));
+        $config = $this->config->get_setting('plugin_sms', 'enabled_plugin');
         $this->assertEquals(array(), $config);
     }
 }

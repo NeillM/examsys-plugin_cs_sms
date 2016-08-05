@@ -253,7 +253,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      */
     public function enable_plugin() {
         $enabled = array();
-        $current = json_decode($this->config->get_setting($this->plugin_type, 'enabled_plugin'));
+        $current = $this->config->get_setting($this->plugin_type, 'enabled_plugin');
         if (!is_null($current)) {
             if(!array_search($this->plugin, $current)) {
                 $enabled = $current;
@@ -262,7 +262,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         } else {
             $enabled = array($this->plugin);
         }
-        $this->config->set_setting('enabled_plugin', json_encode($enabled), \Config::JSON, 'plugin_' . $this->plugin_type);
+        $this->config->set_setting('enabled_plugin', $enabled, \Config::JSON, 'plugin_' . $this->plugin_type);
     }
     
     /**
@@ -270,13 +270,13 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      */
     public function disable_plugin() {
         $new = array();
-        $enabled = json_decode($this->config->get_setting('plugin_' . $this->plugin_type, 'enabled_plugin'));
+        $enabled = $this->config->get_setting('plugin_' . $this->plugin_type, 'enabled_plugin');
         if (!is_null($enabled)) {
             $key = array_search($this->plugin, $enabled);
             if ($key !== false) {
                 unset($enabled[$key]);
             }
-            $this->config->set_setting('enabled_plugin', json_encode($new), \Config::JSON, 'plugin_' . $this->plugin_type);
+            $this->config->set_setting('enabled_plugin', $new, \Config::JSON, 'plugin_' . $this->plugin_type);
         }
     }
     
