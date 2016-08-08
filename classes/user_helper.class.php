@@ -230,14 +230,18 @@ class user_helper {
      * @return string|null rogo year or null if not mapped
      */
     static public function map_yearofstudy($csyear) {
-        // Valid Rogo years 0-6
+        /*  
+        Possible Statuses from CS
+        0-6 - undergraduate year
+        PGT - not releveant to Rogo so map to null
+        PGR - not releveant to Rogo so map to null
+        FND - maps to 0
+         */
         if (preg_match("/^[0-6]$/", $csyear)) {
             $year = $csyear;
         } elseif ($csyear == 'FND') {
-            // Map foundation year to 0.
             $year = 0;
         } else {
-            // CS also uses PGR and PGT as year values but these have no meaning in Rogo so set to null.
             $year = null;
         }
         return $year;
