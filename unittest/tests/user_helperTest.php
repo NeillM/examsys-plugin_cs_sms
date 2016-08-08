@@ -129,6 +129,8 @@ class user_helpertest extends unittestdatabase {
     public function test_map_yearofstudy() {
         // Valid year.
         $this->assertEquals(6, user_helper::map_yearofstudy(6));
+        // Foundation year.
+        $this->assertEquals(0, user_helper::map_yearofstudy('FND'));
         // Invalid year.
         $this->assertEquals(null, user_helper::map_yearofstudy(7));
     }
