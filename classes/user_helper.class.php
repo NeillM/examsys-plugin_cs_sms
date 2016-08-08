@@ -237,6 +237,7 @@ class user_helper {
             // Map foundation year to 0.
             $year = 0;
         } else {
+            // CS also uses PGR and PGT as year values but these have no meaning in Rogo so set to null.
             $year = null;
         }
         return $year;
