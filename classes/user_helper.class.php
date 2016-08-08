@@ -233,6 +233,9 @@ class user_helper {
         // Valid Rogo years 0-6
         if (preg_match("/^[0-6]$/", $csyear)) {
             $year = $csyear;
+        } elseif ($csyear == 'FND') {
+            // Map foundation year to 0.
+            $year = 0;
         } else {
             $year = null;
         }
