@@ -111,6 +111,14 @@ class user_helper {
      * @return string|null rogo gender or null if not mapped
      */
     static public function map_gender($csgender, $title) {
+        /*
+        Possible Genders from CS
+        F - Female
+        M - Male
+        O - Other
+        U - Unknown
+        X - Intersex
+        */
         switch ($csgender) {
             case 'F':
                 $gender = 'Female';
