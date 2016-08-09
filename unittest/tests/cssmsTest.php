@@ -293,7 +293,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UNUTRN</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -312,7 +312,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UNUTRN</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -325,7 +325,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UNUTRN</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -338,7 +338,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UCVENG</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                     </User>
                     <User>
@@ -347,7 +347,7 @@ class cssmstest extends unittestdatabase {
                         <Surname>Watson</Surname>
                         <Username>brzamh</Username>
                         <PlanID>M6UCVENG</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -360,7 +360,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UCVENG</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -386,7 +386,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UNUTRN</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -399,7 +399,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UCVENG</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -431,7 +431,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UNUTRN</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -444,7 +444,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UCVENG</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>

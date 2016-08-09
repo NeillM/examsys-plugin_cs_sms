@@ -232,13 +232,13 @@ class user_helper {
     static public function map_yearofstudy($csyear) {
         /*  
         Possible Statuses from CS
-        0-6 - undergraduate year
+        00-06 - undergraduate year as zero padded integer, maps to single digit integer
         PGT - not releveant to Rogo so map to null
         PGR - not releveant to Rogo so map to null
         FND - maps to 0
          */
-        if (preg_match("/^[0-6]$/", $csyear)) {
-            $year = $csyear;
+        if (preg_match("/^0[0-6]$/", $csyear)) {
+            $year = substr($csyear, 1);
         } elseif ($csyear == 'FND') {
             $year = 0;
         } else {

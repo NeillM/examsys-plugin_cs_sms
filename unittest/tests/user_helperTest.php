@@ -127,20 +127,20 @@ class user_helpertest extends unittestdatabase {
      * @group plugin_cs_sms
      */
     public function test_map_yearofstudy() {
-        // Valid year 6.
-        $this->assertEquals(6, user_helper::map_yearofstudy(6));
-        // Valid year 5.
-        $this->assertEquals(5, user_helper::map_yearofstudy(5));
-        // Valid year 4.
-        $this->assertEquals(4, user_helper::map_yearofstudy(4));
-        // Valid year 3.
-        $this->assertEquals(3, user_helper::map_yearofstudy(3));
-        // Valid year 2.
-        $this->assertEquals(2, user_helper::map_yearofstudy(2));
-        // Valid year 1.
-        $this->assertEquals(1, user_helper::map_yearofstudy(1));
-        // Valid year 0.
-        $this->assertEquals(0, user_helper::map_yearofstudy(0));
+        // Valid year 06.
+        $this->assertEquals(6, user_helper::map_yearofstudy('06'));
+        // Valid year 05.
+        $this->assertEquals(5, user_helper::map_yearofstudy('05'));
+        // Valid year 04.
+        $this->assertEquals(4, user_helper::map_yearofstudy('04'));
+        // Valid year 03.
+        $this->assertEquals(3, user_helper::map_yearofstudy('03'));
+        // Valid year 02.
+        $this->assertEquals(2, user_helper::map_yearofstudy('02'));
+        // Valid year 01.
+        $this->assertEquals(1, user_helper::map_yearofstudy('01'));
+        // Valid year 00.
+        $this->assertEquals(0, user_helper::map_yearofstudy('00'));
         // Foundation year.
         $this->assertEquals(0, user_helper::map_yearofstudy('FND'));
         // PGT.
