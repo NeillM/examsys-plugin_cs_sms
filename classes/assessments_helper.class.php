@@ -31,7 +31,7 @@ class assessments_helper {
      * TODO List of valid assessment types.
      * @var array $validtypes
      */
-    private static $validtypes = array('ABCD');
+    private static $validtypes = array('ROGO');
     
     /**
      * Process assessment WS response

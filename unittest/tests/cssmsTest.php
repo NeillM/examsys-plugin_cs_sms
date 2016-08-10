@@ -33,7 +33,7 @@ class cssmstest extends unittestdatabase {
         <AssessmentList>
           <Assessment>
             <AssessmentID>C-00000000032</AssessmentID>
-            <AssessmentType>ABCD</AssessmentType>
+            <AssessmentType>ROGO</AssessmentType>
             <DurationHours>1</DurationHours>
             <DurationMinutes>30</DurationMinutes>
             <Modules>
@@ -51,7 +51,7 @@ class cssmstest extends unittestdatabase {
           </Assessment>
           <Assessment>
             <AssessmentID>C-00000000033</AssessmentID>
-            <AssessmentType>ABCD</AssessmentType>
+            <AssessmentType>ROGO</AssessmentType>
             <AssessmentDescr>Test Exam</AssessmentDescr>
             <DurationHours>1</DurationHours>
             <DurationMinutes>30</DurationMinutes>
@@ -89,7 +89,7 @@ class cssmstest extends unittestdatabase {
           </Assessment>
           <Assessment>
             <AssessmentID>C-00000000035</AssessmentID>
-            <AssessmentType>ABCD</AssessmentType>
+            <AssessmentType>ROGO</AssessmentType>
             <AssessmentDescr>Test Exam 2</AssessmentDescr>
             <DurationHours>1</DurationHours>
             <DurationMinutes>0</DurationMinutes>
