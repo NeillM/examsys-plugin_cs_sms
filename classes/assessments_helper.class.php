@@ -127,8 +127,10 @@ class assessments_helper {
                 }
                 $params['nodeid'] = $node;
                 $node++;
-                $response = $am->schedule($params, $userid);
-                log_helper::log('Schedule', $params, $response, $logfile);
+                if ($assessmenttype == 'ROGO') {
+                    $response = $am->schedule($params, $userid);
+                    log_helper::log('Schedule', $params, $response, $logfile);
+                }
             }
         }
         return true;
