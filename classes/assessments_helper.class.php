@@ -28,7 +28,8 @@ namespace plugins\SMS\plugin_cs_sms;
 class assessments_helper {
     
     /**
-     * TODO List of valid assessment types.
+     * List of valid assessment types.
+     * ROGO - CS only currently mapping one exam type to Rogo (summative)
      * @var array $validtypes
      */
     private static $validtypes = array('ROGO');

@@ -26,7 +26,7 @@ use testing\unittest\unittestdatabase;
  */
 class cssmstest extends unittestdatabase {
     /**
-     * TODO Mock assessment xml
+     * Mock assessment xml
      * @var string
      */
     private $assessmentxml = '<?xml version="1.0" encoding="utf-8"?>
