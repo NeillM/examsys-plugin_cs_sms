@@ -35,7 +35,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * Language pack component.
      * @var string
      */
-    private $langcomponent = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
+    protected $langcomponent = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
     /**
      * Land pack strings.
      * @var string
@@ -67,6 +67,19 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     private function set_lang_strings() {
         $langpack = new \langpack();
         $this->strings = $langpack->get_all_strings($this->langcomponent);
+    }
+    
+    /**
+     * Is the plugin function configured
+     * @param stiring $function name of function
+     * @return boolean true if configured
+     */
+    private function is_configured($function) {
+        $configured = $this->config->get_setting($this->plugin, 'enable_' . $function);
+        if (!is_null($configured) and $configured == true) {
+            return true;
+        }
+        return false;
     }
     
     /**
@@ -112,8 +125,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         // Strip last &.
         $url = rtrim($url, '/');
         $username = $this->config->get_setting($this->plugin, 'username');
-        $encryp = new \encryp();
-        $password = $encryp->mdecrypt_password($this->config->get_setting($this->plugin, 'password'));
+        $password = $this->config->get_setting($this->plugin, 'password');
         $timeout = $this->config->get_setting($this->plugin, 'timeout');
         $options = array(CURLOPT_TIMEOUT => $timeout,
             CURLOPT_SSL_VERIFYPEER => $this->config->get_setting($this->plugin, 'ssl_verify')
@@ -130,12 +142,31 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     }
 
     /**
+     * Get all assessments for academic session
+     * @params integer $session academic session to sync assessments with
+     */
+    public function get_assessments($session) {
+        if (!$this->is_enabled() or !$this->is_configured('assessment')) {
+            return;
+        }
+        $logfile = log_helper::set_logfile($this->logdir, 'assessment');
+        $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+        foreach ($campuslist as $campus) {
+            $args = array('academic_session' => $session, 'campus' => $campus);
+            $response = $this->callws('RogoAssessments', self::CSVERSIONONE, $args);
+            if ($response != '') {
+                assessments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation);
+            }
+        }
+    }
+
+    /**
      * Get enrolments for academic session
      * @params integer $session academic session to sync enrolments with
      * @params integer $externalid external system module id
      */
     public function get_enrolments($session, $externalid = null) {
-        if (!$this->is_enabled()) {
+        if (!$this->is_enabled() or !$this->is_configured('enrolment')) {
             return;
         }
         $logfile = log_helper::set_logfile($this->logdir, 'enrol');
@@ -170,7 +201,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * Get faculties/schools.
      */
     public function get_faculties() {
-        if (!$this->is_enabled()) {
+        if (!$this->is_enabled() or !$this->is_configured('faculty')) {
             return;
         }
         $logfile = log_helper::set_logfile($this->logdir, 'faculty');
@@ -184,7 +215,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * Get courses
      */
     public function get_courses() {
-        if (!$this->is_enabled()) {
+        if (!$this->is_enabled() or !$this->is_configured('course')) {
             return;
         }
         $logfile = log_helper::set_logfile($this->logdir, 'course');
@@ -200,7 +231,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @params integer $session academic session for the module
      */
     public function get_modules($externalid = null, $session = null) {
-        if (!$this->is_enabled()) {
+        if (!$this->is_enabled() or !$this->is_configured('module')) {
             return;
         }
         $args = array();
@@ -221,7 +252,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      */
     public function enable_plugin() {
         $enabled = array();
-        $current = json_decode($this->config->get_setting($this->plugin_type, 'enabled_plugin'));
+        $current = $this->config->get_setting($this->plugin_type, 'enabled_plugin');
         if (!is_null($current)) {
             if(!array_search($this->plugin, $current)) {
                 $enabled = $current;
@@ -230,7 +261,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         } else {
             $enabled = array($this->plugin);
         }
-        $this->config->set_setting('enabled_plugin', json_encode($enabled), \Config::JSON, 'plugin_' . $this->plugin_type);
+        $this->config->set_setting('enabled_plugin', $enabled, \Config::JSON, 'plugin_' . $this->plugin_type);
     }
     
     /**
@@ -238,13 +269,13 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      */
     public function disable_plugin() {
         $new = array();
-        $enabled = json_decode($this->config->get_setting('plugin_' . $this->plugin_type, 'enabled_plugin'));
+        $enabled = $this->config->get_setting('plugin_' . $this->plugin_type, 'enabled_plugin');
         if (!is_null($enabled)) {
             $key = array_search($this->plugin, $enabled);
             if ($key !== false) {
                 unset($enabled[$key]);
             }
-            $this->config->set_setting('enabled_plugin', json_encode($new), \Config::JSON, 'plugin_' . $this->plugin_type);
+            $this->config->set_setting('enabled_plugin', $new, \Config::JSON, 'plugin_' . $this->plugin_type);
         }
     }
     
@@ -253,7 +284,11 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @return array|bool import url and translation strings, false  if module import not supported
      */
     public function supports_module_import() {
-        return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_modules.php', 'blurb' => $this->strings['importmodules'], 'tooltip' => $this->strings['importmodulestooltip']);
+        if ($this->is_configured('module') or $this->is_configured('enrolment')) {
+            return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_modules.php', 'blurb' => $this->strings['importmodules'], 'tooltip' => $this->strings['importmodulestooltip']);
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -261,7 +296,11 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @return array|bool import url and translation strings, false if faculty/school import not supported
      */
     public function supports_faculty_import() {
-        return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_faculties.php', 'blurb' => $this->strings['importfaculties'], 'tooltip' => $this->strings['importfacultiestooltip']);
+        if ($this->is_configured('faculty')) {
+            return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_faculties.php', 'blurb' => $this->strings['importfaculties'], 'tooltip' => $this->strings['importfacultiestooltip']);
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -269,7 +308,11 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @return array|bool import url and translation strings, false  if course import not supported
      */
     public function supports_course_import() {
-        return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_courses.php', 'blurb' => $this->strings['importcourses'], 'tooltip' => $this->strings['importcoursestooltip']);
+        if ($this->is_configured('course')) {
+            return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_courses.php', 'blurb' => $this->strings['importcourses'], 'tooltip' => $this->strings['importcoursestooltip']);
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -277,7 +320,23 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @return array|bool import url and translation strings, false  if enrolment import not supported
      */
     public function supports_enrol_import() {
-        return false;
+        if ($this->is_configured('enrolment')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Check if assessment import is supported by the plugin
+     * @return array|bool import url and translation strings, false  if assessment import not supported
+     */
+    public function supports_assessment_import() {
+        if ($this->is_configured('assessment')) {
+            return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_assessments.php', 'blurb' => $this->strings['importassessments'], 'tooltip' => $this->strings['importassessmentstooltip']);
+        } else {
+            return false;
+        }
     }
     
     /**

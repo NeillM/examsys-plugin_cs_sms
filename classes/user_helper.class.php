@@ -111,6 +111,14 @@ class user_helper {
      * @return string|null rogo gender or null if not mapped
      */
     static public function map_gender($csgender, $title) {
+        /*
+        Possible Genders from CS
+        F - Female
+        M - Male
+        O - Other
+        U - Unknown
+        X - Intersex
+        */
         switch ($csgender) {
             case 'F':
                 $gender = 'Female';
@@ -230,9 +238,17 @@ class user_helper {
      * @return string|null rogo year or null if not mapped
      */
     static public function map_yearofstudy($csyear) {
-        // Valid Rogo years 0-6
-        if (preg_match("/^[0-6]$/", $csyear)) {
-            $year = $csyear;
+        /*  
+        Possible Statuses from CS
+        00-06 - undergraduate year as zero padded integer, maps to single digit integer
+        PGT - not releveant to Rogo so map to null
+        PGR - not releveant to Rogo so map to null
+        FND - maps to 0
+         */
+        if (preg_match("/^0[0-6]$/", $csyear)) {
+            $year = substr($csyear, 1);
+        } elseif ($csyear == 'FND') {
+            $year = 0;
         } else {
             $year = null;
         }

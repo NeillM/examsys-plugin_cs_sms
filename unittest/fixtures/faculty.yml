@@ -75,6 +75,18 @@ modules:
 users:
   -
     id: 1
+    grade: "University Lecturer"
+    surname: "staff"
+    username: "staff"
+    title: ""
+    email: ""
+    gender: null
+    gender: null
+    roles: "Staff"
+    first_names: "staffy"
+    yearofstudy: 1
+  -
+    id: 2
     grade: "M6UNUTRN"
     surname: "John"
     username: "brzhs5"
@@ -85,7 +97,7 @@ users:
     first_names: "Lewis"
     yearofstudy: 1
   -
-    id: 2
+    id: 3
     grade: "M6UCVENG"
     surname: "Watson"
     username: "brzamh"
@@ -98,18 +110,18 @@ users:
 sid:
   -
     student_id: "10000667"
-    userID: 1
+    userID: 2
   -
     student_id: "10000670"
-    userID: 2
+    userID: 3
 modules_student:
   -
     id: 1
-    userID: 1
+    userID: 2
     idMod: 1
     calendar_year: 2016
   -
     id: 2
-    userID: 2 
+    userID: 3
     idMod: 1
     calendar_year: 2016
