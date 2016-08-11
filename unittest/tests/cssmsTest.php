@@ -26,6 +26,89 @@ use testing\unittest\unittestdatabase;
  */
 class cssmstest extends unittestdatabase {
     /**
+     * Mock assessment xml
+     * @var string
+     */
+    private $assessmentxml = '<?xml version="1.0" encoding="utf-8"?>
+        <AssessmentList>
+          <Assessment>
+            <AssessmentID>C-00000000032</AssessmentID>
+            <AssessmentType>ROGO</AssessmentType>
+            <DurationHours>1</DurationHours>
+            <DurationMinutes>30</DurationMinutes>
+            <Modules>
+              <Module>
+                <ModuleID>00001111</ModuleID>
+                <ModuleCode>TESTMOD</ModuleCode>
+              </Module>
+            </Modules>
+            <Owner>
+              <UserID>91234567</UserID>
+              <UserName>staff</UserName>
+            </Owner>
+            <AcademicSession>2016</AcademicSession>
+            <Sittings>1</Sittings>
+          </Assessment>
+          <Assessment>
+            <AssessmentID>C-00000000033</AssessmentID>
+            <AssessmentType>ROGO</AssessmentType>
+            <AssessmentDescr>Test Exam</AssessmentDescr>
+            <DurationHours>1</DurationHours>
+            <DurationMinutes>30</DurationMinutes>
+            <Modules>
+              <Module>
+                <ModuleID>00001111</ModuleID>
+                <ModuleCode>TESTMOD</ModuleCode>
+              </Module>
+            </Modules>
+            <Owner>
+              <UserID>91234567</UserID>
+              <UserName>staff</UserName>
+            </Owner>
+            <AcademicSession>2016</AcademicSession>
+            <Sittings>1</Sittings>
+          </Assessment>
+          <Assessment>
+            <AssessmentID>C-00000000034</AssessmentID>
+            <AssessmentType>CRSE</AssessmentType>
+            <AssessmentDescr>Test Coursework</AssessmentDescr>
+            <DurationHours>0</DurationHours>
+            <DurationMinutes>0</DurationMinutes>
+            <Modules>
+              <Module>
+                <ModuleID>00001111</ModuleID>
+                <ModuleCode>TESTMOD</ModuleCode>
+              </Module>
+            </Modules>
+            <Owner>
+              <UserID>91234567</UserID>
+              <UserName>staff</UserName>
+            </Owner>
+            <AcademicSession>2016</AcademicSession>
+            <Sittings>1</Sittings>
+          </Assessment>
+          <Assessment>
+            <AssessmentID>C-00000000035</AssessmentID>
+            <AssessmentType>ROGO</AssessmentType>
+            <AssessmentDescr>Test Exam 2</AssessmentDescr>
+            <DurationHours>1</DurationHours>
+            <DurationMinutes>0</DurationMinutes>
+            <Modules>
+              <Module>
+                <ModuleID>00001111</ModuleID>
+                <ModuleCode>TESTMOD</ModuleCode>
+              </Module>
+            </Modules>
+            <Owner>
+              <UserID>91234567</UserID>
+              <UserName>staff</UserName>
+            </Owner>
+            <AcademicSession>2016</AcademicSession>
+            <Sittings>1</Sittings>
+            <Notes>meh</Notes>
+          </Assessment>
+        </AssessmentList>';
+    /**
      * Mock faculty xml
      * @var string
      */
@@ -104,6 +187,10 @@ class cssmstest extends unittestdatabase {
                 </MemberSchools>
             </Faculty>
         </FacultyList>';
+    /**
+     * Mock faculty xml
+     * @var string
+     */
     private $facultyxml2 = '<?xml version="1.0"?>
         <FacultyList>
             <Faculty>
@@ -188,7 +275,10 @@ class cssmstest extends unittestdatabase {
                 <SchoolID>USC-MED</SchoolID>
             </Module>
         </ModuleList>';
-        
+    /**
+     * Mock enrolment xml
+     * @var string
+     */    
     private $enrolxml = '<?xml version="1.0"?>
         <ModuleEnrolments>
             <Module>
@@ -203,7 +293,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UNUTRN</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -222,7 +312,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UNUTRN</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -235,7 +325,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UNUTRN</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -248,7 +338,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UCVENG</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                     </User>
                     <User>
@@ -257,7 +347,7 @@ class cssmstest extends unittestdatabase {
                         <Surname>Watson</Surname>
                         <Username>brzamh</Username>
                         <PlanID>M6UCVENG</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -270,13 +360,17 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UCVENG</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
                 </Membership>
             </Module>
         </ModuleEnrolments>';
+    /**
+     * Mock enrolment xml
+     * @var string
+     */  
     private $enrolxml2 = '<?xml version="1.0"?>
         <ModuleEnrolments>
             <Module>
@@ -292,7 +386,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UNUTRN</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -305,13 +399,17 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UCVENG</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
                 </Membership>
             </Module>
         </ModuleEnrolments>';
+    /**
+     * Mock enrolment xml
+     * @var string
+     */  
     private $enrolxml3 = '<?xml version="1.0"?>
         <ModuleEnrolments>
             <Module>
@@ -333,7 +431,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UNUTRN</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -346,7 +444,7 @@ class cssmstest extends unittestdatabase {
                         <Email/>
                         <Gender/>
                         <PlanID>M6UCVENG</PlanID>
-                        <YearOfStudy>1</YearOfStudy>
+                        <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
                         <Role>Student</Role>
                     </User>
@@ -367,6 +465,30 @@ class cssmstest extends unittestdatabase {
      */
     public function get_expected_data_set($name) {
         return new PHPUnit_Extensions_Database_DataSet_YamlDataSet(dirname(__DIR__) . DIRECTORY_SEPARATOR  . "fixtures" . DIRECTORY_SEPARATOR . $name . ".yml");
+    }
+    /**
+     * Test get assessments
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_get_assessments() {
+        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
+            ->setMethods(array('callws'))
+            ->setConstructorArgs(array($this->db, 0))
+            ->getMock();
+        $sms->expects($this->once())
+            ->method('callws')
+            ->will($this->returnValue($this->assessmentxml));
+        $sms->get_assessments(2016);
+        $queryTable = $this->getConnection()->createQueryTable('scheduling', 'SELECT id, paperID, notes, sittings FROM scheduling');
+        $expectedTable = $this->get_expected_data_set('scheduling')->getTable("scheduling");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->getConnection()->createQueryTable('properties', 'SELECT property_id, paper_title, paper_type, exam_duration, paper_ownerID, calendar_year, externalid, externalsys FROM properties');
+        $expectedTable = $this->get_expected_data_set('scheduling')->getTable("properties");
+        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->getConnection()->createQueryTable('properties_modules', 'SELECT property_id, idMod FROM properties_modules');
+        $expectedTable = $this->get_expected_data_set('scheduling')->getTable("properties_modules");
+        $this->assertTablesEqual($expectedTable, $queryTable);
     }
     /**
      * Test get faculties
@@ -576,7 +698,7 @@ class cssmstest extends unittestdatabase {
         $queryTable = $this->getConnection()->createQueryTable('plugins', 'SELECT component, version, type FROM plugins');
         $expectedTable = $this->get_expected_data_set('pluginconfig')->getTable("plugins");
         $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('config', 'SELECT component, setting, value FROM config order by 1, 2');
+        $queryTable = $this->getConnection()->createQueryTable('config', 'SELECT component, setting, value, type FROM config order by 1, 2');
         $expectedTable = $this->get_expected_data_set('pluginconfig')->getTable("config");
         $this->assertTablesEqual($expectedTable, $queryTable);
         $sms->uninstall($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
@@ -593,7 +715,7 @@ class cssmstest extends unittestdatabase {
         // Check tables are correct.
         $queryTable = $this->getConnection()->getRowCount('plugins');
         $this->assertEquals(0, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('config', 'SELECT component, setting, value FROM config  order by 1, 2');
+        $queryTable = $this->getConnection()->createQueryTable('config', 'SELECT component, setting, value, type FROM config  order by 1, 2');
         $expectedTable = $this->get_expected_data_set('nopluginconfig')->getTable("config");
         $this->assertTablesEqual($expectedTable, $queryTable);
     }
@@ -607,5 +729,163 @@ class cssmstest extends unittestdatabase {
         $sms->install($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
         $this->assertEquals($sms->get_installed_version(), $sms->get_plugin_version('plugin_cs_sms'));
         $sms->uninstall($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
+    }
+    /**
+     * Test supports_module_import
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_module_import() {
+        $lang = new \langpack();
+        $component = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
+        $strings = $lang->get_all_strings($component);
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $array = array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/plugin_cs_sms/admin/import_modules.php',
+         'blurb' => $strings['importmodules'],
+         'tooltip' => $strings['importmodulestooltip']);
+        $this->assertEquals($array, $sms->supports_module_import());
+        
+    }
+    /**
+     * Test supports_module_import - disabled in config
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_module_import_disabled() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->config->set_setting('enable_module', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('enable_enrolment', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->assertFalse($sms->supports_module_import());
+        
+    }
+    /**
+     * Test supports_faculty_import
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_faculty_import() {
+        $lang = new \langpack();
+        $component = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
+        $strings = $lang->get_all_strings($component);
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $array = array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/plugin_cs_sms/admin/import_faculties.php',
+         'blurb' => $strings['importfaculties'],
+         'tooltip' => $strings['importfacultiestooltip']);
+        $this->assertEquals($array, $sms->supports_faculty_import());
+    }
+    /**
+     * Test supports_faculty_import - disabled in config
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_faculty_import_disabled() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->config->set_setting('enable_faculty', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->assertFalse($sms->supports_faculty_import());
+    }
+    /**
+     * Test supports_course_import
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_course_import() {
+        $lang = new \langpack();
+        $component = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
+        $strings = $lang->get_all_strings($component);
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $array = array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/plugin_cs_sms/admin/import_courses.php',
+         'blurb' => $strings['importcourses'],
+         'tooltip' => $strings['importcoursestooltip']);
+        $this->assertEquals($array, $sms->supports_course_import());
+    }
+    /**
+     * Test supports_course_import - disabled in config
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_course_import_disabled() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->config->set_setting('enable_course', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->assertFalse($sms->supports_course_import());
+    }
+    /**
+     * Test supports_enrol_import
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_enrol_import() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->assertTrue($sms->supports_enrol_import());
+    }
+    /**
+     * Test supports_enrol_import - disabled in config
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_enrol_import_disabled() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->config->set_setting('enable_enrolment', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->assertFalse($sms->supports_enrol_import());
+    }
+    /**
+     * Test supports_assessment_import
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_assessment_import() {
+        $lang = new \langpack();
+        $component = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
+        $strings = $lang->get_all_strings($component);
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $array = array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/plugin_cs_sms/admin/import_assessments.php',
+         'blurb' => $strings['importassessments'],
+         'tooltip' => $strings['importassessmentstooltip']);
+        $this->assertEquals($array, $sms->supports_assessment_import());
+    }
+    /**
+     * Test supports_assessment_import - disabled in config
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_supports_assessment_import_disabled() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->config->set_setting('enable_assessment', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->assertFalse($sms->supports_assessment_import());
+    }
+    /**
+     * Test get_name
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_get_name() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $this->assertEquals('Campus Solutions', $sms->get_name());
+    }
+    /**
+     * Test enable_plugin
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_enable_plugin() {
+        $config = $this->config->get_setting('plugin_sms', 'enabled_plugin');
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        // Check already enabled.
+        $sms->enable_plugin();
+        $this->assertEquals(array('plugin_cs_sms'), $config);
+        // Disable so we can test enabling.
+        $sms->disable_plugin();
+        $sms->enable_plugin();
+        $this->assertEquals(array('plugin_cs_sms'), $config);
+    }
+    /**
+     * Test disable_plugin
+     * @group sms
+     * @group plugin_cs_sms
+     */
+    public function test_disable_plugin() {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms($this->db);
+        $sms->disable_plugin();
+        $config = $this->config->get_setting('plugin_sms', 'enabled_plugin');
+        $this->assertEquals(array(), $config);
     }
 }

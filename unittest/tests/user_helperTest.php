@@ -95,31 +95,31 @@ class user_helpertest extends unittestdatabase {
      */
     public function test_map_student_status() {
         // User Cancelled.
-        $this->assertEquals('Left', user_helper::map_student_status('CN', 1, $this->db));
+        $this->assertEquals('Left', user_helper::map_student_status('CN', 2, $this->db));
         // User Discontinued.
-        $this->assertEquals('Left', user_helper::map_student_status('DC', 2, $this->db));
+        $this->assertEquals('Left', user_helper::map_student_status('DC', 3, $this->db));
         // User Deceased.
-        $this->assertEquals('Left', user_helper::map_student_status('DE', 3, $this->db));
+        $this->assertEquals('Left', user_helper::map_student_status('DE', 4, $this->db));
         // User Dismissed.
-        $this->assertEquals('Left', user_helper::map_student_status('DM', 4, $this->db));
+        $this->assertEquals('Left', user_helper::map_student_status('DM', 5, $this->db));
         // Completed Program.
-        $this->assertEquals('Graduate', user_helper::map_student_status('CM', 5, $this->db));
+        $this->assertEquals('Graduate', user_helper::map_student_status('CM', 6, $this->db));
         // User Admitted.
-        $this->assertEquals('Suspended', user_helper::map_student_status('AD', 6, $this->db));
+        $this->assertEquals('Suspended', user_helper::map_student_status('AD', 7, $this->db));
         // User Applicant.
-        $this->assertEquals('Suspended', user_helper::map_student_status('AP', 7, $this->db));
+        $this->assertEquals('Suspended', user_helper::map_student_status('AP', 8, $this->db));
         // User Leave of absence.
-        $this->assertEquals('Suspended', user_helper::map_student_status('LA', 8, $this->db));
+        $this->assertEquals('Suspended', user_helper::map_student_status('LA', 9, $this->db));
         // User Prematriculant.
-        $this->assertEquals('Suspended', user_helper::map_student_status('PM', 9, $this->db));
+        $this->assertEquals('Suspended', user_helper::map_student_status('PM', 10, $this->db));
         // User Suspended.
-        $this->assertEquals('Suspended', user_helper::map_student_status('SP', 10, $this->db));
+        $this->assertEquals('Suspended', user_helper::map_student_status('SP', 11, $this->db));
         // User Waitlisted.
-        $this->assertEquals('Suspended', user_helper::map_student_status('WT', 11, $this->db));
+        $this->assertEquals('Suspended', user_helper::map_student_status('WT', 12, $this->db));
         // User Active.
-        $this->assertEquals('Student', user_helper::map_student_status('AC', 12, $this->db));
+        $this->assertEquals('Student', user_helper::map_student_status('AC', 13, $this->db));
         // User Locked interanlly in Rogo
-        $this->assertEquals('Locked', user_helper::map_student_status('AC', 13, $this->db));
+        $this->assertEquals('Locked', user_helper::map_student_status('AC', 14, $this->db));
     }
     /**
      * Test map year of study
@@ -127,8 +127,26 @@ class user_helpertest extends unittestdatabase {
      * @group plugin_cs_sms
      */
     public function test_map_yearofstudy() {
-        // Valid year.
-        $this->assertEquals(6, user_helper::map_yearofstudy(6));
+        // Valid year 06.
+        $this->assertEquals(6, user_helper::map_yearofstudy('06'));
+        // Valid year 05.
+        $this->assertEquals(5, user_helper::map_yearofstudy('05'));
+        // Valid year 04.
+        $this->assertEquals(4, user_helper::map_yearofstudy('04'));
+        // Valid year 03.
+        $this->assertEquals(3, user_helper::map_yearofstudy('03'));
+        // Valid year 02.
+        $this->assertEquals(2, user_helper::map_yearofstudy('02'));
+        // Valid year 01.
+        $this->assertEquals(1, user_helper::map_yearofstudy('01'));
+        // Valid year 00.
+        $this->assertEquals(0, user_helper::map_yearofstudy('00'));
+        // Foundation year.
+        $this->assertEquals(0, user_helper::map_yearofstudy('FND'));
+        // PGT.
+        $this->assertEquals(null, user_helper::map_yearofstudy('PGT'));
+        // PGR.
+        $this->assertEquals(null, user_helper::map_yearofstudy('PGR'));
         // Invalid year.
         $this->assertEquals(null, user_helper::map_yearofstudy(7));
     }

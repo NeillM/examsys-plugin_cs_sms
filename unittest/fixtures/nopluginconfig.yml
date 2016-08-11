@@ -1,41 +1,96 @@
 config:
   -
+    component: "core"
+    setting: "paper_max_duration"
+    value: 779
+    type: "integer"
+  -
+    component: "core"
+    setting: "paper_timezones"
+    value: "{\"Pacific\/Samoa\":\"(UTC-11:00) Samoa\",\"Pacific\/Honolulu\":\"(UTC-10:00) Hawaii\",\"America\/Anchorage\":\"(UTC-09:00) Alaska\",\"America\/Los_Angeles\":\"(UTC-08:00) Pacific Time (US and Canada)\",\"America\/Denver\":\"(UTC-07:00) Arizona\",\"America\/Tegucigalpa\":\"(UTC-06:00) Central Time (US and Canada)\",\"America\/New_York\":\"(UTC-05:00) Eastern Time (US and Canada)\",\"America\/Caracas\":\"(UTC-04:30) Caracas\",\"America\/Halifax\":\"(UTC-04:00) Santiago\",\"America\/St_Johns\":\"(UTC-03:30) Newfoundland\",\"America\/Sao_Paulo\":\"(UTC-03:00) Buenos Aires\",\"Atlantic\/South_Georgia\":\"(UTC-02:00) Mid-Atlantic\",\"Atlantic\/Azores\":\"(UTC-01:00) Azores\",\"Europe\/London\":\"(UTC) Dublin, Edinburgh, Lisbon, London\",\"Europe\/Amsterdam\":\"(UTC+01:00) Amsterdam, Berlin, Stockholm\",\"Europe\/Athens\":\"(UTC+02:00) Athens, Bucharest\",\"Africa\/Johannesburg\":\"(UTC+02:00) Cape Town, Johannesburg\",\"Asia\/Kuwait\":\"(UTC+03:00) Kuwait, Riyadh\",\"Asia\/Tehran\":\"(UTC+03:30) Tehran\",\"Europe\/Moscow\":\"(UTC+04:00) Moscow, St. Petersburg, Volgograd\",\"Asia\/Kabul\":\"(UTC+04:30) Kabul\",\"Asia\/Karachi\":\"(UTC+05:00) Islamabad, Karachi\",\"Asia\/Calcutta\":\"(UTC+05:30) Kolkata, Mumbai, New Delhi\",\"Asia\/Dhaka\":\"(UTC+06:00) Dhaka\",\"Asia\/Rangoon\":\"(UTC+06:30) Yango (Rangoon)\",\"Asia\/Bangkok\":\"(UTC+07:00) Bangkok, Hanoi, Jakarta\",\"Asia\/Kuala_Lumpur\":\"(UTC+07:00) Bangkok, Hanoi, Jakarta\",\"Asia\/Hong_Kong\":\"(UTC+08:00) Beijing, Chongqing, Hong Kong\",\"Asia\/Tokyo\":\"(UTC+09:00) Osaka, Sapporo, Tokyo\",\"Australia\/Adelaide\":\"(UTC+09:30) Adelaide\",\"Australia\/Melbourne\":\"(UTC+10:00) Canberra, Melbourne, Sydney\",\"Asia\/Vladivostok\":\"(UTC+11:00) Solomon Is., New Caledonia\",\"Pacific\/Auckland\":\"(UTC+12:00) Auckland, Wellington\"}"
+    type: "timezones"
+  -
+    component: "core"
+    setting: "summative_cohort_sizes"
+    value: "[\"<whole cohort>\",\"0-10\",\"11-20\",\"21-30\",\"31-40\",\"41-50\",\"51-75\",\"76-100\",\"101-150\",\"151-200\",\"201-300\",\"301-400\",\"401-500\"]"
+    type: "json"
+  -
+    component: "core"
+    setting: "summative_max_sittings"
+    value: 6
+    type: "integer"
+  -
     component: "plugin_cs_sms"
     setting: "campuslist"
     value: "C,M,U"
+    type: "string"
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_assessment"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_course"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_enrolment"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_faculty"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_module"
+    value: 1
+    type: "boolean"
   -
     component: "plugin_cs_sms"
     setting: "installed"
     value: 0
+    type: "boolean"
   -
     component: "plugin_cs_sms"
     setting: "loglocation"
     value: ""
+    type: "string"
   -
     component: "plugin_cs_sms"
     setting: "password"
     value: "password"
+    type: "password"
   -
     component: "plugin_cs_sms"
     setting: "ssl_verify"
-    value: "1"  
+    value: "1"
+    type: "boolean"
   -
     component: "plugin_cs_sms"
     setting: "timeout"
     value: 10
+    type: "integer"
   -
     component: "plugin_cs_sms"
     setting: "url"
     value: "https://www.example.com"
+    type: "url"
   -
     component: "plugin_cs_sms"
     setting: "username"
     value: "username"
+    type: "string"
   -
     component: "plugin_cs_sms"
     setting: "validate_schema"
     value: "1"
+    type: "boolean"
   -
     component: "plugin_sms"
     setting: "enabled_plugin"
     value: "[\"plugin_cs_sms\"]"
+    type: "json"
