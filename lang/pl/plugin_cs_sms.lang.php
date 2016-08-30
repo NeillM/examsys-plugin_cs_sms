@@ -36,3 +36,5 @@ $string['timeout'] = 'Time limit in seconds before Rogo gives up calling the web
 $string['url'] = 'The url of the web service.';
 $string['username'] = 'The username required by the web service.';
 $string['validate_schema'] = 'Enable/Disable schema validation on the response from the web service.';
+$string['enable_gradebook'] = 'Enable/Disable gradebook publishing.';
+$string['gradebooklocation'] = 'Location to write greadebook files to be picked up by external system. Note: Leaving blank will effectively disable gradebook publishing.';

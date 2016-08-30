@@ -106,6 +106,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $this->userid = $userid;
         $this->campuslist = $this->config->get_setting($this->plugin, 'campuslist');
         $this->validation = $this->config->get_setting($this->plugin, 'validate_schema');
+        $this->gradebookdir = $this->config->get_setting($this->plugin, 'gradebooklocation');
     }
     
     /**
@@ -248,6 +249,17 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     }
     
     /**
+     * Write a gradebook to a file to be processed by campus solutions.
+     * @param integer $paper_id paper to publish gradebook for
+     */
+    public function publish_gradebook($paper_id) {
+        if (!$this->is_enabled() or !$this->is_configured('gradebook') or $this->gradebookdir == '') {
+            return;
+        }
+        gradebook_helper::publish($this->db, $paper_id, $this->gradebookdir);
+    }
+    
+    /**
      * Enable this plugin
      */
     public function enable_plugin() {
@@ -316,8 +328,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     }
     
     /**
-     * Check if enorlment import is supported by the plugin
-     * @return array|bool import url and translation strings, false  if enrolment import not supported
+     * Check if enrolment import is supported by the plugin
+     * @return array|bool false if enrolment import not supported
      */
     public function supports_enrol_import() {
         if ($this->is_configured('enrolment')) {
@@ -334,6 +346,18 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     public function supports_assessment_import() {
         if ($this->is_configured('assessment')) {
             return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_assessments.php', 'blurb' => $this->strings['importassessments'], 'tooltip' => $this->strings['importassessmentstooltip']);
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Check if gradebook publishing is supported by the plugin
+     * @return array|bool if gradebook publishing is not supported
+     */
+    public function supports_gradebook_publish() {
+        if ($this->is_configured('gradebook')) {
+            return true;
         } else {
             return false;
         }

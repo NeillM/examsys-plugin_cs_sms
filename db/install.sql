@@ -11,3 +11,5 @@ INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_s
 INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'enable_faculty', 1, 'boolean');
 INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'enable_module', 1, 'boolean');
 INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'enable_enrolment', 1, 'boolean');
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'enable_gradebook', 1, 'boolean');
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'gradebooklocation', '', 'string');
