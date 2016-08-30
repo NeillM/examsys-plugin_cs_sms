@@ -29,10 +29,10 @@ class assessments_helper {
     
     /**
      * List of valid assessment types.
-     * ROGO - CS only currently mapping one exam type to Rogo (summative)
+     * SUMMATIVE - CS only currently mapping one exam type to Rogo (summative)
      * @var array $validtypes
      */
-    private static $validtypes = array('ROGO');
+    private static $validtypes = array('SUMMATIVE');
     
     /**
      * Process assessment WS response
@@ -82,9 +82,7 @@ class assessments_helper {
                 $params['externalsys'] = plugin_cs_sms::SMS;
                 try {
                     $params['title'] = $xpath->query('./AssessmentDescr', $assessment)->item(0)->nodeValue;
-                    $hours = $xpath->query('./DurationHours', $assessment)->item(0)->nodeValue;
-                    $minutes = $xpath->query('./DurationMinutes', $assessment)->item(0)->nodeValue;
-                    $params['duration'] = ($hours * 60) + $minutes;
+                    $params['duration'] = $xpath->query('./DurationMinutes', $assessment)->item(0)->nodeValue;
                     $params['session'] = $xpath->query('./AcademicSession', $assessment)->item(0)->nodeValue;
                     $params['sittings'] = $xpath->query('./Sittings', $assessment)->item(0)->nodeValue;
                     $user = $xpath->query('./Owner', $assessment)->item(0);
@@ -127,7 +125,7 @@ class assessments_helper {
                 }
                 $params['nodeid'] = $node;
                 $node++;
-                if ($assessmenttype == 'ROGO') {
+                if ($assessmenttype == 'SUMMATIVE') {
                     $response = $am->schedule($params, $userid);
                     log_helper::log('Schedule', $params, $response, $logfile);
                 }
