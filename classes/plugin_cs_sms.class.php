@@ -249,14 +249,25 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     }
     
     /**
-     * Write a gradebook to a file to be processed by campus solutions.
+     * Write a gradebook for a paper to a file to be processed by campus solutions.
      * @param integer $paper_id paper to publish gradebook for
      */
-    public function publish_gradebook($paper_id) {
-        if (!$this->is_enabled() or !$this->is_configured('gradebook') or $this->gradebookdir == '') {
+    public function publish_paper_gradebook($paper_id) {
+        if (!$this->is_enabled() or !$this->is_configured('paper_gradebook') or $this->gradebookdir == '') {
             return;
         }
         gradebook_helper::publish($this->db, $paper_id, $this->gradebookdir);
+    }
+    
+    /**
+     * Write a gradebook for an academic session to a file to be processed by campus solutions.
+     * @param integer $session academic session to publish gradebook for
+     */
+    public function publish_session_gradebook($session) {
+        if (!$this->is_enabled() or !$this->is_configured('session_gradebook') or $this->gradebookdir == '') {
+            return;
+        }
+        gradebook_helper::publish_all($this->db, $session, $this->gradebookdir);
     }
     
     /**
@@ -346,18 +357,6 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     public function supports_assessment_import() {
         if ($this->is_configured('assessment')) {
             return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_assessments.php', 'blurb' => $this->strings['importassessments'], 'tooltip' => $this->strings['importassessmentstooltip']);
-        } else {
-            return false;
-        }
-    }
-    
-    /**
-     * Check if gradebook publishing is supported by the plugin
-     * @return array|bool if gradebook publishing is not supported
-     */
-    public function supports_gradebook_publish() {
-        if ($this->is_configured('gradebook')) {
-            return true;
         } else {
             return false;
         }
