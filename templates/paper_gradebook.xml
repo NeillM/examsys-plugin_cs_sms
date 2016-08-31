@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<{{ name }}>
+{% for key, item in response %}
+{% for itemkey,itemval in item %}
+    <Assessment_Student_Mark>
+        <CourseIDOfferingNo>{{ itemkey }}</CourseIDOfferingNo>
+        <CourseDescription>{{ itemval.coursedesc }}</CourseDescription>
+        <CourseSubjectCatalogNo>{{ itemval.coursesubject }}</CourseSubjectCatalogNo>
+        <ActivityRootID>{{ itemval.activityrootid }}</ActivityRootID>
+        <ActivityID>{{ itemval.activityid }}</ActivityID>
+        <ActivityDescription>{{ itemval.activitydesc }}</ActivityDescription>
+        <StudentID>{{ itemval.studentid }}</StudentID>
+        <LastName>{{ itemval.lastname }}</LastName>
+        <FirstName>{{ itemval.firstname }}</FirstName>
+        <Mark>{{ itemval.mark }}</Mark>
+        <ResultStatus>{{ itemval.resultstatus }}</ResultStatus>
+        <ResultType>{{ itemval.resulttype }}</ResultType>
+        <SubmissionDate>{{ itemval.submissiondate }}</SubmissionDate>
+    </Assessment_Student_Mark>
+{% endfor %}
+{% endfor %}
+</{{ name }}>

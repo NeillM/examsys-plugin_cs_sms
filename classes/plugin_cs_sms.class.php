@@ -256,7 +256,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!$this->is_enabled() or !$this->is_configured('paper_gradebook') or $this->gradebookdir == '') {
             return;
         }
-        gradebook_helper::publish($this->db, $paper_id, $this->gradebookdir);
+        gradebook_helper::publish($this->db, $paper_id, $this->gradebookdir, $this->config, $this->get_path());
     }
     
     /**
@@ -267,7 +267,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!$this->is_enabled() or !$this->is_configured('session_gradebook') or $this->gradebookdir == '') {
             return;
         }
-        gradebook_helper::publish_all($this->db, $session, $this->gradebookdir);
+        gradebook_helper::publish_all($this->db, $session, $this->gradebookdir, $this->config, $this->get_path());
     }
     
     /**
