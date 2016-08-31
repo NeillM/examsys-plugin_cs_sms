@@ -38,11 +38,12 @@ class gradebook_helper {
      */
     static public function publish($db, $paper_id, $gradebookdir, $configObject, $path) {
         $render = new \render($configObject, $path . DIRECTORY_SEPARATOR . 'templates');
-        $gradebook = new \gradebook($db);
         // Only interested in summative papers.
         if (\Paper_utils::get_paper_type($paper_id, $db) == '2') {
             $gradebookarray = self::get_paper_gradebook($paper_id, $db);
             if ($gradebookarray !== false) {
+                $paperdetails = \Paper_utils::get_paper_properties($paper_id, $db);
+                $activityid = $paperdetails['externalid'];
                 $logfile = $gradebookdir . DIRECTORY_SEPARATOR . $activityid . '.xml';
                 $response_xml = $render->render_xml('paper_gradebook.xml', 'UON_AssessmentResults', $gradebookarray);
                 file_put_contents($logfile, $response_xml);
@@ -60,13 +61,13 @@ class gradebook_helper {
      */
     static public function publish_all($db, $session, $gradebookdir, $configObject, $path) {
         $render = new \render($configObject, $path . DIRECTORY_SEPARATOR . 'templates');
-        $gradebook = new \gradebook($db);
         // Only interested in summative papers.
         $papers = \Paper_utils::get_papers_by_session($session, '2', $db);
+        $gradebookarray = array();
         foreach ($papers as $paper_id) {
             $g = self::get_paper_gradebook($paper_id, $db);
             if ($g !== false) {
-                $gradebookarray[] = $g;
+                 $gradebookarray = array_merge($gradebookarray, $g);
             }
         }
         $logfile = $gradebookdir . DIRECTORY_SEPARATOR . $session . '.xml';
@@ -81,11 +82,12 @@ class gradebook_helper {
      * @return array|bool gradebook or false if non
      */
     static private function get_paper_gradebook($paper_id, $db) {
+        $gradebook = new \gradebook($db);
         $paperdetails = \Paper_utils::get_paper_properties($paper_id, $db);
         $activityrootid = "";
         $activityid = $paperdetails['externalid'];
         // Only interested in external system assessments.
-        if (!is_null($activityid)) {
+        if (is_null($activityid)) {
             return false;
         }
         $activitydesc = $paperdetails['title'];
