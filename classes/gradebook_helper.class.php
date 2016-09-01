@@ -44,7 +44,7 @@ class gradebook_helper {
             if ($gradebookarray !== false) {
                 $paperdetails = \Paper_utils::get_paper_properties($paper_id, $db);
                 $activityid = $paperdetails['externalid'];
-                $logfile = $gradebookdir . DIRECTORY_SEPARATOR . $activityid . '.xml';
+                $logfile = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $activityid . '.xml';
                 $response_xml = $render->render_xml('paper_gradebook.xml', 'UON_AssessmentResults', $gradebookarray);
                 file_put_contents($logfile, $response_xml);
             }
@@ -70,7 +70,7 @@ class gradebook_helper {
                  $gradebookarray = array_merge($gradebookarray, $g);
             }
         }
-        $logfile = $gradebookdir . DIRECTORY_SEPARATOR . $session . '.xml';
+        $logfile = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $session . '.xml';
         $response_xml = $render->render_xml('paper_gradebook.xml', 'UON_AssessmentResults', $gradebookarray);
         file_put_contents($logfile, $response_xml);
     }
