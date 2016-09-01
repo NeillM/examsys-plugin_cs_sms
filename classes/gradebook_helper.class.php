@@ -27,7 +27,6 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class gradebook_helper {
     
-    
     /**
      * Publish a gradebook for a paper to a file
      * @param mysqli $db database connection
