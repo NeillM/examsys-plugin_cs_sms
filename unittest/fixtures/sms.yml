@@ -58,6 +58,16 @@ config:
     setting: "enable_module"
     value: 1
     type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_paper_gradebook"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_session_gradebook"
+    value: 1
+    type: "boolean"
 faculty:
   -
     id: 1

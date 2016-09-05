@@ -88,7 +88,7 @@ class cssmstest extends unittestdatabase {
             <AssessmentID>C-00000000035</AssessmentID>
             <AssessmentType>SUMMATIVE</AssessmentType>
             <AssessmentDescr>Test Exam 2</AssessmentDescr>
-            <DurationMinutes>0</DurationMinutes>
+            <DurationMinutes>60</DurationMinutes>
             <Modules>
               <Module>
                 <ModuleID>00001111</ModuleID>
