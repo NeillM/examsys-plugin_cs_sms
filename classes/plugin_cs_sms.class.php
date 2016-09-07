@@ -247,27 +247,16 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $singleexternal);
         }
     }
-    
-    /**
-     * Write a gradebook for a paper to a file to be processed by campus solutions.
-     * @param integer $paper_id paper to publish gradebook for
-     */
-    public function publish_paper_gradebook($paper_id) {
-        if (!$this->is_enabled() or !$this->is_configured('paper_gradebook') or $this->gradebookdir == '') {
-            return;
-        }
-        gradebook_helper::publish($this->db, $paper_id, $this->gradebookdir, $this->config, $this->get_path());
-    }
-    
+        
     /**
      * Write a gradebook for an academic session to a file to be processed by campus solutions.
      * @param integer $session academic session to publish gradebook for
      */
-    public function publish_session_gradebook($session) {
-        if (!$this->is_enabled() or !$this->is_configured('session_gradebook') or $this->gradebookdir == '') {
+    public function publish_gradebook($session) {
+        if (!$this->is_enabled() or !$this->is_configured('gradebook') or $this->gradebookdir == '') {
             return;
         }
-        gradebook_helper::publish_all($this->db, $session, $this->gradebookdir, $this->config, $this->get_path());
+        gradebook_helper::publish($this->db, $session, $this->gradebookdir, $this->config, $this->get_path());
     }
     
     /**

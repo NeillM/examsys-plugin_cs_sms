@@ -26,30 +26,6 @@ namespace plugins\SMS\plugin_cs_sms;
  * Gradebook helper class.
  */
 class gradebook_helper {
-    
-    /**
-     * Publish a gradebook for a paper to a file
-     * @param mysqli $db database connection
-     * @param integer $paper_id identifier of paper to publish gradebook for
-     * @param string $gradebookdir path to directory to write file
-     * @param object $configObject config object
-     * @param string $path path to plugin
-     */
-    static public function publish($db, $paper_id, $gradebookdir, $configObject, $path) {
-        $render = new \render($configObject, $path . DIRECTORY_SEPARATOR . 'templates');
-        // Only interested in summative papers.
-        if (\Paper_utils::get_paper_type($paper_id, $db) == '2') {
-            $gradebookarray = self::get_paper_gradebook($paper_id, $db);
-            if ($gradebookarray !== false) {
-                $paperdetails = \Paper_utils::get_paper_properties($paper_id, $db);
-                $activityid = $paperdetails['externalid'];
-                $logfile = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $activityid . '.xml';
-                $response_xml = $render->render_xml('paper_gradebook.xml', 'UON_AssessmentResults', $gradebookarray);
-                file_put_contents($logfile, $response_xml);
-            }
-        }
-    }
-    
     /**
      * Publish whole gradebook for an academic session to a file
      * @param mysqli $db database connection
@@ -58,7 +34,7 @@ class gradebook_helper {
      * @param object $configObject config object
      * @param string $path path to plugin
      */
-    static public function publish_all($db, $session, $gradebookdir, $configObject, $path) {
+    static public function publish($db, $session, $gradebookdir, $configObject, $path) {
         $render = new \render($configObject, $path . DIRECTORY_SEPARATOR . 'templates');
         // Only interested in summative papers.
         $papers = \Paper_utils::get_papers_by_session($session, '2', $db);
@@ -70,7 +46,7 @@ class gradebook_helper {
             }
         }
         $logfile = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $session . '.xml';
-        $response_xml = $render->render_xml('paper_gradebook.xml', 'UON_AssessmentResults', $gradebookarray);
+        $response_xml = $render->render_xml('gradebook.xml', 'UON_AssessmentResults', $gradebookarray);
         file_put_contents($logfile, $response_xml);
     }
 
