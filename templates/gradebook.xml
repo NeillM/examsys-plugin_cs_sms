@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-{% for k, i in response %}
 <{{ name }}>
+{% for k, i in response %}
 {% for key, item in i %}
 {% for itemkey,itemval in item %}
     <Assessment_Student_Mark>
@@ -20,5 +20,5 @@
     </Assessment_Student_Mark>
 {% endfor %}
 {% endfor %}
-</{{ name }}>
 {% endfor %}
+</{{ name }}>
