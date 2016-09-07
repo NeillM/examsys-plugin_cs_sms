@@ -50,5 +50,5 @@ $configObject->set_db_object($mysqli);
 $sms = new plugin_cs_sms($mysqli, 0);
 $yearutils = new \yearutils($mysqli);
 $current_year = $yearutils->get_current_session();
-$sms->publish_session_gradebook($current_year);
+$sms->publish_gradebook($current_year);
 $mysqli->close();
