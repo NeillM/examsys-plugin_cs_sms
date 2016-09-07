@@ -85,8 +85,9 @@ class gradebook_helper {
         $paperdetails = \Paper_utils::get_paper_properties($paper_id, $db);
         $activityrootid = "";
         $activityid = $paperdetails['externalid'];
-        // Only interested in external system assessments.
-        if (is_null($activityid)) {
+        $activitysys = $paperdetails['externalsys'];
+        // Only interested in campus solutions assessments.
+        if (is_null($activityid) or $activitysys != plugin_cs_sms::SMS) {
             return false;
         }
         $activitydesc = $paperdetails['title'];
