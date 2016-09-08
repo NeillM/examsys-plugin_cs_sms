@@ -26,6 +26,17 @@ namespace plugins\SMS\plugin_cs_sms;
  * Gradebook helper class.
  */
 class gradebook_helper {
+    
+    /**
+     * Campus Solutions Result status type 'imported'
+     * @var string
+     */
+    const RESULTSTATUS_IMPORTED = '07-Imported';
+    /**
+     * Campus Solutions Result type 'AM'
+     * @var string
+     */
+    const RESULTTYPE_AM = 'AM Result';
     /**
      * Publish whole gradebook for an academic session to a file
      * @param mysqli $db database connection
@@ -67,8 +78,8 @@ class gradebook_helper {
             return false;
         }
         $activitydesc = $paperdetails['title'];
-        $resultstatus = "07-Imported";
-        $resulttype = "AM Result";
+        $resultstatus = self::RESULTSTATUS_IMPORTED;
+        $resulttype = self::RESULTTYPE_AM;
         $submissiondate = $paperdetails['enddatetime'];
         $grades = $gradebook->get_paper_gradebook(\gradebook::PAPER, $paper_id);
         foreach ($grades as $paperidx => $paper) {
