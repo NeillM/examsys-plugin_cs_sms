@@ -7,7 +7,6 @@
         <CourseIDOfferingNo>{{ itemkey }}</CourseIDOfferingNo>
         <CourseDescription>{{ itemval.coursedesc }}</CourseDescription>
         <CourseSubjectCatalogNo>{{ itemval.coursesubject }}</CourseSubjectCatalogNo>
-        <ActivityRootID>{{ itemval.activityrootid }}</ActivityRootID>
         <ActivityID>{{ itemval.activityid }}</ActivityID>
         <ActivityDescription>{{ itemval.activitydesc }}</ActivityDescription>
         <StudentID>{{ itemval.studentid }}</StudentID>

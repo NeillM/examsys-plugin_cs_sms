@@ -70,7 +70,6 @@ class gradebook_helper {
     static private function get_paper_gradebook($paper_id, $db) {
         $gradebook = new \gradebook($db);
         $paperdetails = \Paper_utils::get_paper_properties($paper_id, $db);
-        $activityrootid = "";
         $activityid = $paperdetails['externalid'];
         $activitysys = $paperdetails['externalsys'];
         // Only interested in campus solutions assessments.
@@ -99,7 +98,6 @@ class gradebook_helper {
                     $response[$paper_id][$useridx][$courseid] = array(
                         'coursedesc' => $coursedesc,
                         'coursesubject' => $coursesubject,
-                        'activityrootid' => $activityrootid,
                         'activityid' => $activityid,
                         'activitydesc' => $activitydesc,
                         'studentid' => $studentid,
