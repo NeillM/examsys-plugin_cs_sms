@@ -71,6 +71,7 @@ class gradebook_helper {
      * @return array|bool gradebook or false if non
      */
     static private function get_paper_gradebook($paper_id, $db) {
+        $response = array();
         $gradebook = new \gradebook($db);
         $paperdetails = \Paper_utils::get_paper_properties($paper_id, $db);
         $activityid = $paperdetails['externalid'];
@@ -84,33 +85,35 @@ class gradebook_helper {
         $resulttype = self::RESULTTYPE_AM;
         $submissiondate = $paperdetails['enddatetime'];
         $grades = $gradebook->get_paper_gradebook(\gradebook::PAPER, $paper_id);
-        foreach ($grades as $paperidx => $paper) {
-            foreach ($paper as $useridx => $user) {
-                $userdetails = \UserUtils::get_user_details($useridx, $db);
-                $studentid = $userdetails['student_id'];
-                $lastname = $userdetails['surname'];
-                $firstname = $userdetails['first_names'];
-                $mark = $user['adjusted_grade'];
-                $modules = \module_utils::get_modules_for_paper($paper_id, $useridx, $db);
-                // Module level info.
-                foreach ($modules as $module) {
-                    $moduledetails = \module_utils::get_full_details_by_ID($module, $db);
-                    $courseid = $moduledetails['externalid'];
-                    $coursedesc = $moduledetails['fullname'];
-                    $coursesubject = $moduledetails['moduleid'];
-                    $response[$paper_id][$useridx][$courseid] = array(
-                        'coursedesc' => $coursedesc,
-                        'coursesubject' => $coursesubject,
-                        'activityid' => $activityid,
-                        'activitydesc' => $activitydesc,
-                        'studentid' => $studentid,
-                        'lastname' => $lastname,
-                        'firstname' => $firstname,
-                        'mark' => $mark,
-                        'resultstatus' => $resultstatus,
-                        'resulttype' => $resulttype,
-                        'submissiondate' => $submissiondate,
-                        'duedate' => $submissiondate);
+        if ($grades !== false) {
+            foreach ($grades as $paperidx => $paper) {
+                foreach ($paper as $useridx => $user) {
+                    $userdetails = \UserUtils::get_user_details($useridx, $db);
+                    $studentid = $userdetails['student_id'];
+                    $lastname = $userdetails['surname'];
+                    $firstname = $userdetails['first_names'];
+                    $mark = $user['adjusted_grade'];
+                    $modules = \module_utils::get_modules_for_paper($paper_id, $useridx, $db);
+                    // Module level info.
+                    foreach ($modules as $module) {
+                        $moduledetails = \module_utils::get_full_details_by_ID($module, $db);
+                        $courseid = $moduledetails['externalid'];
+                        $coursedesc = $moduledetails['fullname'];
+                        $coursesubject = $moduledetails['moduleid'];
+                        $response[$paper_id][$useridx][$courseid] = array(
+                            'coursedesc' => $coursedesc,
+                            'coursesubject' => $coursesubject,
+                            'activityid' => $activityid,
+                            'activitydesc' => $activitydesc,
+                            'studentid' => $studentid,
+                            'lastname' => $lastname,
+                            'firstname' => $firstname,
+                            'mark' => $mark,
+                            'resultstatus' => $resultstatus,
+                            'resulttype' => $resulttype,
+                            'submissiondate' => $submissiondate,
+                            'duedate' => $submissiondate);
+                    }
                 }
             }
         }
