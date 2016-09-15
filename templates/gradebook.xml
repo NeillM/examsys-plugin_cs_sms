@@ -16,6 +16,7 @@
         <ResultStatus>{{ itemval.resultstatus }}</ResultStatus>
         <ResultType>{{ itemval.resulttype }}</ResultType>
         <SubmissionDate>{{ itemval.submissiondate }}</SubmissionDate>
+        <DueDate>{{ itemval.duedate }}</DueDate>
     </Assessment_Student_Mark>
 {% endfor %}
 {% endfor %}

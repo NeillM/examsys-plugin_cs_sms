@@ -56,9 +56,12 @@ class gradebook_helper {
                  $gradebookarray = array_merge($gradebookarray, $g);
             }
         }
-        $logfile = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $session . '.xml';
+        $file = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $session . '-' . date("YmdHis");
+        $logfile = $file . '.xml';
+        $md5file = $file . '.md5';
         $response_xml = $render->render_xml('gradebook.xml', 'UON_AssessmentResults', $gradebookarray);
         file_put_contents($logfile, $response_xml);
+        file_put_contents($md5file, md5_file($logfile));
     }
 
     /**
@@ -106,7 +109,8 @@ class gradebook_helper {
                         'mark' => $mark,
                         'resultstatus' => $resultstatus,
                         'resulttype' => $resulttype,
-                        'submissiondate' => $submissiondate);
+                        'submissiondate' => $submissiondate,
+                        'duedate' => $submissiondate);
                 }
             }
         }
