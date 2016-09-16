@@ -56,17 +56,19 @@ class gradebook_helper {
                  $gradebookarray = array_merge($gradebookarray, $g);
             }
         }
-        $response_xml = $render->render_xml('gradebook.xml', 'UON_AssessmentResults', $gradebookarray);
-        if ($configObject->get_setting('plugin_cs_sms', 'gradebook_md5')) {
-            $suffix = md5($response_xml);
-        } else {
-            $suffix = date("YmdHis");
-        }
-        $logfile = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $session . '-' . $suffix . '.xml';
-        // If md5 enabled we only write a file if a change has occured i.e. a grade has been added
-        // If md5 is disabled we only write a file if the datetime has changed which is essentially always
-        if(!file_exists($logfile)) {
-            file_put_contents($logfile, $response_xml);
+        if (count($gradebookarray) !== 0) {
+            $response_xml = $render->render_xml('gradebook.xml', 'UON_AssessmentResults', $gradebookarray);
+            if ($configObject->get_setting('plugin_cs_sms', 'gradebook_md5')) {
+                $suffix = md5($response_xml);
+            } else {
+                $suffix = date("YmdHis");
+            }
+            $logfile = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $session . '-' . $suffix . '.xml';
+            // If md5 enabled we only write a file if a change has occured i.e. a grade has been added
+            // If md5 is disabled we only write a file if the datetime has changed which is essentially always
+            if(!file_exists($logfile)) {
+                file_put_contents($logfile, $response_xml);
+            }
         }
     }
 
