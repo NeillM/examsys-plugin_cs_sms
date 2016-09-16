@@ -39,4 +39,4 @@ $string['username'] = 'The username required by the web service.';
 $string['validate_schema'] = 'Enable/Disable schema validation on the response from the web service.';
 $string['enable_gradebook'] = 'Enable/Disable gradebook publishing.';
 $string['gradebooklocation'] = 'Location to write greadebook files to be picked up by external system. Note: Leaving blank will effectively disable gradebook publishing.';
-$string['gradebook_md5'] = 'Write an md5 file when writing the gradebook file (Useful for the endpoint system to verify file changes)';
+$string['gradebook_md5'] = 'Write md5 of file into file name of gradebook export (Useful for the endpoint system to verify file changes)';

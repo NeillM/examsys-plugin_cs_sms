@@ -56,13 +56,17 @@ class gradebook_helper {
                  $gradebookarray = array_merge($gradebookarray, $g);
             }
         }
-        $file = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $session . '-' . date("YmdHis");
-        $logfile = $file . '.xml';
-        $md5file = $file . '.md5';
         $response_xml = $render->render_xml('gradebook.xml', 'UON_AssessmentResults', $gradebookarray);
-        file_put_contents($logfile, $response_xml);
         if ($configObject->get_setting('plugin_cs_sms', 'gradebook_md5')) {
-            file_put_contents($md5file, md5_file($logfile));
+            $suffix = md5($response_xml);
+        } else {
+            $suffix = date("YmdHis");
+        }
+        $logfile = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $session . '-' . $suffix . '.xml';
+        // If md5 enabled we only write a file if a change has occured, if md5 is disabled we only write a file if the datetime has changed.
+        // which is essentially always.
+        if(!file_exists($logfile)) {
+            file_put_contents($logfile, $response_xml);
         }
     }
 
