@@ -63,8 +63,8 @@ class gradebook_helper {
             $suffix = date("YmdHis");
         }
         $logfile = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $session . '-' . $suffix . '.xml';
-        // If md5 enabled we only write a file if a change has occured, if md5 is disabled we only write a file if the datetime has changed.
-        // which is essentially always.
+        // If md5 enabled we only write a file if a change has occured i.e. a grade has been added
+        // If md5 is disabled we only write a file if the datetime has changed which is essentially always
         if(!file_exists($logfile)) {
             file_put_contents($logfile, $response_xml);
         }
