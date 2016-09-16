@@ -61,7 +61,9 @@ class gradebook_helper {
         $md5file = $file . '.md5';
         $response_xml = $render->render_xml('gradebook.xml', 'UON_AssessmentResults', $gradebookarray);
         file_put_contents($logfile, $response_xml);
-        file_put_contents($md5file, md5_file($logfile));
+        if ($configObject->get_setting('plugin_cs_sms', 'gradebook_md5')) {
+            file_put_contents($md5file, md5_file($logfile));
+        }
     }
 
     /**
