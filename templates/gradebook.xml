@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <{{ name }}>
-{% for k, i in response %}
-{% for key, item in i %}
-{% for itemkey,itemval in item %}
+{% for itemkey,itemval in response %}
     <Assessment_Student_Mark>
-        <CourseIDOfferingNo>{{ itemkey }}</CourseIDOfferingNo>
+        <CourseIDOfferingNo>{{ itemval.courseid }}</CourseIDOfferingNo>
         <CourseDescription>{{ itemval.coursedesc }}</CourseDescription>
         <CourseSubjectCatalogNo>{{ itemval.coursesubject }}</CourseSubjectCatalogNo>
         <ActivityID>{{ itemval.activityid }}</ActivityID>
@@ -18,7 +16,5 @@
         <SubmissionDate>{{ itemval.submissiondate }}</SubmissionDate>
         <DueDate>{{ itemval.duedate }}</DueDate>
     </Assessment_Student_Mark>
-{% endfor %}
-{% endfor %}
 {% endfor %}
 </{{ name }}>

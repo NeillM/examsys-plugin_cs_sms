@@ -108,7 +108,8 @@ class gradebook_helper {
                         $courseid = $moduledetails['externalid'];
                         $coursedesc = $moduledetails['fullname'];
                         $coursesubject = $moduledetails['moduleid'];
-                        $response[$paper_id][$useridx][$courseid] = array(
+                        $response[] = array(
+                            'courseid' => $courseid,
                             'coursedesc' => $coursedesc,
                             'coursesubject' => $coursesubject,
                             'activityid' => $activityid,
