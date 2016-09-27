@@ -32,13 +32,19 @@ class gradebook_helper {
      * @var string
      */
     const RESULTSTATUS_IMPORTED = '07-Imported';
-    
+
     /**
      * Campus Solutions Result type 'AM'
      * @var string
      */
     const RESULTTYPE_AM = 'AM Result';
-    
+
+    /**
+     * Gradebook object
+     * @var gradebook
+     */
+    private static $gradebook;
+
     /**
      * Publish whole gradebook for an academic session to a file
      * @param mysqli $db database connection
@@ -54,6 +60,7 @@ class gradebook_helper {
         // Only interested in summative papers.
         $papers = \Paper_utils::get_papers_by_session($session, '2', $db);
         $gradebookarray = array();
+        self::$gradebook = new \gradebook($db);
         foreach ($papers as $paper_id) {
             $g = self::get_paper_gradebook($paper_id, $db);
             if ($g !== false) {
@@ -84,7 +91,6 @@ class gradebook_helper {
      */
     static private function get_paper_gradebook($paper_id, $db) {
         $response = array();
-        $gradebook = new \gradebook($db);
         $paperdetails = \Paper_utils::get_paper_properties($paper_id, $db);
         $activityid = $paperdetails['externalid'];
         $activitysys = $paperdetails['externalsys'];
@@ -96,7 +102,7 @@ class gradebook_helper {
         $resultstatus = self::RESULTSTATUS_IMPORTED;
         $resulttype = self::RESULTTYPE_AM;
         $submissiondate = $paperdetails['enddatetime'];
-        $grades = $gradebook->get_paper_gradebook(\gradebook::PAPER, $paper_id);
+        $grades = self::$gradebook->get_paper_gradebook(\gradebook::PAPER, $paper_id);
         if ($grades !== false) {
             foreach ($grades as $paperidx => $paper) {
                 foreach ($paper as $useridx => $user) {
