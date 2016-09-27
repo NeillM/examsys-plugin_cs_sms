@@ -123,7 +123,7 @@ class gradebook_helper {
                             'studentid' => $studentid,
                             'lastname' => $lastname,
                             'firstname' => $firstname,
-                            'mark' => $mark,
+                            'mark' => self::round_up_negative($mark),
                             'resultstatus' => $resultstatus,
                             'resulttype' => $resulttype,
                             'submissiondate' => $submissiondate,
@@ -133,5 +133,17 @@ class gradebook_helper {
             }
         }
         return array('activityid' => $activityid, 'grades' => $response);
+    }
+
+    /**
+     * Round up neagtive marks.
+     * CS cannot handle negative marks so we round up to zero
+     * @param integer $mark mark to round up
+     */
+    static private function round_up_negative($mark) {
+        if ($mark < 0) {
+            return 0;
+        }
+        return $mark;
     }
 }
