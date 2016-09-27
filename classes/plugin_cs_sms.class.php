@@ -256,7 +256,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!$this->is_enabled() or !$this->is_configured('gradebook') or $this->gradebookdir == '') {
             return;
         }
-        gradebook_helper::publish($this->db, $session, $this->gradebookdir, $this->config, $this->get_path());
+        gradebook_helper::publish($session, $this->gradebookdir, $this->get_path());
     }
     
     /**

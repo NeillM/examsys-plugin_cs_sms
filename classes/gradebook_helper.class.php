@@ -32,11 +32,13 @@ class gradebook_helper {
      * @var string
      */
     const RESULTSTATUS_IMPORTED = '07-Imported';
+    
     /**
      * Campus Solutions Result type 'AM'
      * @var string
      */
     const RESULTTYPE_AM = 'AM Result';
+    
     /**
      * Publish whole gradebook for an academic session to a file
      * @param mysqli $db database connection
@@ -45,7 +47,9 @@ class gradebook_helper {
      * @param object $configObject config object
      * @param string $path path to plugin
      */
-    static public function publish($db, $session, $gradebookdir, $configObject, $path) {
+    static public function publish($session, $gradebookdir, $path) {
+        $configObject = \Config::get_instance();
+        $db = $configObject->db;
         $render = new \render($configObject, $path . DIRECTORY_SEPARATOR . 'templates');
         // Only interested in summative papers.
         $papers = \Paper_utils::get_papers_by_session($session, '2', $db);
