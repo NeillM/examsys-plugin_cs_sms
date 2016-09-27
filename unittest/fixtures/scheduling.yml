@@ -14,7 +14,7 @@ properties:
     property_id: 1
     paper_title: "Test Exam"
     paper_type: 2
-    exam_duration: 30
+    exam_duration: 90
     paper_ownerID: 1
     calendar_year: 2016
     externalid: "C-00000000033"
