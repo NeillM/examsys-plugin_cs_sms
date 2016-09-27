@@ -102,15 +102,14 @@ class gradebook_helper {
         $resultstatus = self::RESULTSTATUS_IMPORTED;
         $resulttype = self::RESULTTYPE_AM;
         $submissiondate = $paperdetails['enddatetime'];
-        $grades = self::$gradebook->get_paper_gradebook(\gradebook::PAPER, $paper_id);
+        $grades = self::$gradebook->get_user_detailed_paper_gradebook($paper_id);
         if ($grades !== false) {
             foreach ($grades as $paperidx => $paper) {
-                foreach ($paper as $useridx => $user) {
-                    $userdetails = \UserUtils::get_user_details($useridx, $db);
+                foreach ($paper as $useridx => $userdetails) {
                     $studentid = $userdetails['student_id'];
                     $lastname = $userdetails['surname'];
                     $firstname = $userdetails['first_names'];
-                    $mark = $user['adjusted_grade'];
+                    $mark = $userdetails['adjusted_grade'];
                     $modules = \module_utils::get_modules_for_paper($paper_id, $useridx, $db);
                     // Module level info.
                     foreach ($modules as $moduledetails) {
