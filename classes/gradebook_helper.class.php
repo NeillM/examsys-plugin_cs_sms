@@ -113,8 +113,7 @@ class gradebook_helper {
                     $mark = $user['adjusted_grade'];
                     $modules = \module_utils::get_modules_for_paper($paper_id, $useridx, $db);
                     // Module level info.
-                    foreach ($modules as $module) {
-                        $moduledetails = \module_utils::get_full_details_by_ID($module, $db);
+                    foreach ($modules as $moduledetails) {
                         $courseid = $moduledetails['externalid'];
                         $coursedesc = $moduledetails['fullname'];
                         $coursesubject = $moduledetails['moduleid'];
