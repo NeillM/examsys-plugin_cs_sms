@@ -47,10 +47,8 @@ class gradebook_helper {
 
     /**
      * Publish whole gradebook for an academic session to a file
-     * @param mysqli $db database connection
      * @param integer $session academic year to publish gradebook for
      * @param string $gradebookdir path to directory to write file
-     * @param object $configObject config object
      * @param string $path path to plugin
      */
     static public function publish($session, $gradebookdir, $path) {
