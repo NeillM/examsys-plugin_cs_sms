@@ -48,7 +48,5 @@ $mysqli = \DBUtils::get_mysqli_link($configObject->get('cfg_db_host'), $configOb
 $configObject->set_db_object($mysqli);
 // Run sms if enabled.
 $sms = new plugin_cs_sms($mysqli, 0);
-$yearutils = new \yearutils($mysqli);
-$current_year = $yearutils->get_current_session();
-$sms->publish_gradebook($current_year);
+$sms->publish_gradebook(date("Y"));
 $mysqli->close();

@@ -46,8 +46,8 @@ class gradebook_helper {
     private static $gradebook;
 
     /**
-     * Publish whole gradebook for an academic session to a file
-     * @param integer $session academic year to publish gradebook for
+     * Publish gradebook for year to multiple files per paper
+     * @param integer $session year to publish gradebook for
      * @param string $gradebookdir path to directory to write file
      * @param string $path path to plugin
      */
@@ -56,7 +56,7 @@ class gradebook_helper {
         $db = $configObject->db;
         $render = new \render($configObject, $path . DIRECTORY_SEPARATOR . 'templates');
         // Only interested in summative papers.
-        $papers = \Paper_utils::get_papers_by_session($session, '2', $db);
+        $papers = \Paper_utils::get_finalised_papers($session, '2', $db);
         self::$gradebook = new \gradebook($db);
         foreach ($papers as $paper_id) {
             $g = self::get_paper_gradebook($paper_id, $db);
