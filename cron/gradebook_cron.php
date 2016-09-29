@@ -47,7 +47,7 @@ Copyright (c) 2016 University of Nottingahm
 Generates gradebook files for campus solutions student management system.
     
 Usage:
-    php gradebook_cron.php [-y <year>]
+    php gradebook_cron.php [-y[<year>]]
     
 Parameters:
     -h, --help      This help documentation
