@@ -29,6 +29,42 @@ if (PHP_SAPI != 'cli') {
   die("Please run this script from the CLI!\n");
 }
 
+// Lets look to see what arguments have been passed.
+$options = 'hy::';
+$longoptions = array(
+    'help',
+);
+
+$optionslist = getopt($options, $longoptions);
+
+// Check if we should display help to the user.
+if (isset($optionslist['h']) || isset($optionslist['help'])) {
+    echo <<<HELP
+
+Rogo gradebook publication script
+Copyright (c) 2016 University of Nottingahm
+
+Generates gradebook files for campus solutions student management system.
+    
+Usage:
+    php gradebook_cron.php [-y <year>]
+    
+Parameters:
+    -h, --help      This help documentation
+    -y[year]       The calendar year to produce gradebooks for. 
+                    This value is optional. Defaults to current calendar year.
+
+HELP;
+exit();
+}
+
+// Set year based on command line argument or use default.
+if (isset($optionslist['y']) and !is_null($optionslist['y'])) {
+    $year = $optionslist['y'];
+} else {
+    $year = date("Y");
+}
+
 set_time_limit(0);
 
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/load_config.php';
@@ -48,5 +84,5 @@ $mysqli = \DBUtils::get_mysqli_link($configObject->get('cfg_db_host'), $configOb
 $configObject->set_db_object($mysqli);
 // Run sms if enabled.
 $sms = new plugin_cs_sms($mysqli, 0);
-$sms->publish_gradebook(date("Y"));
+$sms->publish_gradebook($year);
 $mysqli->close();
