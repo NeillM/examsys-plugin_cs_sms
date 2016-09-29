@@ -51,7 +51,7 @@ Usage:
     
 Parameters:
     -h, --help      This help documentation
-    -y[year]       The calendar year to produce gradebooks for. 
+    -y[year]        The calendar year to produce gradebooks for. 
                     This value is optional. Defaults to current calendar year.
 
 HELP;
