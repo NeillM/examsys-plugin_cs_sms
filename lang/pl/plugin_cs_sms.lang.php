@@ -16,6 +16,7 @@
 
 $string['restnodata'] = 'No data returned';
 $string['restnotvalid'] = 'Schema validation failed';
+$string['importfaculties'] = 'Import Faculties/Schools from SMS';
 $string['importfacultiestooltip'] = 'Sync Faculties and Schools with the connected Student Management System';
 $string['importmodules'] = 'Import modules from SMS';
 $string['importmodulestooltip']  = 'Sync Modules and Module Enrolments with the connected Student Management System';
@@ -36,3 +37,6 @@ $string['timeout'] = 'Time limit in seconds before Rogo gives up calling the web
 $string['url'] = 'The url of the web service.';
 $string['username'] = 'The username required by the web service.';
 $string['validate_schema'] = 'Enable/Disable schema validation on the response from the web service.';
+$string['enable_gradebook'] = 'Enable/Disable gradebook publishing.';
+$string['gradebooklocation'] = 'Location to write greadebook files to be picked up by external system. Note: Leaving blank will effectively disable gradebook publishing.';
+$string['gradebook_md5'] = 'Write md5 of file into file name of gradebook export (Useful for the endpoint system to verify file changes)';

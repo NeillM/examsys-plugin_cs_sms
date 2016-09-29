@@ -55,6 +55,16 @@ config:
     type: "boolean"
   -
     component: "plugin_cs_sms"
+    setting: "gradebook_md5"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_gradebook"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
     setting: "enable_module"
     value: 1
     type: "boolean"
