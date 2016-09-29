@@ -106,6 +106,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $this->userid = $userid;
         $this->campuslist = $this->config->get_setting($this->plugin, 'campuslist');
         $this->validation = $this->config->get_setting($this->plugin, 'validate_schema');
+        $this->gradebookdir = $this->config->get_setting($this->plugin, 'gradebooklocation');
     }
     
     /**
@@ -246,6 +247,17 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $singleexternal);
         }
     }
+        
+    /**
+     * Write a gradebook for an academic session to a file to be processed by campus solutions.
+     * @param integer $session academic session to publish gradebook for
+     */
+    public function publish_gradebook($session) {
+        if (!$this->is_enabled() or !$this->is_configured('gradebook') or $this->gradebookdir == '') {
+            return;
+        }
+        gradebook_helper::publish($session, $this->gradebookdir, $this->get_path());
+    }
     
     /**
      * Enable this plugin
@@ -316,8 +328,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
     }
     
     /**
-     * Check if enorlment import is supported by the plugin
-     * @return array|bool import url and translation strings, false  if enrolment import not supported
+     * Check if enrolment import is supported by the plugin
+     * @return array|bool false if enrolment import not supported
      */
     public function supports_enrol_import() {
         if ($this->is_configured('enrolment')) {
