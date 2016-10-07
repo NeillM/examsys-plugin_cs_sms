@@ -93,35 +93,51 @@ class assessments_helper {
                     // If the above are not provided we cannto create the assessment.
                     continue;
                 }
+                // Default optionals to null.
+                $params['month'] = null;
+                $params['cohort_size'] = null;
+                $params['barriers'] = null;
+                $params['campus'] = null;
+                $params['notes'] = null;
                 try {
-                    $params['month'] = $xpath->query('./Month', $assessment)->item(0)->nodeValue;
+                    $month = $xpath->query('./Month', $assessment)->item(0);
+                    if (!empty($month)) {
+                        $params['month'] = $month->nodeValue;
+                    }
                 } catch (\exception $e) {
                     // Optional so dont care.
-                    $params['month'] = null;
                 }
                 try {
-                    $params['cohort_size'] = $xpath->query('./CohortSize', $assessment)->item(0)->nodeValue;
+                    $cohort = $xpath->query('./CohortSize', $assessment)->item(0);
+                    if (!empty($cohort)) {
+                        $params['cohort_size'] = $cohort->nodeValue;
+                    }
                 } catch (\exception $e) {
                     // Optional so dont care.
-                    $params['cohort_size'] = null;
                 }
                 try {
-                    $params['barriers'] = $xpath->query('./Barriers', $assessment)->item(0)->nodeValue;
+                    $barrier = $xpath->query('./Barriers', $assessment)->item(0);
+                    if (!empty($barrier)) {
+                        $params['barriers'] = $barrier->nodeValue;
+                    }
                 } catch (\exception $e) {
                     // Optional so dont care.
-                    $params['barriers'] = null;
                 }
                 try {
-                    $params['campus'] = $xpath->query('./Campus', $assessment)->item(0)->nodeValue;
+                    $campus = $xpath->query('./Campus', $assessment)->item(0);
+                    if (!empty($campus)) {
+                        $params['campus'] = $campus->nodeValue;
+                    }
                 } catch (\exception $e) {
                     // Optional so dont care.
-                    $params['campus'] = null;
                 }
                 try {
-                    $params['notes'] = $xpath->query('./Notes', $assessment)->item(0)->nodeValue;
+                    $notes = $xpath->query('./Notes', $assessment)->item(0);
+                    if (!empty($notes)) {
+                        $params['notes'] = $notes->nodeValue;
+                    }
                 } catch (\exception $e) {
                     // Optional so dont care.
-                    $params['notes'] = null;
                 }
                 $params['nodeid'] = $node;
                 $node++;
