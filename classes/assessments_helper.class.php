@@ -127,6 +127,12 @@ class assessments_helper {
                 $node++;
                 if ($assessmenttype == 'SUMMATIVE') {
                     $response = $am->schedule($params, $userid);
+                    // Convert array to string for logging
+                    $loggingmodules = $params['extmodules'];
+                    $params['extmodules'] = '';
+                    foreach ($loggingmodules as $extmod) {
+                        $params['extmodules'] .= $extmod['value'] . ',';
+                    }
                     log_helper::log('Schedule', $params, $response, $logfile);
                 }
             }
