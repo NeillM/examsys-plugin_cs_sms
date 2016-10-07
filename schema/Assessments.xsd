@@ -8,8 +8,8 @@
                                        <xs:sequence>
                                              <xs:element name="AssessmentID" type="externalid"></xs:element>
                                              <xs:element name="AssessmentType" type="xs:string"></xs:element>
-                                             <xs:element name="AssessmentDescr" type="xs:string"></xs:element>
                                              <xs:element name="DurationMinutes" type="xs:int"></xs:element>
+                                             <xs:element name="AssessmentDescr" type="xs:string"></xs:element>
                                              <xs:element name="Modules">
                                                    <xs:complexType>
                                                          <xs:sequence>
@@ -32,7 +32,7 @@
                                                          </xs:sequence>
                                                    </xs:complexType>
                                              </xs:element>
-                                             <xs:element name="AcademicSession" type="year"></xs:element>
+                                             <xs:element name="AcademicSession" type="xs:gYear"></xs:element>
                                              <xs:element name="Month" type="month" minOccurs="0"></xs:element>
                                              <xs:element name="Campus" type="campus" minOccurs="0"></xs:element>
                                              <xs:element name="CohortSize" type="cohort" minOccurs="0"></xs:element>
@@ -56,12 +56,6 @@
                  <xs:minLength value="1"/>
                  <xs:maxLength value="15"/>
              </xs:restriction>
-        </xs:simpleType>
-        <xs:simpleType name="year">
-            <xs:restriction base="xs:integer">
-                <xs:minInclusive value="0"/>
-                <xs:maxInclusive value="6"/>
-            </xs:restriction>
         </xs:simpleType>
         <xs:simpleType name="username">
             <xs:restriction base="xs:string">
