@@ -58,13 +58,6 @@ HELP;
 exit();
 }
 
-// Set year based on command line argument or use default.
-if (isset($optionslist['y']) and !is_null($optionslist['y'])) {
-    $year = $optionslist['y'];
-} else {
-    $year = date("Y");
-}
-
 set_time_limit(0);
 
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/load_config.php';
@@ -76,6 +69,13 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/a
 autoloader::init();
 
 $configObject = \Config::get_instance();
+
+// Set year based on command line argument or use default.
+if (isset($optionslist['y']) and !is_null($optionslist['y'])) {
+    $year = $optionslist['y'];
+} else {
+    $year = date("Y");
+}
 
 $mysqli = \DBUtils::get_mysqli_link($configObject->get('cfg_db_host'), $configObject->get('cfg_db_sysadmin_user'),
     $configObject->get('cfg_db_sysadmin_passwd'), $configObject->get('cfg_db_database'), $configObject->get('cfg_db_charset'),
