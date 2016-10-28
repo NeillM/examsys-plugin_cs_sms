@@ -209,7 +209,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
         foreach ($campuslist as $campus) {
             $args = array('campus' => $campus);
-            $response = $this->callws('RogoSchools', self::CSVERSIONONE);
+            $response = $this->callws('RogoSchools', self::CSVERSIONONE, $args);
             if ($response != '') {
                 faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
             }
@@ -227,7 +227,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
         foreach ($campuslist as $campus) {
             $args = array('campus' => $campus);
-            $response = $this->callws('RogoProgPlan', self::CSVERSIONONE);
+            $response = $this->callws('RogoProgPlan', self::CSVERSIONONE, $args);
             if ($response != '') {
                 courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
             }
