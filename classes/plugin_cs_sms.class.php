@@ -206,9 +206,13 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             return;
         }
         $logfile = log_helper::set_logfile($this->logdir, 'faculty');
-        $response = $this->callws('RogoSchools', self::CSVERSIONONE);
-        if ($response != '') {
-            faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+        $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+        foreach ($campuslist as $campus) {
+            $args = array('campus' => $campus);
+            $response = $this->callws('RogoSchools', self::CSVERSIONONE, $args);
+            if ($response != '') {
+                faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+            }
         }
     }
     
@@ -220,9 +224,13 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             return;
         }
         $logfile = log_helper::set_logfile($this->logdir, 'course');
-        $response = $this->callws('RogoProgPlan', self::CSVERSIONONE);
-        if ($response != '') {
-            courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+        $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+        foreach ($campuslist as $campus) {
+            $args = array('campus' => $campus);
+            $response = $this->callws('RogoProgPlan', self::CSVERSIONONE, $args);
+            if ($response != '') {
+                courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+            }
         }
     }
     
@@ -238,13 +246,18 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $args = array();
         $logfile = log_helper::set_logfile($this->logdir, 'module');
         $singleexternal = false;
-        if (!is_null($externalid) and !is_null($session)) {
-            $args = array('academic_session' => $session, 'externalid' => $externalid);
-            $singleexternal = true;
-        }
-        $response = $this->callws('RogoClasses', self::CSVERSIONONE, $args);
-        if ($response != '') {
-            modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $singleexternal);
+        $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+        foreach ($campuslist as $campus) {
+            if (!is_null($externalid) and !is_null($session)) {
+                $args = array('academic_session' => $session, 'campus' => $campus, 'externalid' => $externalid);
+                $singleexternal = true;
+            } else {
+                $args = array('campus' => $campus);
+            }
+            $response = $this->callws('RogoClasses', self::CSVERSIONONE, $args);
+            if ($response != '') {
+                modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $singleexternal);
+            }
         }
     }
         
