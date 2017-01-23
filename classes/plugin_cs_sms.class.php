@@ -252,8 +252,9 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * Get modules
      * @params integer $externalid external system module id
      * @params integer $session academic session for the module
+     * @params integer $campus campus module is running on
      */
-    public function get_modules($externalid = null, $session = null) {
+    public function get_modules($externalid = null, $session = null, $campus = null) {
         if (!$this->is_enabled() or !$this->is_configured('module')) {
             return;
         }
@@ -262,25 +263,25 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $singleexternal = false;
         $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
         $currentmodules = array();
-        foreach ($campuslist as $campus) {
-            if (!is_null($externalid) and !is_null($session)) {
-                $args = array('academic_session' => $session, 'campus' => $campus, 'externalid' => $externalid);
-                $singleexternal = true;
-            } else {
+        if (!is_null($externalid) and !is_null($session) and !is_null($campus)) {
+            $args = array('academic_session' => $session, 'campus' => $campus, 'externalid' => $externalid);
+            $singleexternal = true;
+        } else {
+            foreach ($campuslist as $campus) {
                 $args = array('campus' => $campus);
-            }
-            $response = $this->callws('RogoClasses', self::CSVERSIONONE, $args);
-            if ($response != '') {
-                $modules = modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
-                if ($modules !== false) {
-                    $currentmodules = array_merge($currentmodules, $modules);
+                $response = $this->callws('RogoClasses', self::CSVERSIONONE, $args);
+                if ($response != '') {
+                    $modules = modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+                    if ($modules !== false) {
+                        $currentmodules = array_merge($currentmodules, $modules);
+                    }
                 }
             }
         }
-        // Delete modules no longer in CS.
         // Do not diff modules on single module update.
         if (!$singleexternal) {
-            modules_helper::delete_modules($currentmodules, $logfile, $this->userid, $this->db, $singleexternal);
+            // Delete modules no longer in CS
+            modules_helper::delete_modules($currentmodules, $logfile, $this->userid, $this->db);
         }
     }
         
