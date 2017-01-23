@@ -577,7 +577,7 @@ class cssmstest extends unittestdatabase {
         $sms->expects($this->once())
             ->method('callws')
             ->will($this->returnValue($this->modulexml));
-        $sms->get_modules('030003', 2016, 'U');
+        $sms->get_modules('030003', 2016);
         $queryTable = $this->getConnection()->createQueryTable('modules', 'SELECT id, moduleid, fullname, schoolid, externalid, academic_year_start, sms FROM modules');
         $expectedTable = $this->get_expected_data_set('faculty')->getTable("modules");
         $this->assertTablesEqual($expectedTable, $queryTable);
