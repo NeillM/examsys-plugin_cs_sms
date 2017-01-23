@@ -278,7 +278,10 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             }
         }
         // Delete modules no longer in CS.
-        modules_helper::delete_modules($currentmodules, $logfile, $this->userid, $this->db, $singleexternal);
+        // Do not diff modules on single module update.
+        if (!$singleexternal) {
+            modules_helper::delete_modules($currentmodules, $logfile, $this->userid, $this->db, $singleexternal);
+        }
     }
         
     /**
