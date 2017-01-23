@@ -34,7 +34,7 @@ class faculties_helper {
      * @param mysqli $db db connection
      * @param string $logfile log file location
      * @param boolean $validation validate xml response against schema
-     * @return boolean true on success, false on error
+     * @return boolean|array false on error, list of facultes and schools in CS on success
      */
     static public function process($response, $userid, $strings, $db, $logfile, $validation) {
         // Parse returned XML.
@@ -97,8 +97,24 @@ class faculties_helper {
                 $currentschools = array_merge($currentschools, school_helper::get_schools($memberschools, $externalid, $db, $userid, $logfile));
             }
         }
-        // Delete schools that have been removed from CS.
+        
+        return array($currentfaculties, $currentschools);
+    }
+
+    /**
+     * Delete facultes/schools that have been removed from CS
+     * 
+     * @param array $currentschools of schools ids in CS
+     * @param array $currentfaculties of faculty ids in CS
+     * @param string $logfile log file location
+     * @param integer $userid user to record actions under
+     * @param mysqli $db db connection
+     */
+    static public function delete_faculties_schools($currentschools, $currentfaculties, $logfile, $userid, $db) {
+        $node = 1;
+        $fm = new \api\facultymanagement($db);
         $sm = new \api\schoolmanagement($db);
+        // Delete schools that have been removed from CS.
         $delete = \SchoolUtils::diff_external_schools_to_internal_schools($currentschools, plugin_cs_sms::SMS, $db);
         // Try to delete course via schoolmanagement delete api.
         foreach ($delete as $deleteid) {
@@ -120,6 +136,5 @@ class faculties_helper {
             $response = $fm->delete($params, $userid);
             log_helper::log('Faculty Delete', $params, $response, $logfile);
         }
-        return true;
     }
 }

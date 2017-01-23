@@ -207,13 +207,21 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         }
         $logfile = log_helper::set_logfile($this->logdir, 'faculty');
         $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+        $currentfaculties = array();
+        $currentschools= array();
         foreach ($campuslist as $campus) {
             $args = array('campus' => $campus);
             $response = $this->callws('RogoSchools', self::CSVERSIONONE, $args);
             if ($response != '') {
-                faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+                $faculties = faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+                if ($faculties !== false) {
+                    $currentfaculties = array_merge($currentfaculties, $faculties[0]);
+                    $currentschools = array_merge($currentschools, $faculties[1]);
+                }
             }
         }
+        // Delete faculties and schools no longer in CS.
+        faculties_helper::delete_faculties_schools($currentschools, $currentfaculties, $logfile, $this->userid, $this->db);
     }
     
     /**
@@ -225,13 +233,19 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         }
         $logfile = log_helper::set_logfile($this->logdir, 'course');
         $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+        $currentplans = array();
         foreach ($campuslist as $campus) {
             $args = array('campus' => $campus);
             $response = $this->callws('RogoProgPlan', self::CSVERSIONONE, $args);
             if ($response != '') {
-                courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+                $plans = courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+                if ($plans !== false) {
+                    $currentplans = array_merge($currentplans, $plans);
+                }
             }
         }
+        // Delete courses no longer in CS.
+        courses_helper::delete_courses($currentplans, $logfile, $this->userid, $this->db);
     }
     
     /**
@@ -247,6 +261,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $logfile = log_helper::set_logfile($this->logdir, 'module');
         $singleexternal = false;
         $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+        $currentmodules = array();
         foreach ($campuslist as $campus) {
             if (!is_null($externalid) and !is_null($session)) {
                 $args = array('academic_session' => $session, 'campus' => $campus, 'externalid' => $externalid);
@@ -256,9 +271,14 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             }
             $response = $this->callws('RogoClasses', self::CSVERSIONONE, $args);
             if ($response != '') {
-                modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $singleexternal);
+                $modules = modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+                if ($modules !== false) {
+                    $currentmodules = array_merge($currentmodules, $modules);
+                }
             }
         }
+        // Delete modules no longer in CS.
+        modules_helper::delete_modules($currentmodules, $logfile, $this->userid, $this->db, $singleexternal);
     }
         
     /**
