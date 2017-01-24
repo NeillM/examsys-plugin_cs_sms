@@ -34,10 +34,9 @@ class modules_helper {
      * @param mysqli $db db connection
      * @param string $logfile log file location
      * @param boolean $validation validate xml response against schema
-     * @param boolean $singleexternal true if updating single external module, false otherwise
-     * @return boolean true on success, false on error
+     * @return boolean|array false on error, list of current module ids on success
      */
-    static public function process($response, $userid, $strings, $db, $logfile, $validation, $singleexternal) {
+    static public function process($response, $userid, $strings, $db, $logfile, $validation) {
         // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
@@ -89,23 +88,8 @@ class modules_helper {
                 }
                 log_helper::log($type, $params, $response, $logfile);
             }
-
         }
-        // Do not diff modules on single module update.
-        if (!$singleexternal) {
-            // Delete modules that have been removed from CS.
-            $delete = \module_utils::diff_external_modules_to_internal_modules($currentmodules, plugin_cs_sms::SMS, $db);
-            // Try to delete course via modulemanagement delete api.
-            foreach ($delete as $deleteid) {
-                $params = array();
-                $params['externalid'] = $deleteid;
-                $params['nodeid'] = $node;
-                $node++;
-                $response = $mm->delete($params, $userid);
-                log_helper::log('Module Delete', $params, $response, $logfile);
-            }
-        }
-        return true;
+        return $currentmodules;
     }
 
     /**
@@ -136,5 +120,29 @@ class modules_helper {
             $modulecode = $sourcecode;
         }
         return $modulecode;
+    }
+
+    /**
+     * Delete modules that have been removed from CS
+     * 
+     * @param array $currentmodules list of module ids in CS
+     * @param string $logfile log file location
+     * @param integer $userid user to record actions under
+     * @param mysqli $db db connection
+     */
+    static public function delete_modules($currentmodules, $logfile, $userid, $db) {
+        $node = 1;
+        $mm = new \api\modulemanagement($db);
+        // Delete modules that have been removed from CS.
+        $delete = \module_utils::diff_external_modules_to_internal_modules($currentmodules, plugin_cs_sms::SMS, $db);
+        // Try to delete course via modulemanagement delete api.
+        foreach ($delete as $deleteid) {
+            $params = array();
+            $params['externalid'] = $deleteid;
+            $params['nodeid'] = $node;
+            $node++;
+            $response = $mm->delete($params, $userid);
+            log_helper::log('Module Delete', $params, $response, $logfile);
+        }
     }
 }

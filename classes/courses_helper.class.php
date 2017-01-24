@@ -34,7 +34,7 @@ class courses_helper {
      * @param mysqli $db db connection
      * @param string $logfile log file location
      * @param boolean $validation validate xml response against schema
-     * @return boolean true on success, false on error
+     * @return boolean|array false on error, list of current plan ids on success
      */
     static public function process($response, $userid, $strings, $db, $logfile, $validation) {
         // Parse returned XML.
@@ -91,8 +91,21 @@ class courses_helper {
                 log_helper::log($type, $params, $response, $logfile);
             }
         }
-        // Delete courses that have been removed from CS.
+        return $currentplans;
+    }
+
+    /**
+     * Delete courses that have been removed from CS
+     * 
+     * @param array $currentplans list of course ids in CS
+     * @param string $logfile log file location
+     * @param integer $userid user to record actions under
+     * @param mysqli $db db connection
+     */
+    static public function delete_courses($currentplans, $logfile, $userid, $db) {
+        $cm = new \api\coursemanagement($db);
         $delete = \CourseUtils::diff_external_courses_to_internal_courses($currentplans, plugin_cs_sms::SMS, $db);
+        $node = 1;
         // Try to delete course via coursemanagement delete api.
         foreach ($delete as $deleteid) {
             $params = array();
@@ -102,6 +115,5 @@ class courses_helper {
             $response = $cm->delete($params, $userid);
             log_helper::log('Course Delete', $params, $response, $logfile);
         }
-        return true;
     }
 }
