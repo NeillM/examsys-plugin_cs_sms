@@ -210,7 +210,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $currentfaculties = array();
         $currentschools= array();
         foreach ($campuslist as $campus) {
-            $args = array('campus' => $campus);
+            $args = array('faculty' => '', 'campus' => $campus);
             $response = $this->callws('RogoSchools', self::CSVERSIONONE, $args);
             if ($response != '') {
                 $faculties = faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
@@ -235,7 +235,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
         $currentplans = array();
         foreach ($campuslist as $campus) {
-            $args = array('campus' => $campus);
+            $args = array('session' => '', 'campus' => $campus);
             $response = $this->callws('RogoProgPlan', self::CSVERSIONONE, $args);
             if ($response != '') {
                 $plans = courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
@@ -264,10 +264,10 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $currentmodules = array();
         foreach ($campuslist as $campus) {
             if (!is_null($externalid) and !is_null($session)) {
-                $args = array('academic_session' => $session, 'campus' => $campus, 'externalid' => $externalid);
+                $args = array('academic_session' => $session, 'externalid' => $externalid, 'campus' => $campus);
                 $singleexternal = true;
             } else {
-                $args = array('campus' => $campus);
+                $args = array('academic_session' => '', 'externalid' => '', 'campus' => $campus);
             }
             $response = $this->callws('RogoClasses', self::CSVERSIONONE, $args);
             if ($response != '') {
