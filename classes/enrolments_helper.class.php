@@ -74,11 +74,11 @@ class enrolments_helper {
                     // If membership node not provided cannot proceed with current module enrolments.
                     continue;
                 }
-                $currentenrols = user_helper::get_users($usermembership, $externalid, $userid, $logfile, $db, $userupdated);
                 // Enrol / Unerol users.
                 $moduleid = \module_utils::get_id_from_externalid($externalid, $db);
                 // We only enrol/unenrol if the module exists in rogo.
                 if ($moduleid) {
+                    $currentenrols = user_helper::get_users($usermembership, $externalid, $userid, $logfile, $db, $userupdated);
                     $smsimports[$moduleid]['enrolcount'] = 0;
                     $smsimports[$moduleid]['enrolusers'] = '';
                     $smsimports[$moduleid]['unenrolcount'] = 0;

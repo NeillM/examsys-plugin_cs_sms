@@ -150,14 +150,21 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!$this->is_enabled() or !$this->is_configured('assessment')) {
             return;
         }
-        $logfile = log_helper::set_logfile($this->logdir, 'assessment');
-        $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
-        foreach ($campuslist as $campus) {
-            $args = array('academic_session' => $session, 'campus' => $campus);
-            $response = $this->callws('RogoAssessments', self::CSVERSIONONE, $args);
-            if ($response != '') {
-                assessments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation);
+        // Check if sync already running.
+        $lockfile = $this->config->get('cfg_tmpdir') . DIRECTORY_SEPARATOR . 'assessment.lock';
+        lockfile_helper::lockfiletimeout($lockfile);
+        if (!file_exists($lockfile)) {
+            file_put_contents($lockfile, time());
+            $logfile = log_helper::set_logfile($this->logdir, 'assessment');
+            $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+            foreach ($campuslist as $campus) {
+                $args = array('academic_session' => $session, 'campus' => $campus);
+                $response = $this->callws('RogoAssessments', self::CSVERSIONONE, $args);
+                if ($response != '') {
+                    assessments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation);
+                }
             }
+            unlink($lockfile);
         }
     }
 
@@ -170,17 +177,24 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!$this->is_enabled() or !$this->is_configured('enrolment')) {
             return;
         }
-        $logfile = log_helper::set_logfile($this->logdir, 'enrol');
-        $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
-        foreach ($campuslist as $campus) {
-            $args = array('academic_session' => $session, 'campus' => $campus);
-            if (!is_null($externalid)) {
-                $args['externalid'] = $externalid;
+        // Check if sync already running.
+        $lockfile = $this->config->get('cfg_tmpdir') . DIRECTORY_SEPARATOR . 'enrolment.lock';
+        lockfile_helper::lockfiletimeout($lockfile);
+        if (!file_exists($lockfile)) {
+            file_put_contents($lockfile, time());
+            $logfile = log_helper::set_logfile($this->logdir, 'enrol');
+            $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+            foreach ($campuslist as $campus) {
+                $args = array('academic_session' => $session, 'campus' => $campus);
+                if (!is_null($externalid)) {
+                    $args['externalid'] = $externalid;
+                }
+                $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
+                if ($response != '') {
+                    enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation);
+                }
             }
-            $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
-            if ($response != '') {
-                enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation);
-            }
+            unlink($lockfile);
         }
     }
     
@@ -205,23 +219,30 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!$this->is_enabled() or !$this->is_configured('faculty')) {
             return;
         }
-        $logfile = log_helper::set_logfile($this->logdir, 'faculty');
-        $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
-        $currentfaculties = array();
-        $currentschools= array();
-        foreach ($campuslist as $campus) {
-            $args = array('faculty' => '', 'campus' => $campus);
-            $response = $this->callws('RogoSchools', self::CSVERSIONONE, $args);
-            if ($response != '') {
-                $faculties = faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
-                if ($faculties !== false) {
-                    $currentfaculties = array_merge($currentfaculties, $faculties[0]);
-                    $currentschools = array_merge($currentschools, $faculties[1]);
+        // Check if sync already running.
+        $lockfile = $this->config->get('cfg_tmpdir') . DIRECTORY_SEPARATOR . 'faculty.lock';
+        lockfile_helper::lockfiletimeout($lockfile);
+        if (!file_exists($lockfile)) {
+            file_put_contents($lockfile, time());
+            $logfile = log_helper::set_logfile($this->logdir, 'faculty');
+            $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+            $currentfaculties = array();
+            $currentschools= array();
+            foreach ($campuslist as $campus) {
+                $args = array('faculty' => '', 'campus' => $campus);
+                $response = $this->callws('RogoSchools', self::CSVERSIONONE, $args);
+                if ($response != '') {
+                    $faculties = faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+                    if ($faculties !== false) {
+                        $currentfaculties = array_merge($currentfaculties, $faculties[0]);
+                        $currentschools = array_merge($currentschools, $faculties[1]);
+                    }
                 }
             }
+            // Delete faculties and schools no longer in CS.
+            faculties_helper::delete_faculties_schools($currentschools, $currentfaculties, $logfile, $this->userid, $this->db);
+            unlink($lockfile);
         }
-        // Delete faculties and schools no longer in CS.
-        faculties_helper::delete_faculties_schools($currentschools, $currentfaculties, $logfile, $this->userid, $this->db);
     }
     
     /**
@@ -231,21 +252,28 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!$this->is_enabled() or !$this->is_configured('course')) {
             return;
         }
-        $logfile = log_helper::set_logfile($this->logdir, 'course');
-        $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
-        $currentplans = array();
-        foreach ($campuslist as $campus) {
-            $args = array('session' => '', 'campus' => $campus);
-            $response = $this->callws('RogoProgPlan', self::CSVERSIONONE, $args);
-            if ($response != '') {
-                $plans = courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
-                if ($plans !== false) {
-                    $currentplans = array_merge($currentplans, $plans);
+        // Check if sync already running.
+        $lockfile = $this->config->get('cfg_tmpdir') . DIRECTORY_SEPARATOR . 'course.lock';
+        lockfile_helper::lockfiletimeout($lockfile);
+        if (!file_exists($lockfile)) {
+            file_put_contents($lockfile, time());
+            $logfile = log_helper::set_logfile($this->logdir, 'course');
+            $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+            $currentplans = array();
+            foreach ($campuslist as $campus) {
+                $args = array('session' => '', 'campus' => $campus);
+                $response = $this->callws('RogoProgPlan', self::CSVERSIONONE, $args);
+                if ($response != '') {
+                    $plans = courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+                    if ($plans !== false) {
+                        $currentplans = array_merge($currentplans, $plans);
+                    }
                 }
             }
+            // Delete courses no longer in CS.
+            courses_helper::delete_courses($currentplans, $logfile, $this->userid, $this->db);
+            unlink($lockfile);
         }
-        // Delete courses no longer in CS.
-        courses_helper::delete_courses($currentplans, $logfile, $this->userid, $this->db);
     }
     
     /**
@@ -257,30 +285,37 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!$this->is_enabled() or !$this->is_configured('module')) {
             return;
         }
-        $args = array();
-        $logfile = log_helper::set_logfile($this->logdir, 'module');
-        $singleexternal = false;
-        $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
-        $currentmodules = array();
-        foreach ($campuslist as $campus) {
-            if (!is_null($externalid) and !is_null($session)) {
-                $args = array('academic_session' => $session, 'externalid' => $externalid, 'campus' => $campus);
-                $singleexternal = true;
-            } else {
-                $args = array('academic_session' => '', 'externalid' => '', 'campus' => $campus);
-            }
-            $response = $this->callws('RogoClasses', self::CSVERSIONONE, $args);
-            if ($response != '') {
-                $modules = modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
-                if ($modules !== false) {
-                    $currentmodules = array_merge($currentmodules, $modules);
+        // Check if sync already running.
+        $lockfile = $this->config->get('cfg_tmpdir') . DIRECTORY_SEPARATOR . 'module.lock';
+        lockfile_helper::lockfiletimeout($lockfile);
+        if (!file_exists($lockfile)) {
+            file_put_contents($lockfile, time());
+            $args = array();
+            $logfile = log_helper::set_logfile($this->logdir, 'module');
+            $singleexternal = false;
+            $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+            $currentmodules = array();
+            foreach ($campuslist as $campus) {
+                if (!is_null($externalid) and !is_null($session)) {
+                    $args = array('academic_session' => $session, 'externalid' => $externalid, 'campus' => $campus);
+                    $singleexternal = true;
+                } else {
+                    $args = array('academic_session' => '', 'externalid' => '', 'campus' => $campus);
+                }
+                $response = $this->callws('RogoClasses', self::CSVERSIONONE, $args);
+                if ($response != '') {
+                    $modules = modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+                    if ($modules !== false) {
+                        $currentmodules = array_merge($currentmodules, $modules);
+                    }
                 }
             }
-        }
-        // Do not diff modules on single module update.
-        if (!$singleexternal) {
-            // Delete modules no longer in CS
-            modules_helper::delete_modules($currentmodules, $logfile, $this->userid, $this->db);
+            // Do not diff modules on single module update.
+            if (!$singleexternal) {
+                // Delete modules no longer in CS
+                modules_helper::delete_modules($currentmodules, $logfile, $this->userid, $this->db);
+            }
+            unlink($lockfile);
         }
     }
         
@@ -292,7 +327,14 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!$this->is_enabled() or !$this->is_configured('gradebook') or $this->gradebookdir == '') {
             return;
         }
-        gradebook_helper::publish($session, $this->gradebookdir, $this->get_path());
+        // Check if export is already running.
+        $lockfile = $this->config->get('cfg_tmpdir') . DIRECTORY_SEPARATOR . 'gradebook.lock';
+        lockfile_helper::lockfiletimeout($lockfile);
+        if (!file_exists($lockfile)) {
+            file_put_contents($lockfile, time());
+            gradebook_helper::publish($session, $this->gradebookdir, $this->get_path());
+            unlink($lockfile);
+        }
     }
     
     /**
