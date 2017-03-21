@@ -191,7 +191,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                 }
                 $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
                 if ($response != '') {
-                    enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation);
+                    $active = $this->config->get_setting($this->plugin, 'active_modules_only');
+                    enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active);
                 }
             }
             unlink($lockfile);

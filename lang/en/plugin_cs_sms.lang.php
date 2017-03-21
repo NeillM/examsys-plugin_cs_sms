@@ -41,3 +41,4 @@ $string['enable_gradebook'] = 'Enable/Disable gradebook publishing.';
 $string['gradebooklocation'] = 'Location to write greadebook files to be picked up by external system. Note: Leaving blank will effectively disable gradebook publishing.';
 $string['gradebook_md5'] = 'Write md5 of file into file name of gradebook export (Useful for the endpoint system to verify file changes)';
 $string['lockfile_lifespan'] = 'Lifespan of process lock files (in hours)';
+$string['active_modules_only'] = 'Only sync enrolments to modules active in Rogo. If enabeld the enrolment feed processing time will be reduced.';

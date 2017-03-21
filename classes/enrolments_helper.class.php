@@ -35,10 +35,11 @@ class enrolments_helper {
      * @param string $logfile log file location
      * @param integer $session academic session for enrolments
      * @param boolean $validation validate xml response against schema
+     * @param boolean $active onyl process enrolments for active modules
      * @return boolean true on success, false on error
      */
-    static public function process($response, $userid, $strings, $db, $logfile, $session, $validation) {
-        // Parse returned XML.
+    static public function process($response, $userid, $strings, $db, $logfile, $session, $validation, $active) {
+        // Parse returned XML., 
         $data = new \DOMDocument();
         $data->loadXML($response);
         if (xml_helper::check_for_error($data, $userid, $db)) {
@@ -76,8 +77,14 @@ class enrolments_helper {
                 }
                 // Enrol / Unerol users.
                 $moduleid = \module_utils::get_id_from_externalid($externalid, $db);
+                $activemodule = true;
+                // Check if only syncing active modules.
+                if ($active) {
+                    $details = \module_utils::get_full_details_by_ID($moduleid, $db);
+                    $activemodule = $details['active'];
+                }
                 // We only enrol/unenrol if the module exists in rogo.
-                if ($moduleid) {
+                if ($moduleid && $activemodule) {
                     $currentenrols = user_helper::get_users($usermembership, $externalid, $userid, $logfile, $db, $userupdated);
                     $smsimports[$moduleid]['enrolcount'] = 0;
                     $smsimports[$moduleid]['enrolusers'] = '';
