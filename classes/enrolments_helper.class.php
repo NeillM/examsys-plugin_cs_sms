@@ -35,7 +35,7 @@ class enrolments_helper {
      * @param string $logfile log file location
      * @param integer $session academic session for enrolments
      * @param boolean $validation validate xml response against schema
-     * @param boolean $active onyl process enrolments for active modules
+     * @param boolean $active only process enrolments for active modules
      * @return boolean true on success, false on error
      */
     static public function process($response, $userid, $strings, $db, $logfile, $session, $validation, $active) {
