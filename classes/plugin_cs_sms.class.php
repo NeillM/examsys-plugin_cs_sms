@@ -153,7 +153,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         // Check if sync already running.
         $lockfile = $this->config->get('cfg_tmpdir') . DIRECTORY_SEPARATOR . 'assessment.lock';
         lockfile_helper::lockfiletimeout($lockfile);
-        if (!file_exists($lockfile)) {
+        $lifespan = $this->config->get_setting($this->plugin, 'lockfile_lifespan');
+        if (!file_exists($lockfile, $lifespan)) {
             file_put_contents($lockfile, time());
             $logfile = log_helper::set_logfile($this->logdir, 'assessment');
             $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
@@ -180,7 +181,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         // Check if sync already running.
         $lockfile = $this->config->get('cfg_tmpdir') . DIRECTORY_SEPARATOR . 'enrolment.lock';
         lockfile_helper::lockfiletimeout($lockfile);
-        if (!file_exists($lockfile)) {
+        $lifespan = $this->config->get_setting($this->plugin, 'lockfile_lifespan');
+        if (!file_exists($lockfile, $lifespan)) {
             file_put_contents($lockfile, time());
             $logfile = log_helper::set_logfile($this->logdir, 'enrol');
             $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
@@ -223,7 +225,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         // Check if sync already running.
         $lockfile = $this->config->get('cfg_tmpdir') . DIRECTORY_SEPARATOR . 'faculty.lock';
         lockfile_helper::lockfiletimeout($lockfile);
-        if (!file_exists($lockfile)) {
+        $lifespan = $this->config->get_setting($this->plugin, 'lockfile_lifespan');
+        if (!file_exists($lockfile, $lifespan)) {
             file_put_contents($lockfile, time());
             $logfile = log_helper::set_logfile($this->logdir, 'faculty');
             $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
@@ -256,7 +259,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         // Check if sync already running.
         $lockfile = $this->config->get('cfg_tmpdir') . DIRECTORY_SEPARATOR . 'course.lock';
         lockfile_helper::lockfiletimeout($lockfile);
-        if (!file_exists($lockfile)) {
+        $lifespan = $this->config->get_setting($this->plugin, 'lockfile_lifespan');
+        if (!file_exists($lockfile, $lifespan)) {
             file_put_contents($lockfile, time());
             $logfile = log_helper::set_logfile($this->logdir, 'course');
             $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
@@ -289,7 +293,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         // Check if sync already running.
         $lockfile = $this->config->get('cfg_tmpdir') . DIRECTORY_SEPARATOR . 'module.lock';
         lockfile_helper::lockfiletimeout($lockfile);
-        if (!file_exists($lockfile)) {
+        $lifespan = $this->config->get_setting($this->plugin, 'lockfile_lifespan');
+        if (!file_exists($lockfile, $lifespan)) {
             file_put_contents($lockfile, time());
             $args = array();
             $logfile = log_helper::set_logfile($this->logdir, 'module');
@@ -331,7 +336,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         // Check if export is already running.
         $lockfile = $this->config->get('cfg_tmpdir') . DIRECTORY_SEPARATOR . 'gradebook.lock';
         lockfile_helper::lockfiletimeout($lockfile);
-        if (!file_exists($lockfile)) {
+        $lifespan = $this->config->get_setting($this->plugin, 'lockfile_lifespan');
+        if (!file_exists($lockfile, $lifespan)) {
             file_put_contents($lockfile, time());
             gradebook_helper::publish($session, $this->gradebookdir, $this->get_path());
             unlink($lockfile);
