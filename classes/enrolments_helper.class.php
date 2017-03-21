@@ -39,7 +39,7 @@ class enrolments_helper {
      * @return boolean true on success, false on error
      */
     static public function process($response, $userid, $strings, $db, $logfile, $session, $validation, $active) {
-        // Parse returned XML., 
+        // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
         if (xml_helper::check_for_error($data, $userid, $db)) {
