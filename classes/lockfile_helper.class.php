@@ -30,11 +30,11 @@ class lockfile_helper {
     /**
      * Timeout lock file after a day - removes lock file.
      * @param string $lockfile filename of lock file
+     * @param integer $lifespan lifespan of lock file in hours
      */
-    static public function lockfiletimeout($lockfile) {
+    static public function lockfiletimeout($lockfile, $lifespan) {
         if (file_exists($lockfile)) {
             $lastlocked = file_get_contents($lockfile);
-            $lifespan = $this->config->get_setting($this->plugin, 'lockfile_lifespan');
             $onedayago = strtotime('-$lifespan hour', time());
             if ($lastlocked < $onedayago) {
                 unlink($lockfile);
