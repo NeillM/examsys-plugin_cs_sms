@@ -1,1 +1,2 @@
 INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'lockfile_lifespan', 24, 'integer');
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'active_modules_only', 1, 'boolean');
