@@ -24,11 +24,11 @@
 use plugins\SMS\plugin_cs_sms\plugin_cs_sms;
 
 require '../../../../include/sysadmin_auth.inc';
-require '../../../../include/errors.inc';
+require '../../../../include/errors.php';
 
 set_time_limit(0);
 
-$session = check_var('session', 'GET', true, false, true);
+$session = check_var('session', 'GET', true, false, true, param::INT);
 $yearutils = new \yearutils($mysqli);
 $supported_sessions = $yearutils->get_supported_years();
 if (!array_key_exists($session, $supported_sessions)) {
