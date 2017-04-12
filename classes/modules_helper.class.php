@@ -150,7 +150,7 @@ class modules_helper {
      * Get modules in Rogo that we want to action
      * @param string $campus university campus
      * @param boolean $active filter by active modules
-     * @param musqli $db db connection
+     * @param mysqli $db db connection
      * @return array modules
      */
     static public function get_target_modules($campus, $active, $db) {
