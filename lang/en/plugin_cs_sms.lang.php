@@ -42,3 +42,5 @@ $string['gradebooklocation'] = 'Location to write greadebook files to be picked 
 $string['gradebook_md5'] = 'Write md5 of file into file name of gradebook export (Useful for the endpoint system to verify file changes)';
 $string['lockfile_lifespan'] = 'Lifespan of process lock files (in hours)';
 $string['active_modules_only'] = 'Only sync enrolments to modules active in Rogo. If enabeld the enrolment feed processing time will be reduced.';
+$string['enable_delete_modules'] = 'Enabled/Disable deletion of modules during module sync.';
+$string['target_module_enrolments'] = 'Enable targeted enrolment sync. At teh cost of addtional API calls to SMS.';

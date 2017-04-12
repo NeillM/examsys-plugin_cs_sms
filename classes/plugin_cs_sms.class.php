@@ -93,7 +93,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         }
         return false;
     }
-    
+
     /**
      * Constructor
      * @param mysqli $mysqli db connection
@@ -185,16 +185,30 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!file_exists($lockfile)) {
             file_put_contents($lockfile, time());
             $logfile = log_helper::set_logfile($this->logdir, 'enrol');
+            $targeted = $this->config->get_setting($this->plugin, 'target_module_enrolments');
             $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+            $active = $this->config->get_setting($this->plugin, 'active_modules_only');
             foreach ($campuslist as $campus) {
                 $args = array('academic_session' => $session, 'campus' => $campus);
-                if (!is_null($externalid)) {
-                    $args['externalid'] = $externalid;
-                }
-                $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
-                if ($response != '') {
-                    $active = $this->config->get_setting($this->plugin, 'active_modules_only');
-                    enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active);
+                // Targeted list of modules.
+                if (is_null($externalid) and $targeted) {
+                    $targetmodules = modules_helper::get_target_modules($campus, $active, $this->db);
+                    foreach ($targetmodules as $externalid) {
+                        $args['externalid'] = $externalid;
+                        $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
+                        if ($response != '') {
+                            enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active);
+                        }
+                    }
+                } else {
+                    // Specific module.
+                    if (!is_null($externalid)) {
+                        $args['externalid'] = $externalid;
+                    }
+                    $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
+                    if ($response != '') {
+                        enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active);
+                    }
                 }
             }
             unlink($lockfile);
@@ -316,8 +330,10 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                     }
                 }
             }
+            // Check if delete modules is enabled.
+            $delete = $this->config->get_setting($this->plugin, 'enable_delete_modules');
             // Do not diff modules on single module update.
-            if (!$singleexternal) {
+            if (!$singleexternal and $delete) {
                 // Delete modules no longer in CS
                 modules_helper::delete_modules($currentmodules, $logfile, $this->userid, $this->db);
             }
