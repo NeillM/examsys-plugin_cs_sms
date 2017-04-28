@@ -1,0 +1,2 @@
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'enable_delete_modules', 1, 'boolean');
+INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'target_module_enrolments', 0, 'boolean');

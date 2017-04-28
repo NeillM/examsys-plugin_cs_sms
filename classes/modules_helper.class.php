@@ -145,4 +145,41 @@ class modules_helper {
             log_helper::log('Module Delete', $params, $response, $logfile);
         }
     }
+
+    /**
+     * Get modules in Rogo that we want to action
+     * @param string $campus university campus
+     * @param boolean $active filter by active modules
+     * @param mysqli $db db connection
+     * @return array modules
+     */
+    static public function get_target_modules($campus, $active, $db) {
+        $sms = plugin_cs_sms::SMS;
+        $modules = array();
+        switch ($campus) {
+            case 'C':
+                $modcode = 'AND moduleid LIKE \'%_UNNC\'';
+                break;
+            case 'M':
+                $modcode = 'AND moduleid LIKE \'%_UNMC\'';
+                break;
+            default:
+                $modcode = 'AND moduleid NOT LIKE \'%_UNMC\' AND moduleid NOT LIKE \'%_UNNC\'';
+                break;
+        }
+        if ($active) {
+            $act = 'active = 1 AND';
+        } else {
+            $act = '';
+        }
+        $result = $db->prepare("SELECT externalid FROM modules WHERE sms = ? AND $act mod_deleted IS NULL $modcode");
+        $result->bind_param('s', $sms);
+        $result->execute();
+        $result->store_result();
+        $result->bind_result($externalid);
+        while ($result->fetch()) {
+            $modules[] = $externalid;
+        }
+        return $modules;
+    }
 }
