@@ -43,13 +43,14 @@ class assessments_helper {
      * @param string $logfile log file location
      * @param integer $session academic session for enrolments
      * @param boolean $validation validate xml response against schema
+     * @param array $args arguments used to call web service
      * @return boolean true on success, false on error
      */
-    static public function process($response, $userid, $strings, $db, $logfile, $session, $validation) {
+    static public function process($response, $userid, $strings, $db, $logfile, $session, $validation, $args) {
         // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
-        if (xml_helper::check_for_error($data, $userid, $db)) {
+        if (xml_helper::check_for_error($data, $userid, $db, 'assessment', $args)) {
             return false;
         }
         if ($validation) {

@@ -162,7 +162,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                 $args = array('academic_session' => $session, 'campus' => $campus);
                 $response = $this->callws('RogoAssessments', self::CSVERSIONONE, $args);
                 if ($response != '') {
-                    assessments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation);
+                    assessments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $args);
                 }
             }
             unlink($lockfile);
@@ -197,7 +197,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                         $args['externalid'] = $externalid;
                         $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
                         if ($response != '') {
-                            enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active);
+                            enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active, $args);
                         }
                     }
                 } else {
@@ -207,7 +207,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                     }
                     $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
                     if ($response != '') {
-                        enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active);
+                        enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active, $args);
                     }
                 }
             }
@@ -250,7 +250,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                 $args = array('faculty' => '', 'campus' => $campus);
                 $response = $this->callws('RogoSchools', self::CSVERSIONONE, $args);
                 if ($response != '') {
-                    $faculties = faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+                    $faculties = faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $args);
                     if ($faculties !== false) {
                         $currentfaculties = array_merge($currentfaculties, $faculties[0]);
                         $currentschools = array_merge($currentschools, $faculties[1]);
@@ -283,7 +283,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                 $args = array('session' => '', 'campus' => $campus);
                 $response = $this->callws('RogoProgPlan', self::CSVERSIONONE, $args);
                 if ($response != '') {
-                    $plans = courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+                    $plans = courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $args);
                     if ($plans !== false) {
                         $currentplans = array_merge($currentplans, $plans);
                     }
@@ -324,7 +324,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                 }
                 $response = $this->callws('RogoClasses', self::CSVERSIONONE, $args);
                 if ($response != '') {
-                    $modules = modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation);
+                    $modules = modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $args);
                     if ($modules !== false) {
                         $currentmodules = array_merge($currentmodules, $modules);
                     }
