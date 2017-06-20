@@ -18,4 +18,3 @@ INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_s
 INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'active_modules_only', 1, 'boolean');
 INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'enable_delete_modules', 1, 'boolean');
 INSERT IGNORE INTO config (component, setting, value, type) values ('plugin_cs_sms', 'target_module_enrolments', 0, 'boolean');
-INSERT IGNORE INTO external_systems (name, type) values ('Campus Solutions', 'plugin');

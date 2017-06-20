@@ -1,1 +1,0 @@
-DELETE IGNORE FROM external_systems WHERE name = 'Campus Solutions' AND type = 'plugin';
