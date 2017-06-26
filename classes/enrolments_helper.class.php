@@ -76,11 +76,11 @@ class enrolments_helper {
                     continue;
                 }
                 // Enrol / Unerol users.
-                $moduleid = \module_utils::get_id_from_externalid($externalid, $db);
+                $details = \module_utils::get_full_details('external', $externalid, $db);
+                $moduleid = $details['moduleid'];
                 $activemodule = true;
                 // Check if only syncing active modules.
                 if ($active) {
-                    $details = \module_utils::get_full_details_by_ID($moduleid, $db);
                     $activemodule = $details['active'];
                 }
                 // We only enrol/unenrol if the module exists in rogo.
