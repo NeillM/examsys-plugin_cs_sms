@@ -1,0 +1,1 @@
+INSERT IGNORE INTO external_systems (name, type) values ('Campus Solutions', 'plugin');
