@@ -36,13 +36,14 @@ class enrolments_helper {
      * @param integer $session academic session for enrolments
      * @param boolean $validation validate xml response against schema
      * @param boolean $active only process enrolments for active modules
+     * @param array $args arguments used to call web service
      * @return boolean true on success, false on error
      */
-    static public function process($response, $userid, $strings, $db, $logfile, $session, $validation, $active) {
+    static public function process($response, $userid, $strings, $db, $logfile, $session, $validation, $active, $args) {
         // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
-        if (xml_helper::check_for_error($data, $userid, $db)) {
+        if (xml_helper::check_for_error($data, $userid, $db, 'enrolment feed', $args)) {
             return false;
         }
         if ($validation) {

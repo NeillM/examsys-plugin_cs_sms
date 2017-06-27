@@ -32,13 +32,14 @@ class log_helper {
      * @param integer $userid user to log error to
      * @param array $string error string
      * @param integer $errline line web service was called
+     * @param array $args arguments used to call web service
      * @param mysqli $db db connection
      */
-    static public function log_app_warning($userid, $string, $errorline, $db) {
+    static public function log_app_warning($userid, $string, $errorline, $db, $args) {
         $log = new \Logger($db);
         $username = 'plugin_cs_sms';
         $errorfile = $_SERVER['PHP_SELF'];
-        $log->record_application_warning($userid, $username, $string, $errorfile, $errorline);
+        $log->record_application_warning($userid, $username, $string, $errorfile, $errorline, $args);
     }
     
     /**
