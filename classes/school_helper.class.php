@@ -54,7 +54,7 @@ class school_helper {
                 if (!is_null($externalid)) {
                     $currentschools[] = $externalid;
                     $params = array();
-                    $schoolid = \SchoolUtils::get_schoolid_from_externalid($externalid, $db);
+                    $schoolid = \SchoolUtils::get_schoolid_from_externalid($externalid, plugin_cs_sms::SMS, $db);
                     try {
                         $params['code'] = $xpath->query('./SchoolCode', $school)->item(0)->nodeValue;
                         $params['name'] = $xpath->query('./SchoolDescr', $school)->item(0)->nodeValue;

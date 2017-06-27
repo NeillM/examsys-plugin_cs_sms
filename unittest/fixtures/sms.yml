@@ -24,15 +24,15 @@ config:
     value: 6
     type: "integer"
   -
-    component: "plugin_sms"
-    setting: "enabled_plugin"
-    value: "[\"plugin_cs_sms\"]"
-    type: "json"
-  -
     component: "plugin_cs_sms"
-    setting: "installed"
+    setting: "active_modules_only"
     value: 1
     type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "campuslist"
+    value: "U"
+    type: "string"
   -
     component: "plugin_cs_sms"
     setting: "enable_assessment"
@@ -41,6 +41,11 @@ config:
   -
     component: "plugin_cs_sms"
     setting: "enable_course"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_delete_modules"
     value: 1
     type: "boolean"
   -
@@ -55,11 +60,6 @@ config:
     type: "boolean"
   -
     component: "plugin_cs_sms"
-    setting: "gradebook_md5"
-    value: 1
-    type: "boolean"
-  -
-    component: "plugin_cs_sms"
     setting: "enable_gradebook"
     value: 1
     type: "boolean"
@@ -68,6 +68,71 @@ config:
     setting: "enable_module"
     value: 1
     type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "gradebook_md5"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "gradebooklocation"
+    value: ""
+    type: "string"
+  -
+    component: "plugin_cs_sms"
+    setting: "installed"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "lockfile_lifespan"
+    value: 0
+    type: "integer"
+  -
+    component: "plugin_cs_sms"
+    setting: "loglocation"
+    value: ""
+    type: "string"
+  -
+    component: "plugin_cs_sms"
+    setting: "password"
+    value: "password"
+    type: "password"
+  -
+    component: "plugin_cs_sms"
+    setting: "ssl_verify"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "target_module_enrolments"
+    value: 0
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "timeout"
+    value: 10
+    type: "integer"
+  -
+    component: "plugin_cs_sms"
+    setting: "url"
+    value: "https://www.example.com"
+    type: "url"
+  -
+    component: "plugin_cs_sms"
+    setting: "username"
+    value: "username"
+    type: "string"
+  -
+    component: "plugin_cs_sms"
+    setting: "validate_schema"
+    value: 0
+    type: "boolean"
+  -
+    component: "plugin_sms"
+    setting: "enabled_plugin"
+    value: "[\"plugin_cs_sms\"]"
+    type: "json"
 faculty:
   -
     id: 1
@@ -107,6 +172,7 @@ modules:
     externalid: "00001111"
     academic_year_start: "07/01"
     sms: "Campus Solutions"
+    active: 1
 users:
   -
     id: 1

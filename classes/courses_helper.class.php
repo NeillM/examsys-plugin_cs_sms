@@ -66,7 +66,7 @@ class courses_helper {
             if (!is_null($externalid)) {
                 $currentplans[] = $externalid;
                 $params = array();
-                $courseid = \CourseUtils::get_courseid_from_externalid($externalid, $db);
+                $courseid = \CourseUtils::get_courseid_from_externalid($externalid, plugin_cs_sms::SMS, $db);
                 try {
                     $params['name'] = $xpath->query('./PlanCode', $plan)->item(0)->nodeValue;
                     $params['description'] = $xpath->query('./PlanDescr', $plan)->item(0)->nodeValue;
