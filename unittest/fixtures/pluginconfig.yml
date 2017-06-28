@@ -21,8 +21,13 @@ config:
     type: "integer"
   -
     component: "plugin_cs_sms"
+    setting: "active_modules_only"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
     setting: "campuslist"
-    value: "C,M,U"
+    value: "U"
     type: "string"
   -
     component: "plugin_cs_sms"
@@ -32,6 +37,11 @@ config:
   -
     component: "plugin_cs_sms"
     setting: "enable_course"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "enable_delete_modules"
     value: 1
     type: "boolean"
   -
@@ -71,6 +81,11 @@ config:
     type: "boolean"
   -
     component: "plugin_cs_sms"
+    setting: "lockfile_lifespan"
+    value: 0
+    type: "integer"
+  -
+    component: "plugin_cs_sms"
     setting: "loglocation"
     value: ""
     type: "string"
@@ -82,7 +97,12 @@ config:
   -
     component: "plugin_cs_sms"
     setting: "ssl_verify"
-    value: "1"
+    value: 1
+    type: "boolean"
+  -
+    component: "plugin_cs_sms"
+    setting: "target_module_enrolments"
+    value: 0
     type: "boolean"
   -
     component: "plugin_cs_sms"
@@ -102,7 +122,7 @@ config:
   -
     component: "plugin_cs_sms"
     setting: "validate_schema"
-    value: "1"
+    value: 0
     type: "boolean"
   -
     component: "plugin_sms"
@@ -112,5 +132,5 @@ config:
 plugins:
   -
     component: "plugin_cs_sms"
-    version: "1.1.0"
+    version: "1.2.1"
     type: "SMS"

@@ -77,11 +77,11 @@ class enrolments_helper {
                     continue;
                 }
                 // Enrol / Unerol users.
-                $moduleid = \module_utils::get_id_from_externalid($externalid, $db);
+                $details = \module_utils::get_full_details('external', $externalid, $db, plugin_cs_sms::SMS);
+                $moduleid = $details['moduleid'];
                 $activemodule = true;
                 // Check if only syncing active modules.
                 if ($active) {
-                    $details = \module_utils::get_full_details_by_ID($moduleid, $db);
                     $activemodule = $details['active'];
                 }
                 // We only enrol/unenrol if the module exists in rogo.
@@ -93,6 +93,7 @@ class enrolments_helper {
                     $smsimports[$moduleid]['unenrolusers'] = '';
                     $params = array();
                     $params['moduleextid'] = $externalid;
+                    $params['moduleextsys'] = plugin_cs_sms::SMS;
                     $params['session'] = $session;
                     // Enrol.
                     foreach ($currentenrols[$externalid] as $userexternalid => $username) {
@@ -117,6 +118,7 @@ class enrolments_helper {
                     // Unenrol.
                     $params = array();
                     $params['moduleextid'] = $externalid;
+                    $params['moduleextsys'] = plugin_cs_sms::SMS;
                     $params['session'] = $session;
                     $membership = \module_utils::get_student_members($session, $moduleid, $db);
                     foreach ($membership as $idx => $member) {

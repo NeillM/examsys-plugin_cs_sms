@@ -67,7 +67,7 @@ class faculties_helper {
             if (!is_null($externalid)) {
                 $currentfaculties[] = $externalid;
                 $params = array();
-                $facultyid= \FacultyUtils::get_facultyid_from_externalid($externalid, $db);
+                $facultyid= \FacultyUtils::get_facultyid_from_externalid($externalid, plugin_cs_sms::SMS, $db);
                 try {
                     $params['code'] = $xpath->query('./FacultyCode', $faculty)->item(0)->nodeValue;
                     $params['name'] = $xpath->query('./FacultyDescr', $faculty)->item(0)->nodeValue;

@@ -64,6 +64,7 @@ modules:
     externalid: "00001111"
     academic_year_start: "07/01"
     sms: "Campus Solutions"
+    active: 1
   -
     id: 2
     moduleid: "NAAAXXXX"
@@ -72,6 +73,7 @@ modules:
     externalid: "030003"
     academic_year_start: "07/01"
     sms: "Campus Solutions"
+    active: 1
 users:
   -
     id: 1

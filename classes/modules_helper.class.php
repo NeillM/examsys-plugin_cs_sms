@@ -77,7 +77,7 @@ class modules_helper {
                 }
                 $params['nodeid'] = $node;
                 $params['sms'] = plugin_cs_sms::SMS;
-                $modid = \module_utils::get_id_from_externalid($externalid, $db);
+                $modid = \module_utils::get_id_from_externalid($externalid, plugin_cs_sms::SMS, $db);
                 if ($modid) {
                     // If ExternalID exists call modulemanagement update api.
                     $response = $mm->update($params, $userid);
