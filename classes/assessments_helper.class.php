@@ -91,7 +91,7 @@ class assessments_helper {
                     $modules = $xpath->query('./Modules', $assessment)->item(0)->childNodes;
                     $params['extmodules'] = self::process_module($modules);
                 } catch (\exception $e) {
-                    // If the above are not provided we cannto create the assessment.
+                    // If the above are not provided we cannot create the assessment.
                     continue;
                 }
                 // Default optionals to null.
@@ -161,7 +161,7 @@ class assessments_helper {
      * Process owners node
      * @param DOMNodeList $ownernode xml for owners
      * @param mysqli $db db connection
-     * @return string owner username
+     * @return mixed user rogo id or false if not found, null is missing.
      */
     static private function process_owner($ownernode, $db) {
         $userid = null;
@@ -181,7 +181,7 @@ class assessments_helper {
      * Get owner from node
      * @param DOMNode $usernode xml for user
      * @param mysqli $db db connection
-     * @return integer|false user rogo id or false if not found.
+     * @return mixed user rogo id or false if not found, null is missing.
      */
     static private function get_owner($usernode, $db) {
         $xpath = new \DOMXPath($usernode->ownerDocument);
