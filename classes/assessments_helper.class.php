@@ -86,8 +86,8 @@ class assessments_helper {
                     $params['duration'] = $xpath->query('./DurationMinutes', $assessment)->item(0)->nodeValue;
                     $params['session'] = $xpath->query('./AcademicSession', $assessment)->item(0)->nodeValue;
                     $params['sittings'] = $xpath->query('./Sittings', $assessment)->item(0)->nodeValue;
-                    $user = $xpath->query('./Owner', $assessment)->item(0);
-                    $params['owner'] = self::get_owner($user, $db);
+                    $owners = $xpath->query('./Owners', $assessment)->item(0)->childNodes;
+                    $params['owner'] = self::process_owner($owners, $db);
                     $modules = $xpath->query('./Modules', $assessment)->item(0)->childNodes;
                     $params['extmodules'] = self::process_module($modules);
                 } catch (\exception $e) {
@@ -157,6 +157,26 @@ class assessments_helper {
         return true;
     }
 
+    /**
+     * Process owners node
+     * @param DOMNodeList $ownernode xml for owners
+     * @param mysqli $db db connection
+     * @return string owner username
+     */
+    static private function process_owner($ownernode, $db) {
+        $userid = null;
+        foreach ($ownernode as $owner) {
+            if ($owner->hasChildNodes()) {
+                $userid = self::get_owner($owner, $db);
+                if ($userid) {
+                    // Found an owner that exits in rogo.
+                    break;
+                }
+            }
+        }
+        return $userid;
+    }
+    
     /**
      * Get owner from node
      * @param DOMNode $usernode xml for user

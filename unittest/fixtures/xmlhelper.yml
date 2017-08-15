@@ -2,4 +2,4 @@ sys_errors:
   -
     auth_user: "plugin_cs_sms"
     errtype: "Application Warning"
-    errstr: "Header Info"
+    errstr: "assessment - Header Info"

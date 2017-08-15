@@ -41,10 +41,16 @@ class cssmstest extends unittestdatabase {
                 <ModuleCode>TESTMOD</ModuleCode>
               </Module>
             </Modules>
-            <Owner>
-              <UserID>91234567</UserID>
-              <UserName>staff</UserName>
-            </Owner>
+            <Owners>
+              <Owner>
+                <UserID>1248778</UserID>
+                <UserName>unknown</UserName>
+              </Owner>
+              <Owner>
+                <UserID>91234567</UserID>
+                <UserName>staff</UserName>
+              </Owner>
+            </Owners>
             <AcademicSession>2016</AcademicSession>
             <Sittings>1</Sittings>
           </Assessment>
@@ -59,10 +65,16 @@ class cssmstest extends unittestdatabase {
                 <ModuleCode>TESTMOD</ModuleCode>
               </Module>
             </Modules>
-            <Owner>
-              <UserID>91234567</UserID>
-              <UserName>staff</UserName>
-            </Owner>
+            <Owners>
+              <Owner>
+                <UserID>1248778</UserID>
+                <UserName>unknown</UserName>
+              </Owner>
+              <Owner>
+                <UserID>91234567</UserID>
+                <UserName>staff</UserName>
+              </Owner>
+            </Owners>
             <AcademicSession>2016</AcademicSession>
             <Sittings>1</Sittings>
           </Assessment>
@@ -77,10 +89,16 @@ class cssmstest extends unittestdatabase {
                 <ModuleCode>TESTMOD</ModuleCode>
               </Module>
             </Modules>
-            <Owner>
-              <UserID>91234567</UserID>
-              <UserName>staff</UserName>
-            </Owner>
+            <Owners>
+              <Owner>
+                <UserID>1248778</UserID>
+                <UserName>unknown</UserName>
+              </Owner>
+              <Owner>
+                <UserID>91234567</UserID>
+                <UserName>staff</UserName>
+              </Owner>
+            </Owners>
             <AcademicSession>2016</AcademicSession>
             <Sittings>1</Sittings>
           </Assessment>
@@ -95,10 +113,16 @@ class cssmstest extends unittestdatabase {
                 <ModuleCode>TESTMOD</ModuleCode>
               </Module>
             </Modules>
-            <Owner>
-              <UserID>91234567</UserID>
-              <UserName>staff</UserName>
-            </Owner>
+            <Owners>
+              <Owner>
+                <UserID>1248778</UserID>
+                <UserName>unknown</UserName>
+              </Owner>
+              <Owner>
+                <UserID>91234567</UserID>
+                <UserName>staff</UserName>
+              </Owner>
+            </Owners>
             <AcademicSession>2016</AcademicSession>
             <Sittings>1</Sittings>
             <Notes>meh</Notes>

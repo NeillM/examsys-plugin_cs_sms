@@ -52,7 +52,7 @@ class xml_helpertest extends unittestdatabase {
             <Error><Header>Header Info</Header><Detail>Some Details</Detail></Error>';
         $doc = new DOMDocument();
         $doc->loadXML($data);
-        $this->assertTrue(xml_helper::check_for_error($doc, $userid, $this->db));
+        $this->assertTrue(xml_helper::check_for_error($doc, $userid, $this->db, 'assessment', array('academic_session' => 2017, 'campus' => 'M')));
         $queryTable = $this->getConnection()->createQueryTable('sys_errors', 'SELECT auth_user, errtype, errstr FROM sys_errors');
         $expectedTable = $this->get_expected_data_set('xmlhelper')->getTable("sys_errors");
         $this->assertTablesEqual($expectedTable, $queryTable);
@@ -61,6 +61,6 @@ class xml_helpertest extends unittestdatabase {
             <FacultyList></FacultyList>';
         $doc = new DOMDocument();
         $doc->loadXML($data);
-        $this->assertFalse(xml_helper::check_for_error($doc, $userid, $this->db));
+        $this->assertFalse(xml_helper::check_for_error($doc, $userid, $this->db, 'assessment', array('academic_session' => 2017, 'campus' => 'M')));
     }
 }
