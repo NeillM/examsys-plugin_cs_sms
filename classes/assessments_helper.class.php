@@ -161,7 +161,7 @@ class assessments_helper {
      * Process owners node
      * @param DOMNodeList $ownernode xml for owners
      * @param mysqli $db db connection
-     * @return mixed user rogo id or false if not found, null is missing.
+     * @return mixed user rogo id or false if not found, null if missing.
      */
     static private function process_owner($ownernode, $db) {
         $userid = null;
@@ -181,7 +181,7 @@ class assessments_helper {
      * Get owner from node
      * @param DOMNode $usernode xml for user
      * @param mysqli $db db connection
-     * @return mixed user rogo id or false if not found, null is missing.
+     * @return mixed user rogo id or false if not found, null if missing.
      */
     static private function get_owner($usernode, $db) {
         $xpath = new \DOMXPath($usernode->ownerDocument);
