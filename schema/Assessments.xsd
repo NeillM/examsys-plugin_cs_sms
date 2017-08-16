@@ -24,11 +24,17 @@
                                                          </xs:sequence>
                                                    </xs:complexType>
                                              </xs:element>
-                                             <xs:element name="Owner" maxOccurs="1">
+                                             <xs:element name="Owners">
                                                    <xs:complexType>
                                                          <xs:sequence>
-                                                               <xs:element name="UserID" type="studentid"></xs:element>
-                                                               <xs:element name="UserName" type="username"></xs:element>
+                                                               <xs:element name="Owner" maxOccurs="unbounded">
+                                                                     <xs:complexType>
+                                                                           <xs:sequence>
+                                                                                <xs:element name="UserID" type="studentid"></xs:element>
+                                                                                <xs:element name="UserName" type="username"></xs:element>
+                                                                           </xs:sequence>
+                                                                     </xs:complexType>
+                                                               </xs:element>
                                                          </xs:sequence>
                                                    </xs:complexType>
                                              </xs:element>

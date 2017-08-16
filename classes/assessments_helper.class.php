@@ -86,12 +86,12 @@ class assessments_helper {
                     $params['duration'] = $xpath->query('./DurationMinutes', $assessment)->item(0)->nodeValue;
                     $params['session'] = $xpath->query('./AcademicSession', $assessment)->item(0)->nodeValue;
                     $params['sittings'] = $xpath->query('./Sittings', $assessment)->item(0)->nodeValue;
-                    $user = $xpath->query('./Owner', $assessment)->item(0);
-                    $params['owner'] = self::get_owner($user, $db);
+                    $owners = $xpath->query('./Owners', $assessment)->item(0)->childNodes;
+                    $params['owner'] = self::process_owner($owners, $db);
                     $modules = $xpath->query('./Modules', $assessment)->item(0)->childNodes;
                     $params['extmodules'] = self::process_module($modules);
                 } catch (\exception $e) {
-                    // If the above are not provided we cannto create the assessment.
+                    // If the above are not provided we cannot create the assessment.
                     continue;
                 }
                 // Default optionals to null.
@@ -158,10 +158,30 @@ class assessments_helper {
     }
 
     /**
+     * Process owners node
+     * @param DOMNodeList $ownernode xml for owners
+     * @param mysqli $db db connection
+     * @return mixed user rogo id or false if not found, null if missing.
+     */
+    static private function process_owner($ownernode, $db) {
+        $userid = null;
+        foreach ($ownernode as $owner) {
+            if ($owner->hasChildNodes()) {
+                $userid = self::get_owner($owner, $db);
+                if ($userid) {
+                    // Found an owner that exits in rogo.
+                    break;
+                }
+            }
+        }
+        return $userid;
+    }
+    
+    /**
      * Get owner from node
      * @param DOMNode $usernode xml for user
      * @param mysqli $db db connection
-     * @return integer|false user rogo id or false if not found.
+     * @return mixed user rogo id or false if not found, null if missing.
      */
     static private function get_owner($usernode, $db) {
         $xpath = new \DOMXPath($usernode->ownerDocument);
