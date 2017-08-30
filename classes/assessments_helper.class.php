@@ -164,6 +164,10 @@ class assessments_helper {
      * @return mixed user rogo id or false if not found, null if missing.
      */
     static private function process_owner($ownernode, $db) {
+        if (is_null($ownernode)) {
+          throw new \Exception('owners tag missing');
+          exit();
+        }
         $userid = null;
         foreach ($ownernode as $owner) {
             if ($owner->hasChildNodes()) {
@@ -200,6 +204,10 @@ class assessments_helper {
      * @return array list of module external ids.
      */
     static private function process_module($modulenode) {
+        if (is_null($modulenode)) {
+          throw new \Exception('modules tag missing');
+          exit();
+        }
         $modulesarray = array();
         $i = 0;
         foreach ($modulenode as $module) {
