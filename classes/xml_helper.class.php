@@ -66,7 +66,7 @@ class xml_helper {
         $schema = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'schema' . DIRECTORY_SEPARATOR . $schemaname . '.xsd';
         if (!$data->schemaValidate($schema)) {
             $errorline = __LINE__ - 1;
-            log_helper::log_app_warning($userid, $strings['restnotvalid'], $errorline, $db);
+            log_helper::log_app_warning($userid, $strings['restnotvalid'], $errorline, $db, array());
             return false;
         }
         // Disable user error handling.
