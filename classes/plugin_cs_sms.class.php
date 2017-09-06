@@ -193,8 +193,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                 // Targeted list of modules.
                 if (is_null($externalid) and $targeted) {
                     $targetmodules = modules_helper::get_target_modules($campus, $active, $this->db);
-                    foreach ($targetmodules as $externalid) {
-                        $args['externalid'] = $externalid;
+                    foreach ($targetmodules as $eid) {
+                        $args['externalid'] = $eid;
                         $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
                         if ($response != '') {
                             enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active, $args);
