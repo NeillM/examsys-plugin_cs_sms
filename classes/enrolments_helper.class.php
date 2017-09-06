@@ -78,7 +78,7 @@ class enrolments_helper {
                 }
                 // Enrol / Unerol users.
                 $details = \module_utils::get_full_details('external', $externalid, $db, plugin_cs_sms::SMS);
-                $moduleid = $details['moduleid'];
+                $moduleid = $details['idMod'];
                 $activemodule = true;
                 // Check if only syncing active modules.
                 if ($active) {
