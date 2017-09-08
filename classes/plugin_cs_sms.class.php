@@ -359,39 +359,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             unlink($lockfile);
         }
     }
-    
-    /**
-     * Enable this plugin
-     */
-    public function enable_plugin() {
-        $enabled = array();
-        $current = $this->config->get_setting($this->plugin_type, 'enabled_plugin');
-        if (!is_null($current)) {
-            if(!array_search($this->plugin, $current)) {
-                $enabled = $current;
-                $enabled[] = $this->plugin;
-            }
-        } else {
-            $enabled = array($this->plugin);
-        }
-        $this->config->set_setting('enabled_plugin', $enabled, \Config::JSON, 'plugin_' . $this->plugin_type);
-    }
-    
-    /**
-     * Disable this plugin
-     */
-    public function disable_plugin() {
-        $new = array();
-        $enabled = $this->config->get_setting('plugin_' . $this->plugin_type, 'enabled_plugin');
-        if (!is_null($enabled)) {
-            $key = array_search($this->plugin, $enabled);
-            if ($key !== false) {
-                unset($enabled[$key]);
-            }
-            $this->config->set_setting('enabled_plugin', $new, \Config::JSON, 'plugin_' . $this->plugin_type);
-        }
-    }
-    
+
     /**
      * Check if module import is supported by the plugin
      * @return array|bool import url and translation strings, false  if module import not supported
