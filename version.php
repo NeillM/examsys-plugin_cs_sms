@@ -20,5 +20,5 @@
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
-$this->version = '1.2.2';
-$this->requires = '6.4.0';
+$this->version = '1.2.3';
+$this->requires = '6.5.0';
