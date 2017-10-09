@@ -492,7 +492,6 @@ class cssmstest extends unittestdatabase {
      * @group plugin_cs_sms
      */
     public function test_get_assessments() {
-        $this->config->set('cfg_summative_mgmt', true);
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -500,6 +499,7 @@ class cssmstest extends unittestdatabase {
         $sms->expects($this->once())
             ->method('callws')
             ->will($this->returnValue($this->assessmentxml));
+        $this->config->set_setting('cfg_summative_mgmt', true, \Config::BOOLEAN);
         $sms->get_assessments(2016);
         $queryTable = $this->getConnection()->createQueryTable('scheduling', 'SELECT id, paperID, notes, sittings FROM scheduling');
         $expectedTable = $this->get_expected_data_set('scheduling')->getTable("scheduling");
@@ -510,7 +510,7 @@ class cssmstest extends unittestdatabase {
         $queryTable = $this->getConnection()->createQueryTable('properties_modules', 'SELECT property_id, idMod FROM properties_modules');
         $expectedTable = $this->get_expected_data_set('scheduling')->getTable("properties_modules");
         $this->assertTablesEqual($expectedTable, $queryTable);
-        $this->config->set('cfg_summative_mgmt', false);
+        $this->config->set_setting('cfg_summative_mgmt', false, \Config::BOOLEAN);
     }
     /**
      * Test get faculties
