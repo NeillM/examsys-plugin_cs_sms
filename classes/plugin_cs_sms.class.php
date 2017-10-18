@@ -191,7 +191,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             $logfile = log_helper::set_logfile($this->logdir, 'enrol');
             $targeted = $this->config->get_setting($this->plugin, 'target_module_enrolments');
             $active = $this->config->get_setting($this->plugin, 'active_modules_only');
-            foreach ($this->campuslistas as $campus) {
+            foreach ($this->campuslist as $campus) {
                 $args = array('academic_session' => $session, 'campus' => $campus);
                 // Targeted list of modules.
                 if (is_null($externalid) and $targeted) {
