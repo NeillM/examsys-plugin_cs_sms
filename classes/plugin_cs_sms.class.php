@@ -104,7 +104,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         $this->set_lang_strings();
         $this->logdir = $this->config->get_setting($this->plugin, 'loglocation');
         $this->userid = $userid;
-        $this->campuslist = $this->config->get_setting($this->plugin, 'campuslist');
+        $this->campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
         $this->validation = $this->config->get_setting($this->plugin, 'validate_schema');
         $this->gradebookdir = $this->config->get_setting($this->plugin, 'gradebooklocation');
     }
@@ -157,8 +157,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!file_exists($lockfile)) {
             file_put_contents($lockfile, time());
             $logfile = log_helper::set_logfile($this->logdir, 'assessment');
-            $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
-            foreach ($campuslist as $campus) {
+            foreach ($this->campuslist as $campus) {
                 $args = array('academic_session' => $session, 'campus' => $campus);
                 $response = $this->callws('RogoAssessments', self::CSVERSIONONE, $args);
                 if ($response != '') {
@@ -186,9 +185,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             file_put_contents($lockfile, time());
             $logfile = log_helper::set_logfile($this->logdir, 'enrol');
             $targeted = $this->config->get_setting($this->plugin, 'target_module_enrolments');
-            $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
             $active = $this->config->get_setting($this->plugin, 'active_modules_only');
-            foreach ($campuslist as $campus) {
+            foreach ($this->campuslistas as $campus) {
                 $args = array('academic_session' => $session, 'campus' => $campus);
                 // Targeted list of modules.
                 if (is_null($externalid) and $targeted) {
@@ -243,10 +241,9 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!file_exists($lockfile)) {
             file_put_contents($lockfile, time());
             $logfile = log_helper::set_logfile($this->logdir, 'faculty');
-            $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
             $currentfaculties = array();
             $currentschools= array();
-            foreach ($campuslist as $campus) {
+            foreach ($this->campuslist as $campus) {
                 $args = array('faculty' => '', 'campus' => $campus);
                 $response = $this->callws('RogoSchools', self::CSVERSIONONE, $args);
                 if ($response != '') {
@@ -277,9 +274,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
         if (!file_exists($lockfile)) {
             file_put_contents($lockfile, time());
             $logfile = log_helper::set_logfile($this->logdir, 'course');
-            $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
             $currentplans = array();
-            foreach ($campuslist as $campus) {
+            foreach ($this->campuslist as $campus) {
                 $args = array('session' => '', 'campus' => $campus);
                 $response = $this->callws('RogoProgPlan', self::CSVERSIONONE, $args);
                 if ($response != '') {
@@ -313,9 +309,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             $args = array();
             $logfile = log_helper::set_logfile($this->logdir, 'module');
             $singleexternal = false;
-            $campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
             $currentmodules = array();
-            foreach ($campuslist as $campus) {
+            foreach ($this->campuslist as $campus) {
                 if (!is_null($externalid) and !is_null($session)) {
                     $args = array('academic_session' => $session, 'externalid' => $externalid, 'campus' => $campus);
                     $singleexternal = true;
