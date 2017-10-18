@@ -96,7 +96,7 @@ class modules_helper {
     /**
      * Map campus solutions module code to rogo module code
      * Rogo appends campus name to module code for China and Malaysia
-     * @param string $sourcecode module code return by web servuce
+     * @param string $sourcecode module code return by web service
      * @return string module code to store in rogo
      */
     static public function module_campus_mapping($sourcecode) {
@@ -121,6 +121,25 @@ class modules_helper {
             $modulecode = $sourcecode;
         }
         return $modulecode;
+    }
+
+    /**
+     * Get campus solutions campus code from rogo module
+     * 
+     * @param string $externalid campus id for module
+     * @return string campus code
+     */
+    static public function get_campus_code($externalid, $db) {
+        $details = \module_utils::get_full_details('external', $externalid, $db, plugin_cs_sms::SMS);
+        // Check for Campus Solution modules codes and map campus. Default to UK(U).
+        if (preg_match("/^[A-Z]{4}[F1-5][0-9]{3}_UNNC$/", $details['moduleid'])) {
+          $campuscode = 'C';
+        } elseif (preg_match("/^[A-Z]{4}[F1-5][0-9]{3}_UNMC$/", $details['moduleid'])) {
+          $campuscode = 'M';
+        } else {
+          $campuscode = 'U';
+        }
+        return $campuscode;
     }
 
     /**

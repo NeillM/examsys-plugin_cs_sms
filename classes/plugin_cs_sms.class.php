@@ -191,7 +191,13 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             $logfile = log_helper::set_logfile($this->logdir, 'enrol');
             $targeted = $this->config->get_setting($this->plugin, 'target_module_enrolments');
             $active = $this->config->get_setting($this->plugin, 'active_modules_only');
-            foreach ($this->campuslist as $campus) {
+            // If external id is provided we can select the specific campus to call.
+            if (!is_null($externalid)) {
+              $campuses[] = modules_helper::get_campus_code($externalid, $this->db);
+            } else {
+              $campuses = $this->campuslist;
+            }
+            foreach ($campuses as $campus) {
                 $args = array('academic_session' => $session, 'campus' => $campus);
                 // Targeted list of modules.
                 if (is_null($externalid) and $targeted) {
@@ -315,7 +321,13 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             $logfile = log_helper::set_logfile($this->logdir, 'module');
             $singleexternal = false;
             $currentmodules = array();
-            foreach ($this->campuslist as $campus) {
+            // If external id is provided we can select the specific campus to call.
+            if (!is_null($externalid)) {
+              $campuses[] = modules_helper::get_campus_code($externalid, $this->db);
+            } else {
+              $campuses = $this->campuslist;
+            }
+            foreach ($campuses as $campus) {
                 if (!is_null($externalid) and !is_null($session)) {
                     $args = array('academic_session' => $session, 'externalid' => $externalid, 'campus' => $campus);
                     $singleexternal = true;
