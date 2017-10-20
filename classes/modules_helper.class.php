@@ -129,8 +129,9 @@ class modules_helper {
      * @param string $externalid campus id for module
      * @return string campus code
      */
-    static public function get_campus_code($externalid, $db) {
-        $details = \module_utils::get_full_details('external', $externalid, $db, plugin_cs_sms::SMS);
+    static public function get_campus_code($externalid) {
+        $config = \Config::get_instance();
+        $details = \module_utils::get_full_details('external', $externalid, $config->db, plugin_cs_sms::SMS);
         // Check for Campus Solution modules codes and map campus. Default to UK(U).
         if (preg_match("/^[A-Z]{4}[F1-5][0-9]{3}_UNNC$/", $details['moduleid'])) {
           $campuscode = 'C';

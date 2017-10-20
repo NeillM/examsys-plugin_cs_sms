@@ -193,7 +193,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             $active = $this->config->get_setting($this->plugin, 'active_modules_only');
             // If external id is provided we can select the specific campus to call.
             if (!is_null($externalid)) {
-              $campuses[] = modules_helper::get_campus_code($externalid, $this->db);
+              $campuses[] = modules_helper::get_campus_code($externalid);
             } else {
               $campuses = $this->campuslist;
             }
@@ -323,7 +323,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             $currentmodules = array();
             // If external id is provided we can select the specific campus to call.
             if (!is_null($externalid)) {
-              $campuses[] = modules_helper::get_campus_code($externalid, $this->db);
+              $campuses[] = modules_helper::get_campus_code($externalid);
             } else {
               $campuses = $this->campuslist;
             }
