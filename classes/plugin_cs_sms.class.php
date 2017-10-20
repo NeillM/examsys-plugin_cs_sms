@@ -201,12 +201,12 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                 $args = array('academic_session' => $session, 'campus' => $campus);
                 // Targeted list of modules.
                 if (is_null($externalid) and $targeted) {
-                    $targetmodules = modules_helper::get_target_modules($campus, $active, $this->db);
+                    $targetmodules = modules_helper::get_target_modules($campus, $active);
                     foreach ($targetmodules as $eid) {
                         $args['externalid'] = $eid;
                         $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
                         if ($response != '') {
-                            enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active, $args);
+                            enrolments_helper::process($response, $this->userid, $this->strings, $logfile, $session, $this->validation, $active, $args);
                         }
                     }
                 } else {
@@ -216,7 +216,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                     }
                     $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
                     if ($response != '') {
-                        enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active, $args);
+                        enrolments_helper::process($response, $this->userid, $this->strings, $logfile, $session, $this->validation, $active, $args);
                     }
                 }
             }
@@ -336,7 +336,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
                 }
                 $response = $this->callws('RogoClasses', self::CSVERSIONONE, $args);
                 if ($response != '') {
-                    $modules = modules_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $args);
+                    $modules = modules_helper::process($response, $this->userid, $this->strings, $logfile, $this->validation, $args);
                     if ($modules !== false) {
                         $currentmodules = array_merge($currentmodules, $modules);
                     }
@@ -347,7 +347,7 @@ class plugin_cs_sms extends \plugins\plugins_sms {
             // Do not diff modules on single module update.
             if (!$singleexternal and $delete) {
                 // Delete modules no longer in CS
-                modules_helper::delete_modules($currentmodules, $logfile, $this->userid, $this->db);
+                modules_helper::delete_modules($currentmodules, $logfile, $this->userid);
             }
             unlink($lockfile);
         }

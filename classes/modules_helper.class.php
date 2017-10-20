@@ -31,21 +31,21 @@ class modules_helper {
      * @param string xml $response xml from module WS
      * @param integer $userid user to record actions under
      * @param array $strings lnaguage strings
-     * @param mysqli $db db connection
      * @param string $logfile log file location
      * @param boolean $validation validate xml response against schema
      * @param array $args arguments used to call web service
      * @return boolean|array false on error, list of current module ids on success
      */
-    static public function process($response, $userid, $strings, $db, $logfile, $validation, $args) {
+    static public function process($response, $userid, $strings, $logfile, $validation, $args) {
+        $config = \Config::get_instance();
         // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
-        if (xml_helper::check_for_error($data, $userid, $db, 'module feed', $args)) {
+        if (xml_helper::check_for_error($data, $userid, $config->db, 'module feed', $args)) {
             return false;
         }
         if ($validation) {
-            if (!xml_helper::validate($data, 'ModuleList', $userid, $strings, $db)) {
+            if (!xml_helper::validate($data, 'ModuleList', $userid, $strings, $config->db)) {
                 return false;
             }
         }
@@ -53,7 +53,7 @@ class modules_helper {
         $currentmodules = array();
         $node = 1;
         // Create / Update modules.
-        $mm = new \api\modulemanagement($db);
+        $mm = new \api\modulemanagement($config->db);
         foreach ($modules as $module) {
             $xpath = new \DOMXPath($module->ownerDocument);
             // The ModuleID in Campus Solutions is the Module External ID in Rogo.
@@ -77,7 +77,7 @@ class modules_helper {
                 }
                 $params['nodeid'] = $node;
                 $params['sms'] = plugin_cs_sms::SMS;
-                $modid = \module_utils::get_id_from_externalid($externalid, plugin_cs_sms::SMS, $db);
+                $modid = \module_utils::get_id_from_externalid($externalid, plugin_cs_sms::SMS, $config->db);
                 if ($modid) {
                     // If ExternalID exists call modulemanagement update api.
                     $response = $mm->update($params, $userid);
@@ -149,13 +149,13 @@ class modules_helper {
      * @param array $currentmodules list of module ids in CS
      * @param string $logfile log file location
      * @param integer $userid user to record actions under
-     * @param mysqli $db db connection
      */
-    static public function delete_modules($currentmodules, $logfile, $userid, $db) {
+    static public function delete_modules($currentmodules, $logfile, $userid) {
+        $config = \Config::get_instance();
         $node = 1;
-        $mm = new \api\modulemanagement($db);
+        $mm = new \api\modulemanagement($config->db);
         // Delete modules that have been removed from CS.
-        $delete = \module_utils::diff_external_modules_to_internal_modules($currentmodules, plugin_cs_sms::SMS, $db);
+        $delete = \module_utils::diff_external_modules_to_internal_modules($currentmodules, plugin_cs_sms::SMS, $config->db);
         // Try to delete course via modulemanagement delete api.
         foreach ($delete as $deleteid) {
             $params = array();
@@ -171,10 +171,10 @@ class modules_helper {
      * Get modules in Rogo that we want to action
      * @param string $campus university campus
      * @param boolean $active filter by active modules
-     * @param mysqli $db db connection
      * @return array modules
      */
-    static public function get_target_modules($campus, $active, $db) {
+    static public function get_target_modules($campus, $active) {
+        $config = \Config::get_instance();
         $sms = plugin_cs_sms::SMS;
         $modules = array();
         switch ($campus) {
@@ -193,7 +193,7 @@ class modules_helper {
         } else {
             $act = '';
         }
-        $result = $db->prepare("SELECT externalid FROM modules WHERE sms = ? AND $act mod_deleted IS NULL $modcode");
+        $result = $config->db->prepare("SELECT externalid FROM modules WHERE sms = ? AND $act mod_deleted IS NULL $modcode");
         $result->bind_param('s', $sms);
         $result->execute();
         $result->store_result();
