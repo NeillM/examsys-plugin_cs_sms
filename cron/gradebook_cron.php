@@ -61,7 +61,6 @@ exit();
 set_time_limit(0);
 
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/load_config.php';
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/auth.inc';
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/custom_error_handler.inc';
 
 // Start class autoloading.
@@ -69,6 +68,7 @@ require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/a
 autoloader::init();
 
 $configObject = \Config::get_instance();
+$notice = UserNotices::get_instance();
 
 // Set year based on command line argument or use default.
 if (isset($optionslist['y']) and !is_null($optionslist['y'])) {
