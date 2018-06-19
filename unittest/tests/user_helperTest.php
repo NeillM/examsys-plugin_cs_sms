@@ -14,8 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
-use testing\unittest\unittestdatabase,
-    plugins\SMS\plugin_cs_sms\user_helper as user_helper;
+use testing\unittest\unittestdatabase;
+use PHPUnit\DbUnit\DataSet\YamlDataSet;
+use plugins\SMS\plugin_cs_sms\user_helper as user_helper;
 /**
  * Test user helper functions
  * 
@@ -30,7 +31,7 @@ class user_helpertest extends unittestdatabase {
      * @return dataset
      */
     public function getDataSet() {
-        return new PHPUnit_Extensions_Database_DataSet_YamlDataSet(dirname(__DIR__) . DIRECTORY_SEPARATOR  . "fixtures" . DIRECTORY_SEPARATOR . "userhelper.yml");
+        return new YamlDataSet(dirname(__DIR__) . DIRECTORY_SEPARATOR  . "fixtures" . DIRECTORY_SEPARATOR . "userhelper.yml");
     }
     /**
      * Test map gender

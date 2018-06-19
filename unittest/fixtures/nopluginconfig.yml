@@ -92,7 +92,7 @@ config:
   -
     component: "plugin_cs_sms"
     setting: "password"
-    value: "password"
+    value: "aninscurepassword"
     type: "password"
   -
     component: "plugin_cs_sms"
