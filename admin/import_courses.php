@@ -28,7 +28,7 @@ require '../../../../include/sysadmin_auth.inc';
 set_time_limit(0);
 
 $userObj = \UserObject::get_instance();
-$sms = new plugin_cs_sms($mysqli, $userObj->get_user_ID());
+$sms = new plugin_cs_sms($userObj->get_user_ID());
 // Get courses.
 $sms->get_courses();
 header("location: " . $configObject->get('cfg_root_path') . "/admin/list_courses.php", true, 303);
