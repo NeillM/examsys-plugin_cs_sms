@@ -148,6 +148,13 @@ schools:
     facultyID: 1
     externalid: "USC-MED"
     externalsys: "Campus Solutions"
+  -
+    id: 2
+    code: "TEST2"
+    school: "Centre for Testing 2"
+    facultyID: 2
+    externalid: "USC-ME2"
+    externalsys: "Campus Solutions"
 courses:
   -
     id: 1
