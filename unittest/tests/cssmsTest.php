@@ -263,6 +263,16 @@ class cssmstest extends unittestdatabase {
                 <ProgramCode>U1509</ProgramCode>
                 <ProgramDescr>Breast Surgery</ProgramDescr>
             </Plan>
+            <Plan>
+                <PlanID>UON|U8PBRSGY</PlanID>
+                <PlanCode>U8PBRSGY</PlanCode>
+                <PlanDescr>Breast Surgery</PlanDescr>
+                <FacultyID>UFY-MHS</FacultyID>
+                <SchoolID>USC-ME2</SchoolID>
+                <ProgramID>UON|U1509</ProgramID>
+                <ProgramCode>U1509</ProgramCode>
+                <ProgramDescr>Breast Surgery</ProgramDescr>
+            </Plan>
         </PlanList>';
     /**
      * Mock module xml
@@ -553,7 +563,7 @@ class cssmstest extends unittestdatabase {
         $expectedTable = $this->get_expected_data_set('faculty')->getTable("faculty");
         $this->assertTablesEqual($expectedTable, $queryTable);
         // Missing schools so no schools created.
-        $this->assertEquals(1, $this->getConnection()->getRowCount('schools'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('schools'));
     }
     /**
      * Test get courses

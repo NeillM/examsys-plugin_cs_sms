@@ -21,13 +21,20 @@ schools:
     externalsys: "Campus Solutions"
   -
     id: 2
+    code: "TEST2"
+    school: "Centre for Testing 2"
+    facultyID: 2
+    externalid: "USC-ME2"
+    externalsys: "Campus Solutions"
+  -
+    id: 3
     code: "CSC-CELE"
     school: "Centre for English Language Education"
     facultyID: 2
     externalid: "CSC-CELE"
     externalsys: "Campus Solutions"
   -
-    id: 3
+    id: 4
     code: "CSC-EDU"
     school: "School of Education"
     facultyID: 2
@@ -52,7 +59,7 @@ courses:
     id: 3
     name: "U8PBRSGY"
     description: "Breast Surgery"
-    schoolid: 1
+    schoolid: 2
     externalid: "UON|U8PBRSGY"
     externalsys: "Campus Solutions"
 modules:
