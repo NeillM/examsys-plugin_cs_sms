@@ -104,8 +104,8 @@ class plugin_cs_sms extends \plugins\plugins_sms {
      * @param mysqli $mysqli db connection
      * @param integer $userid rogo id of user running import
      */
-    public function __construct($mysqli, $userid = 0) {
-        parent::__construct($mysqli);
+    public function __construct($userid = 0) {
+        parent::__construct();
         $this->set_lang_strings();
         $this->logdir = $this->config->get_setting($this->plugin, 'loglocation');
         $this->userid = $userid;

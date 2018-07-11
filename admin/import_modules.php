@@ -36,7 +36,7 @@ if (!array_key_exists($session, $supported_sessions)) {
 }
 
 $userObj = \UserObject::get_instance();
-$sms = new plugin_cs_sms($mysqli, $userObj->get_user_ID());
+$sms = new plugin_cs_sms($userObj->get_user_ID());
 // Get modules.
 $sms->get_modules();
 // Get enrolments.
