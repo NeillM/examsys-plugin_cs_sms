@@ -66,14 +66,14 @@ config:
     type: "boolean"
   -
     component: "plugin_cs_sms"
-    setting: "gradebook_md5"
-    value: 1
-    type: "boolean"
-  -
-    component: "plugin_cs_sms"
     setting: "gradebooklocation"
     value: ""
     type: "string"
+  -
+    component: "plugin_cs_sms"
+    setting: "gradebook_md5"
+    value: 1
+    type: "boolean"
   -
     component: "plugin_cs_sms"
     setting: "installed"
