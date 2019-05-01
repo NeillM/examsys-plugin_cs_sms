@@ -110,7 +110,7 @@ class user_helpertest extends unittestdatabase {
         // User Applicant.
         $this->assertEquals('Suspended', user_helper::map_student_status('AP', 8, $this->db));
         // User Leave of absence.
-        $this->assertEquals('Suspended', user_helper::map_student_status('LA', 9, $this->db));
+        $this->assertEquals('Student', user_helper::map_student_status('LA', 9, $this->db));
         // User Prematriculant.
         $this->assertEquals('Suspended', user_helper::map_student_status('PM', 10, $this->db));
         // User Suspended.
