@@ -202,7 +202,7 @@ class user_helper {
         DC  Discontinued
         DE  Deceased
         DM  Dismissed
-        LA  Leave of Absence
+        LA  Leave of Absence - leave as Student role
         PM  Prematriculant - should not be sent to rogo so deafults to suspended
         SP  Suspended
         WT  Waitlisted - should not be sent to rogo so deafults to suspended
@@ -219,7 +219,6 @@ class user_helper {
                 break;
             case 'AD':
             case 'AP':
-            case 'LA':
             case 'PM':
             case 'SP':
             case 'WT':
