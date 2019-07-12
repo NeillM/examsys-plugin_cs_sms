@@ -23,15 +23,19 @@
 
 use plugins\SMS\plugin_cs_sms\plugin_cs_sms;
 
+define('AJAX_REQUEST', true);
+
 require '../../../../include/sysadmin_auth.inc';
 require '../../../../include/errors.php';
 
 set_time_limit(0);
 
-$session = check_var('session', 'GET', true, false, true, param::INT);
+$session = \param::required('session', \param::INT, \param::FETCH_POST);
+$id = \param::required('id', \param::ALPHANUM, \param::FETCH_POST);
 $yearutils = new \yearutils($mysqli);
 $supported_sessions = $yearutils->get_supported_years();
 if (!array_key_exists($session, $supported_sessions)) {
+    echo json_encode("ERROR");
     exit();
 }
 
@@ -40,6 +44,5 @@ $sms = new plugin_cs_sms($userObj->get_user_ID());
 // Get modules.
 $sms->get_modules();
 // Get enrolments.
-$sms->get_enrolments($session);
-header("location: " . $configObject->get('cfg_root_path') . "/admin/list_modules.php", true, 303);
-exit();
+$sms->get_enrolments($session, $id);
+echo json_encode("SUCCESS");
