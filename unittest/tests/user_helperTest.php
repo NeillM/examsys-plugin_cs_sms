@@ -15,7 +15,6 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 use testing\unittest\unittestdatabase;
-use testing\datagenerator\loader;
 use plugins\SMS\plugin_cs_sms\user_helper as user_helper;
 /**
  * Test user helper functions
@@ -31,8 +30,7 @@ class user_helpertest extends unittestdatabase {
      * @throws \testing\datagenerator\not_found
      */
     public function datageneration(): void {
-        parent::datageneration();
-        $datagenerator = loader::get('users', 'core');
+        $datagenerator = $this->get_datagenerator('users', 'core');
         $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy1', 'roles' => 'Student', 'sid' => 'dgsfg345235b'));
         $this->uid1 = $user['id'];
         $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy2', 'roles' => 'Student', 'sid' => 'dgsfg345235c'));

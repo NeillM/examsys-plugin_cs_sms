@@ -15,7 +15,6 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 use testing\unittest\unittestdatabase;
-use testing\datagenerator\loader;
 
 /**
  * Test cs mapping functions
@@ -27,27 +26,22 @@ use testing\datagenerator\loader;
  */
 class cssmstest extends unittestdatabase {
     /**
-     * @var integer $modid id for module generated in datageneration
+     * @var array Storage for module data in tests
      */
-    private $modid;
+    private $mod;
 
     /**
-     * @var integer $fid id for faculty generated in datageneration
+     * @var array Storage for faculty data in tests
      */
-    private $fid1;
+    private $fac;
 
     /**
-     * @var integer $sid id for primary school generated in datageneration
+     * @var array Storage for school data in tests
      */
-    private $sid1;
+    private $school1, $school2;
 
     /**
-     * @var integer $sid id for secondary school generated in datageneration
-     */
-    private $sid2;
-
-    /**
-     * @var integer $uid id for user generated in datageneration
+     * @var integer id for user generated in datageneration
      */
     private $uid;
 
@@ -56,7 +50,6 @@ class cssmstest extends unittestdatabase {
      * @throws \testing\datagenerator\not_found
      */
     public function datageneration(): void {
-        parent::datageneration();
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $sms->install($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
         $sms->enable_plugin();
@@ -79,20 +72,19 @@ class cssmstest extends unittestdatabase {
         $this->config->set_setting('url', 'https://www.example.com', \Config::URL, 'plugin_cs_sms');
         $this->config->set_setting('username', 'username', \Config::STRING, 'plugin_cs_sms');
         $this->config->set_setting('validate_schema', 0, \Config::BOOLEAN, 'plugin_cs_sms');
-        loader::set_database($this->db);
-        $datagenerator = loader::get('academic_year', 'core');
+        $datagenerator = $this->get_datagenerator('academic_year', 'core');
         $datagenerator->create_academic_year(array('calendar_year' => 2016, 'academic_year' => '2016/17'));
-        $datagenerator = loader::get('faculty', 'core');
-        $this->fid1 = $datagenerator->create_faculty(array('name' => 'Faculty of Testing', 'externalid' => 'TESTECT', 'externalsys' => 'Campus Solutions', 'code' => 'TEST'));
-        $datagenerator = loader::get('school', 'core');
-        $this->sid1 = $datagenerator->create_school(array('school' => 'Centre for Testing', 'facultyID' => $this->fid1, 'externalid' => 'USC-MED', 'externalsys' => 'Campus Solutions', 'code' => 'TEST'));
-        $this->sid2 = $datagenerator->create_school(array('school' => 'Centre for Testing 2', 'facultyID' => $this->fid1, 'externalid' => 'USC-ME2', 'externalsys' => 'Campus Solutions', 'code' => 'TEST2'));
-        $datagenerator = loader::get('course', 'core');
-        $datagenerator->create_course(array('name' => 'M6UNUTRN', 'description' => 'Nutrition', 'schoolid' => $this->sid1, 'externalid' => 'M6UNUTRN', 'externalsys' => 'Campus Solutions'));
-        $datagenerator->create_course(array('name' => 'M6UCVENG', 'description' => 'Civil Engineering', 'schoolid' => $this->sid1, 'externalid' => 'M6UCVENG', 'externalsys' => 'Campus Solutions'));
-        $datagenerator = loader::get('modules', 'core');
-        $this->modid = $datagenerator->create_module(array('fullname' => 'Testing skills', 'moduleid' => 'TESTMOD', 'schoolID' => $this->sid1, 'externalID' => '00001111', 'sms_api' => 'Campus Solutions'));
-        $datagenerator = loader::get('users', 'core');
+        $datagenerator = $this->get_datagenerator('faculty', 'core');
+        $this->fac = $datagenerator->create_faculty(array('name' => 'Faculty of Testing', 'externalid' => 'TESTECT', 'externalsys' => 'Campus Solutions', 'code' => 'TEST'));
+        $datagenerator = $this->get_datagenerator('school', 'core');
+        $this->school1 = $datagenerator->create_school(array('school' => 'Centre for Testing', 'facultyID' => $this->fac['id'], 'externalid' => 'USC-MED', 'externalsys' => 'Campus Solutions', 'code' => 'TEST'));
+        $this->school2 = $datagenerator->create_school(array('school' => 'Centre for Testing 2', 'facultyID' => $this->fac['id'], 'externalid' => 'USC-ME2', 'externalsys' => 'Campus Solutions', 'code' => 'TEST2'));
+        $datagenerator = $this->get_datagenerator('course', 'core');
+        $datagenerator->create_course(array('name' => 'M6UNUTRN', 'description' => 'Nutrition', 'schoolid' => $this->school1['id'], 'externalid' => 'M6UNUTRN', 'externalsys' => 'Campus Solutions'));
+        $datagenerator->create_course(array('name' => 'M6UCVENG', 'description' => 'Civil Engineering', 'schoolid' => $this->school1['id'], 'externalid' => 'M6UCVENG', 'externalsys' => 'Campus Solutions'));
+        $datagenerator = $this->get_datagenerator('modules', 'core');
+        $this->mod = $datagenerator->create_module(array('fullname' => 'Testing skills', 'moduleid' => 'TESTMOD', 'schoolID' => $this->school1['id'], 'externalID' => '00001111', 'sms_api' => 'Campus Solutions'));
+        $datagenerator = $this->get_datagenerator('users', 'core');
         $user = $datagenerator->create_user(array('surname' => 'staff', 'username' => 'staff', 'grade' => 'University Lecturer', 'first_names' => 'staffy', 'yearofstudy' => 1,
             'title' => 'Mr', 'email' => 'staffy@example.com', 'gender' => 'Male', 'roles' => 'Staff'));
         $this->uid = $user['id'];
@@ -610,11 +602,11 @@ class cssmstest extends unittestdatabase {
         $expectedTable = array(
             0 => array(
                 "property_id" => \Paper_utils::get_id_from_externalid('C-00000000033', 'Campus Solutions', $this->db),
-                "idMod" => $this->modid,
+                "idMod" => $this->mod['id'],
             ),
             1 => array(
                 "property_id" => \Paper_utils::get_id_from_externalid('C-00000000035', 'Campus Solutions', $this->db),
-                "idMod" => $this->modid,
+                "idMod" => $this->mod['id'],
             ),
         );
         $this->assertEquals($expectedTable, $queryTable);
@@ -658,14 +650,14 @@ class cssmstest extends unittestdatabase {
             0 => array (
                 'code' => "TEST",
                 'school' => "Centre for Testing",
-                'facultyID' => $this->fid1,
+                'facultyID' => $this->fac['id'],
                 'externalid' => "USC-MED",
                 'externalsys' => "Campus Solutions"
             ),
             1 => array (
                 'code' => "TEST2",
                 'school' => "Centre for Testing 2",
-                'facultyID' => $this->fid1,
+                'facultyID' => $this->fac['id'],
                 'externalid' => "USC-ME2",
                 'externalsys' => "Campus Solutions"
             ),
@@ -742,21 +734,21 @@ class cssmstest extends unittestdatabase {
             0 => array (
                 'name' => "M6UNUTRN",
                 'description' => "Nutrition",
-                'schoolid' => $this->sid1,
+                'schoolid' => $this->school1['id'],
                 'externalid' => "M6UNUTRN",
                 'externalsys' => "Campus Solutions"
             ),
             1 => array (
                 'name' => "M6UCVENG",
                 'description' => "Civil Engineering",
-                'schoolid' => $this->sid1,
+                'schoolid' => $this->school1['id'],
                 'externalid' => "M6UCVENG",
                 'externalsys' => "Campus Solutions"
             ),
             2 => array (
                 'name' => "U8PBRSGY",
                 'description' => "Breast Surgery",
-                'schoolid' => $this->sid2,
+                'schoolid' => $this->school2['id'],
                 'externalid' => "UON|U8PBRSGY",
                 'externalsys' => "Campus Solutions"
             ),
@@ -784,7 +776,7 @@ class cssmstest extends unittestdatabase {
             0 => array (
                 'moduleid' => "TESTMOD",
                 'fullname' => "Testing skills",
-                'schoolid' => $this->sid1,
+                'schoolid' => $this->school1['id'],
                 'externalid' => "00001111",
                 'academic_year_start' => "07/01",
                 'sms' => "Campus Solutions",
@@ -793,7 +785,7 @@ class cssmstest extends unittestdatabase {
             1 => array (
                 'moduleid' => "NAAAXXXX",
                 'fullname' => "Self-marketing skills",
-                'schoolid' => $this->sid1,
+                'schoolid' => $this->school1['id'],
                 'externalid' => "030003",
                 'academic_year_start' => "07/01",
                 'sms' => "Campus Solutions",
@@ -823,7 +815,7 @@ class cssmstest extends unittestdatabase {
             0 => array (
                 'moduleid' => "TESTMOD",
                 'fullname' => "Testing skills",
-                'schoolid' => $this->sid1,
+                'schoolid' => $this->school1['id'],
                 'externalid' => "00001111",
                 'academic_year_start' => "07/01",
                 'sms' => "Campus Solutions",
@@ -832,7 +824,7 @@ class cssmstest extends unittestdatabase {
             1 => array (
                 'moduleid' => "NAAAXXXX",
                 'fullname' => "Self-marketing skills",
-                'schoolid' => $this->sid1,
+                'schoolid' => $this->school1['id'],
                 'externalid' => "030003",
                 'academic_year_start' => "07/01",
                 'sms' => "Campus Solutions",
@@ -914,12 +906,12 @@ class cssmstest extends unittestdatabase {
         $expectedTable = array(
             0 => array (
                 'userID' => $student1,
-                'idMod' => $this->modid,
+                'idMod' => $this->mod['id'],
                 'calendar_year' => 2016
             ),
             1 => array (
                 'userID' => $student2,
-                'idMod' => $this->modid,
+                'idMod' => $this->mod['id'],
                 'calendar_year' => 2016
             )
         );
@@ -1070,12 +1062,12 @@ class cssmstest extends unittestdatabase {
         $expectedTable = array(
             0 => array (
                 'userID' => $student1,
-                'idMod' => $this->modid,
+                'idMod' => $this->mod['id'],
                 'calendar_year' => 2016
             ),
             1 => array (
                 'userID' => $student2,
-                'idMod' => $this->modid,
+                'idMod' => $this->mod['id'],
                 'calendar_year' => 2016
             )
         );
@@ -1153,12 +1145,12 @@ class cssmstest extends unittestdatabase {
         $expectedTable = array(
             0 => array (
                 'userID' => \userutils::username_exists('brzhs5', $this->db),
-                'idMod' => $this->modid,
+                'idMod' => $this->mod['id'],
                 'calendar_year' => 2016
             ),
             1 => array (
                 'userID' => \userutils::username_exists('brzamh', $this->db),
-                'idMod' => $this->modid,
+                'idMod' => $this->mod['id'],
                 'calendar_year' => 2016
             )
         );

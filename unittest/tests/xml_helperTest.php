@@ -27,6 +27,13 @@ use plugins\SMS\plugin_cs_sms\xml_helper as xml_helper;
 class xml_helpertest extends unittestdatabase {
 
     /**
+     * Generate data for test.
+     */
+    public function datageneration() : void {
+        // Currently only base data required.
+    }
+
+    /**
      * Test map gender
      * @group sms
      * @group plugin_cs_sms
