@@ -46,11 +46,17 @@ class cssmstest extends unittestdatabase {
     private $uid;
 
     /**
+     * @var integer new version of plugin being installed
+     */
+    private $newversion;
+
+    /**
      * Generate data for test.
      * @throws \testing\datagenerator\not_found
      */
     public function datageneration(): void {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
+        $this->newversion = $sms->get_file_version();
         $sms->install($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
         $sms->enable_plugin();
         $this->config->set_setting('active_modules_only', 1, \Config::BOOLEAN, 'plugin_cs_sms');
@@ -1165,11 +1171,12 @@ class cssmstest extends unittestdatabase {
     public function test_install() {
         // Already installed by data generator so just check data tables.
         // Check tables are correct.
-        $queryTable = $this->query(array('columns' => array('component', 'type'), 'table' => 'plugins'));
+        $queryTable = $this->query(array('columns' => array('component', 'type', 'version'), 'table' => 'plugins'));
         $expectedTable = array(
             0 => array(
                 'component' => "plugin_cs_sms",
-                'type' => "SMS"
+                'type' => "SMS",
+                'version' => $this->newversion
             )
         );
         $this->assertEquals($expectedTable, $queryTable);
