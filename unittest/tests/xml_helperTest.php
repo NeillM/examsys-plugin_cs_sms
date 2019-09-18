@@ -15,7 +15,6 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 use testing\unittest\unittestdatabase;
-use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use plugins\SMS\plugin_cs_sms\xml_helper as xml_helper;
 /**
  * Test xml helper functions
@@ -26,21 +25,14 @@ use plugins\SMS\plugin_cs_sms\xml_helper as xml_helper;
  * @package tests
  */
 class xml_helpertest extends unittestdatabase {
+
     /**
-     * Get init data set from yml
-     * @return dataset
+     * Generate data for test.
      */
-    public function getDataSet() {
-        return new YamlDataSet(dirname(__DIR__) . DIRECTORY_SEPARATOR  . "fixtures" . DIRECTORY_SEPARATOR . "sms.yml");
+    public function datageneration() : void {
+        // Currently only base data required.
     }
-    /**
-     * Get expected data set from yml
-     * @param string $name fixture file name
-     * @return dataset
-     */
-    public function get_expected_data_set($name) {
-        return new YamlDataSet(dirname(__DIR__) . DIRECTORY_SEPARATOR  . "fixtures" . DIRECTORY_SEPARATOR . $name . ".yml");
-    }
+
     /**
      * Test map gender
      * @group sms
@@ -54,9 +46,15 @@ class xml_helpertest extends unittestdatabase {
         $doc = new DOMDocument();
         $doc->loadXML($data);
         $this->assertTrue(xml_helper::check_for_error($doc, $userid, $this->db, 'assessment', array('academic_session' => 2017, 'campus' => 'M')));
-        $queryTable = $this->getConnection()->createQueryTable('sys_errors', 'SELECT auth_user, errtype, errstr FROM sys_errors');
-        $expectedTable = $this->get_expected_data_set('xmlhelper')->getTable("sys_errors");
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('auth_user', 'errtype', 'errstr'), 'table' => 'sys_errors'));
+        $expectedTable = array(
+            0 => array (
+                'auth_user' => 'plugin_cs_sms',
+                'errtype' => 'Application Warning',
+                'errstr' => 'assessment - Header Info'
+            )
+        );
+        $this->assertEquals($expectedTable, $queryTable);
         // No Error.
         $data = '<?xml version="1.0"?>
             <FacultyList></FacultyList>';

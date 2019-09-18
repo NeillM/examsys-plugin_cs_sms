@@ -1,5 +1,0 @@
-sys_errors:
-  -
-    auth_user: "plugin_cs_sms"
-    errtype: "Application Warning"
-    errstr: "assessment - Header Info"

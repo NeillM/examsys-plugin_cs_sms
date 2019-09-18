@@ -15,7 +15,6 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 use testing\unittest\unittestdatabase;
-use PHPUnit\DbUnit\DataSet\YamlDataSet;
 
 /**
  * Test cs mapping functions
@@ -26,6 +25,77 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
  * @package tests
  */
 class cssmstest extends unittestdatabase {
+    /**
+     * @var array Storage for module data in tests
+     */
+    private $mod;
+
+    /**
+     * @var array Storage for faculty data in tests
+     */
+    private $fac;
+
+    /**
+     * @var array Storage for school data in tests
+     */
+    private $school1, $school2;
+
+    /**
+     * @var integer id for user generated in datageneration
+     */
+    private $uid;
+
+    /**
+     * @var integer new version of plugin being installed
+     */
+    private $newversion;
+
+    /**
+     * Generate data for test.
+     * @throws \testing\datagenerator\not_found
+     */
+    public function datageneration(): void {
+        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
+        $this->newversion = $sms->get_file_version();
+        $sms->install($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
+        $sms->enable_plugin();
+        $this->config->set_setting('active_modules_only', 1, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('campuslist', 'U', \Config::STRING, 'plugin_cs_sms');
+        $this->config->set_setting('enable_assessment', 1, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('enable_course', 1, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('enable_delete_modules', 1, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('enable_enrolment', 1, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('enable_faculty', 1, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('enable_gradebook', 1, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('enable_module', 1, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('gradebooklocation', '', \Config::STRING, 'plugin_cs_sms');
+        $this->config->set_setting('gradebook_md5', 1, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('lockfile_lifespan', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('loglocation', '', \Config::STRING, 'plugin_cs_sms');
+        $this->config->set_setting('password', 'aninscurepassword', \Config::PASSWORD, 'plugin_cs_sms');
+        $this->config->set_setting('target_module_enrolments', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $this->config->set_setting('timeout', 10, \Config::INTEGER, 'plugin_cs_sms');
+        $this->config->set_setting('url', 'https://www.example.com', \Config::URL, 'plugin_cs_sms');
+        $this->config->set_setting('username', 'username', \Config::STRING, 'plugin_cs_sms');
+        $this->config->set_setting('validate_schema', 0, \Config::BOOLEAN, 'plugin_cs_sms');
+        $datagenerator = $this->get_datagenerator('academic_year', 'core');
+        $datagenerator->create_academic_year(array('calendar_year' => 2016, 'academic_year' => '2016/17'));
+        $datagenerator = $this->get_datagenerator('faculty', 'core');
+        $this->fac = $datagenerator->create_faculty(array('name' => 'Faculty of Testing', 'externalid' => 'TESTECT', 'externalsys' => 'Campus Solutions', 'code' => 'TEST'));
+        $datagenerator = $this->get_datagenerator('school', 'core');
+        $this->school1 = $datagenerator->create_school(array('school' => 'Centre for Testing', 'facultyID' => $this->fac['id'], 'externalid' => 'USC-MED', 'externalsys' => 'Campus Solutions', 'code' => 'TEST'));
+        $this->school2 = $datagenerator->create_school(array('school' => 'Centre for Testing 2', 'facultyID' => $this->fac['id'], 'externalid' => 'USC-ME2', 'externalsys' => 'Campus Solutions', 'code' => 'TEST2'));
+        $datagenerator = $this->get_datagenerator('course', 'core');
+        $datagenerator->create_course(array('name' => 'M6UNUTRN', 'description' => 'Nutrition', 'schoolid' => $this->school1['id'], 'externalid' => 'M6UNUTRN', 'externalsys' => 'Campus Solutions'));
+        $datagenerator->create_course(array('name' => 'M6UCVENG', 'description' => 'Civil Engineering', 'schoolid' => $this->school1['id'], 'externalid' => 'M6UCVENG', 'externalsys' => 'Campus Solutions'));
+        $datagenerator = $this->get_datagenerator('modules', 'core');
+        $this->mod = $datagenerator->create_module(array('fullname' => 'Testing skills', 'moduleid' => 'TESTMOD', 'schoolID' => $this->school1['id'], 'externalID' => '00001111', 'sms_api' => 'Campus Solutions'));
+        $datagenerator = $this->get_datagenerator('users', 'core');
+        $user = $datagenerator->create_user(array('surname' => 'staff', 'username' => 'staff', 'grade' => 'University Lecturer', 'first_names' => 'staffy', 'yearofstudy' => 1,
+            'title' => 'Mr', 'email' => 'staffy@example.com', 'gender' => 'Male', 'roles' => 'Staff'));
+        $this->uid = $user['id'];
+    }
+
     /**
      * Mock assessment xml
      * @var string
@@ -317,12 +387,12 @@ class cssmstest extends unittestdatabase {
                 <Membership>
                     <User>
                         <UserId>10000667</UserId>
-                        <Title/>
+                        <Title>Mr</Title>
                         <ForeName>Lewis</ForeName>
                         <Surname>John</Surname>
                         <Username>brzhs5</Username>
-                        <Email/>
-                        <Gender/>
+                        <Email>brzhs5@example.com</Email>
+                        <Gender>Male</Gender>
                         <PlanID>M6UNUTRN</PlanID>
                         <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
@@ -340,8 +410,8 @@ class cssmstest extends unittestdatabase {
                         <ForeName>Lewis</ForeName>
                         <Surname>John</Surname>
                         <Username>brzhs5</Username>
-                        <Email/>
-                        <Gender/>
+                        <Email>brzhs5@example.com</Email>
+                        <Gender>Male</Gender>
                         <PlanID>M6UNUTRN</PlanID>
                         <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
@@ -349,12 +419,12 @@ class cssmstest extends unittestdatabase {
                     </User>
                     <User>
                         <UserId>10000667</UserId>
-                        <Title/>
+                        <Title>Mr</Title>
                         <ForeName>Lewis</ForeName>
                         <Surname>John</Surname>
                         <Username>brzhs5</Username>
-                        <Email/>
-                        <Gender/>
+                        <Email>brzhs5@example.com</Email>
+                        <Gender>Male</Gender>
                         <PlanID>M6UNUTRN</PlanID>
                         <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
@@ -362,12 +432,12 @@ class cssmstest extends unittestdatabase {
                     </User>
                     <User>
                         <UserId>10000670</UserId>
-                        <Title/>
+                        <Title>Mr</Title>
                         <ForeName>Daniel</ForeName>
                         <Surname>Watson</Surname>
                         <Username>brzamh</Username>
-                        <Email/>
-                        <Gender/>
+                        <Email>brzamh@example.com</Email>
+                        <Gender>Male</Gender>
                         <PlanID>M6UCVENG</PlanID>
                         <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
@@ -384,12 +454,12 @@ class cssmstest extends unittestdatabase {
                     </User>
                     <User>
                         <UserId>10000670</UserId>
-                        <Title/>
+                        <Title>Mr</Title>
                         <ForeName>Daniel</ForeName>
                         <Surname>Watson</Surname>
                         <Username>brzamh</Username>
-                        <Email/>
-                        <Gender/>
+                        <Email>brzamh@example.com</Email>
+                        <Gender>Male</Gender>
                         <PlanID>M6UCVENG</PlanID>
                         <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
@@ -410,12 +480,12 @@ class cssmstest extends unittestdatabase {
                 <Membership>
                     <User>
                         <UserId>10000667</UserId>
-                        <Title/>
+                        <Title>Mr</Title>
                         <ForeName>Lewis</ForeName>
                         <Surname>John</Surname>
                         <Username>brzhs5</Username>
-                        <Email/>
-                        <Gender/>
+                        <Email>brzhs5@example.com</Email>
+                        <Gender>Male</Gender>
                         <PlanID>M6UNUTRN</PlanID>
                         <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
@@ -423,12 +493,12 @@ class cssmstest extends unittestdatabase {
                     </User>
                     <User>
                         <UserId>10000670</UserId>
-                        <Title/>
+                        <Title>Mr</Title>
                         <ForeName>Daniel</ForeName>
                         <Surname>Watson</Surname>
                         <Username>brzamh</Username>
-                        <Email/>
-                        <Gender/>
+                        <Email>brzamh@example.com</Email>
+                        <Gender>Male</Gender>
                         <PlanID>M6UCVENG</PlanID>
                         <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
@@ -455,12 +525,12 @@ class cssmstest extends unittestdatabase {
                 <Membership>
                     <User>
                         <UserId>10000667</UserId>
-                        <Title/>
+                        <Title>Mr</Title>
                         <ForeName>Lewis</ForeName>
                         <Surname>John</Surname>
                         <Username>brzhs5</Username>
-                        <Email/>
-                        <Gender/>
+                        <Email>brzhs5@example.com</Email>
+                        <Gender>Male</Gender>
                         <PlanID>M6UNUTRN</PlanID>
                         <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
@@ -468,12 +538,12 @@ class cssmstest extends unittestdatabase {
                     </User>
                     <User>
                         <UserId>10000670</UserId>
-                        <Title/>
+                        <Title>Mr</Title>
                         <ForeName>Daniel</ForeName>
                         <Surname>Watson</Surname>
                         <Username>brzamh</Username>
-                        <Email/>
-                        <Gender/>
+                        <Email>brzamh@example.com</Email>
+                        <Gender>Male</Gender>
                         <PlanID>M6UCVENG</PlanID>
                         <YearOfStudy>01</YearOfStudy>
                         <Status>Enrolled</Status>
@@ -482,21 +552,7 @@ class cssmstest extends unittestdatabase {
                 </Membership>
             </Module>
         </ModuleEnrolments>';
-    /**
-     * Get init data set from yml
-     * @return dataset
-     */
-    public function getDataSet() {
-        return new YamlDataSet(dirname(__DIR__) . DIRECTORY_SEPARATOR  . "fixtures" . DIRECTORY_SEPARATOR . "sms.yml");
-    }
-    /**
-     * Get expected data set from yml
-     * @param string $name fixture file name
-     * @return dataset
-     */
-    public function get_expected_data_set($name) {
-        return new YamlDataSet(dirname(__DIR__) . DIRECTORY_SEPARATOR  . "fixtures" . DIRECTORY_SEPARATOR . $name . ".yml");
-    }
+
     /**
      * Test get assessments
      * @group sms
@@ -512,17 +568,57 @@ class cssmstest extends unittestdatabase {
             ->will($this->returnValue($this->assessmentxml));
         $this->config->set_setting('cfg_summative_mgmt', true, \Config::BOOLEAN);
         $sms->get_assessments(2016);
-        $queryTable = $this->getConnection()->createQueryTable('scheduling', 'SELECT id, paperID, notes, sittings FROM scheduling');
-        $expectedTable = $this->get_expected_data_set('scheduling')->getTable("scheduling");
-        $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('properties', 'SELECT property_id, paper_title, paper_type, exam_duration, paper_ownerID, calendar_year, externalid, externalsys FROM properties');
-        $expectedTable = $this->get_expected_data_set('scheduling')->getTable("properties");
-        $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('properties_modules', 'SELECT property_id, idMod FROM properties_modules');
-        $expectedTable = $this->get_expected_data_set('scheduling')->getTable("properties_modules");
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('paperID', 'notes', 'sittings'), 'table' => 'scheduling'));
+        $expectedTable = array(
+            0 => array(
+                "paperID" => \Paper_utils::get_id_from_externalid('C-00000000033', 'Campus Solutions', $this->db),
+                "notes" => null,
+                "sittings" => 1,
+            ),
+            1 => array(
+                "paperID" => \Paper_utils::get_id_from_externalid('C-00000000035', 'Campus Solutions', $this->db),
+                "notes" => "meh",
+                "sittings" => 1,
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('paper_title', 'paper_type', 'exam_duration', 'paper_ownerID', 'calendar_year', 'externalid', 'externalsys'), 'table' => 'properties'));
+        $expectedTable = array(
+            0 => array(
+                'paper_title' => "Test Exam",
+                'paper_type' => 2,
+                'exam_duration' => 90,
+                'paper_ownerID' => $this->uid,
+                'calendar_year' => 2016,
+                'externalid' => "C-00000000033",
+                'externalsys' => "Campus Solutions"
+            ),
+            1 => array(
+                'paper_title' => "Test Exam 2",
+                'paper_type' => 2,
+                'exam_duration' => 60,
+                'paper_ownerID' => $this->uid,
+                'calendar_year' => 2016,
+                'externalid' => "C-00000000035",
+                'externalsys' => "Campus Solutions"
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('property_id', 'idMod'), 'table' => 'properties_modules'));
+        $expectedTable = array(
+            0 => array(
+                "property_id" => \Paper_utils::get_id_from_externalid('C-00000000033', 'Campus Solutions', $this->db),
+                "idMod" => $this->mod['id'],
+            ),
+            1 => array(
+                "property_id" => \Paper_utils::get_id_from_externalid('C-00000000035', 'Campus Solutions', $this->db),
+                "idMod" => $this->mod['id'],
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
         $this->config->set_setting('cfg_summative_mgmt', false, \Config::BOOLEAN);
     }
+
     /**
      * Test get faculties
      * @group sms
@@ -537,19 +633,65 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->facultyxml));
         $sms->get_faculties();
-        $queryTable = $this->getConnection()->createQueryTable('faculty', 'SELECT id, code, name, externalid, externalsys FROM faculty');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("faculty");
-        $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('schools', 'SELECT id, code, school, facultyID, externalid, externalsys FROM schools');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("schools");
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('code', 'name', 'externalid', 'externalsys'), 'table' => 'faculty',
+            'where' => array(array('column' => 'name', 'operator' => 'NOT IN', 'value' => array('UNKNOWN Faculty', 'Administrative and Support Units')))));
+        $expectedTable = array(
+            0 => array (
+                'code' => "TEST",
+                'name' => "Faculty of Testing",
+                'externalid' => "TESTECT",
+                'externalsys' => "Campus Solutions"
+            ),
+            1 => array (
+                'code' => "CFY-AE",
+                'name' => "Faculty of Arts and Education",
+                'externalid' => "CFY-AE",
+                'externalsys' => "Campus Solutions"
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('code', 'school', 'facultyID', 'externalid', 'externalsys'), 'table' => 'schools',
+            'where' => array(array('column' => 'school', 'operator' => 'NOT IN', 'value' => array('UNKNOWN School', 'Training')))));
+        $expectedTable = array(
+            0 => array (
+                'code' => "TEST",
+                'school' => "Centre for Testing",
+                'facultyID' => $this->fac['id'],
+                'externalid' => "USC-MED",
+                'externalsys' => "Campus Solutions"
+            ),
+            1 => array (
+                'code' => "TEST2",
+                'school' => "Centre for Testing 2",
+                'facultyID' => $this->fac['id'],
+                'externalid' => "USC-ME2",
+                'externalsys' => "Campus Solutions"
+            ),
+            2 => array (
+                'code' => "CSC-CELE",
+                'school' => "Centre for English Language Education",
+                'facultyID' => \facultyutils::get_facultyid_by_code('CFY-AE', $this->db),
+                'externalid' => "CSC-CELE",
+                'externalsys' => "Campus Solutions"
+            ),
+            3 => array (
+                'code' => "CSC-EDU",
+                'school' => "School of Education",
+                'facultyID' => \facultyutils::get_facultyid_by_code('CFY-AE', $this->db),
+                'externalid' => "CSC-EDU",
+                'externalsys' => "Campus Solutions"
+            )
+        );
+        $this->assertEquals($expectedTable, $queryTable);
     }
+
     /**
      * Test get faculties - missing schools
      * @group sms
      * @group plugin_cs_sms
      */
     public function test_get_faculties_missing_schools() {
+        $numschools = $this->rowcount('schools');
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -559,12 +701,27 @@ class cssmstest extends unittestdatabase {
             ->will($this->returnValue($this->facultyxml2));
         $sms->get_faculties();
         // Faculties provided so created.
-        $queryTable = $this->getConnection()->createQueryTable('faculty', 'SELECT id, code, name, externalid, externalsys FROM faculty');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("faculty");
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('code', 'name', 'externalid', 'externalsys'), 'table' => 'faculty'
+        , 'where' => array(array('column' => 'name', 'operator' => 'NOT IN', 'value' => array('UNKNOWN Faculty', 'Administrative and Support Units')))));
+        $expectedTable = array(
+            0 => array (
+                'code' => "TEST",
+                'name' => "Faculty of Testing",
+                'externalid' => "TESTECT",
+                'externalsys' => "Campus Solutions"
+            ),
+            1 => array (
+                'code' => "CFY-AE",
+                'name' => "Faculty of Arts and Education",
+                'externalid' => "CFY-AE",
+                'externalsys' => "Campus Solutions"
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
         // Missing schools so no schools created.
-        $this->assertEquals(2, $this->getConnection()->getRowCount('schools'));
+        $this->assertEquals($numschools, $this->rowcount('schools'));
     }
+
     /**
      * Test get courses
      * @group sms
@@ -579,10 +736,33 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->coursexml));
         $sms->get_courses();
-        $queryTable = $this->getConnection()->createQueryTable('courses', 'SELECT id, name, description, schoolid, externalid, externalsys FROM courses');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("courses");
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('name', 'description', 'schoolid', 'externalid', 'externalsys'), 'table' => 'courses'));
+        $expectedTable = array(
+            0 => array (
+                'name' => "M6UNUTRN",
+                'description' => "Nutrition",
+                'schoolid' => $this->school1['id'],
+                'externalid' => "M6UNUTRN",
+                'externalsys' => "Campus Solutions"
+            ),
+            1 => array (
+                'name' => "M6UCVENG",
+                'description' => "Civil Engineering",
+                'schoolid' => $this->school1['id'],
+                'externalid' => "M6UCVENG",
+                'externalsys' => "Campus Solutions"
+            ),
+            2 => array (
+                'name' => "U8PBRSGY",
+                'description' => "Breast Surgery",
+                'schoolid' => $this->school2['id'],
+                'externalid' => "UON|U8PBRSGY",
+                'externalsys' => "Campus Solutions"
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
     }
+
     /**
      * Test get modules
      * @group sms
@@ -597,10 +777,31 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->modulexml));
         $sms->get_modules();
-        $queryTable = $this->getConnection()->createQueryTable('modules', 'SELECT id, moduleid, fullname, schoolid, externalid, academic_year_start, sms, active FROM modules');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("modules");
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('moduleid', 'fullname', 'schoolid', 'externalid', 'academic_year_start', 'sms', 'active'),
+            'table' => 'modules', 'where' => array(array('column' => 'moduleid', 'operator' => 'NOT IN', 'value' => array('TRAIN', 'SYSTEM')))));
+        $expectedTable = array(
+            0 => array (
+                'moduleid' => "TESTMOD",
+                'fullname' => "Testing skills",
+                'schoolid' => $this->school1['id'],
+                'externalid' => "00001111",
+                'academic_year_start' => "07/01",
+                'sms' => "Campus Solutions",
+                'active' => 1
+            ),
+            1 => array (
+                'moduleid' => "NAAAXXXX",
+                'fullname' => "Self-marketing skills",
+                'schoolid' => $this->school1['id'],
+                'externalid' => "030003",
+                'academic_year_start' => "07/01",
+                'sms' => "Campus Solutions",
+                'active' => 1
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
     }
+
     /**
      * Test get modules with session and module as arguments
      * @group sms
@@ -615,10 +816,31 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->modulexml));
         $sms->get_modules('030003', 2016);
-        $queryTable = $this->getConnection()->createQueryTable('modules', 'SELECT id, moduleid, fullname, schoolid, externalid, academic_year_start, sms, active FROM modules');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("modules");
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('moduleid', 'fullname', 'schoolid', 'externalid', 'academic_year_start', 'sms', 'active'),
+            'table' => 'modules', 'where' => array(array('column' => 'moduleid', 'operator' => 'NOT IN', 'value' => array('TRAIN', 'SYSTEM')))));
+        $expectedTable = array(
+            0 => array (
+                'moduleid' => "TESTMOD",
+                'fullname' => "Testing skills",
+                'schoolid' => $this->school1['id'],
+                'externalid' => "00001111",
+                'academic_year_start' => "07/01",
+                'sms' => "Campus Solutions",
+                'active' => 1
+            ),
+            1 => array (
+                'moduleid' => "NAAAXXXX",
+                'fullname' => "Self-marketing skills",
+                'schoolid' => $this->school1['id'],
+                'externalid' => "030003",
+                'academic_year_start' => "07/01",
+                'sms' => "Campus Solutions",
+                'active' => 1
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
     }
+
     /**
      * Test get enrolments with session only (all enrolments)
      * @group sms
@@ -633,22 +855,83 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->enrolxml));
         $sms->get_enrolments(2016);
-        $queryTable = $this->getConnection()->createQueryTable('users', 'SELECT id, grade, surname, username, title, email, gender, roles, first_names, yearofstudy FROM users');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("users");
-        $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('sid', 'SELECT student_id, userID FROM sid');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("sid");
-        $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('modules_student', 'SELECT id, userID, idMod, calendar_year FROM modules_student');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("modules_student");
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('grade', 'surname', 'username', 'title', 'email', 'gender', 'roles', 'first_names', 'yearofstudy'),
+            'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
+        $expectedTable = array(
+            0 => array (
+                'grade' => "University Lecturer",
+                'surname' => "staff",
+                'username' => "staff",
+                'title' => "Mr",
+                'email' => "staffy@example.com",
+                'gender' => "Male",
+                'roles' => "Staff",
+                'first_names' => "staffy",
+                'yearofstudy' => 1
+            ),
+            1 => array (
+                'grade' => "M6UNUTRN",
+                'surname' => "John",
+                'username' => "brzhs5",
+                'title' => "Mr",
+                'email' => "brzhs5@example.com",
+                'gender' => "Male",
+                'roles' => "Student",
+                'first_names' => "Lewis",
+                'yearofstudy' => 1
+            ),
+            2 => array (
+                'grade' => "M6UCVENG",
+                'surname' => "Watson",
+                'username' => "brzamh",
+                'title' => "Mr",
+                'email' => "brzamh@example.com",
+                'gender' => "Male",
+                'roles' => "Student",
+                'first_names' => "Daniel",
+                'yearofstudy' => 1
+            )
+        );
+        $this->assertEquals($expectedTable, $queryTable);
+        $student1 = \userutils::username_exists('brzhs5', $this->db);
+        $student2 = \userutils::username_exists('brzamh', $this->db);
+        $queryTable = $this->query(array('table' => 'sid',
+            'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
+        $expectedTable = array(
+            0 => array(
+                'student_id' => "10000667",
+                'userID' => $student1
+            ),
+            1 => array(
+                'student_id' => "10000670",
+                'userID' => $student2
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('userID', 'idMod', 'calendar_year'), 'table' => 'modules_student',
+            'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
+        $expectedTable = array(
+            0 => array (
+                'userID' => $student1,
+                'idMod' => $this->mod['id'],
+                'calendar_year' => 2016
+            ),
+            1 => array (
+                'userID' => $student2,
+                'idMod' => $this->mod['id'],
+                'calendar_year' => 2016
+            )
+        );
+        $this->assertEquals($expectedTable, $queryTable);
     }
+
     /**
      * Test get enrolments with missing year node
      * @group sms
      * @group plugin_cs_sms
      */
     public function test_get_enrolments_all_missing_nodes() {
+        $numenrolments = $this->rowcount('modules_student');
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -658,15 +941,63 @@ class cssmstest extends unittestdatabase {
             ->will($this->returnValue($this->enrolxml2));
         $sms->get_enrolments(2016);
         // Users should still be created.
-        $queryTable = $this->getConnection()->createQueryTable('users', 'SELECT id, grade, surname, username, title, email, gender, roles, first_names, yearofstudy FROM users');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("users");
-        $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('sid', 'SELECT student_id, userID FROM sid');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("sid");
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('grade', 'surname', 'username', 'title', 'email', 'gender', 'roles', 'first_names', 'yearofstudy'),
+            'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
+        $expectedTable = array(
+            0 => array (
+                'grade' => "University Lecturer",
+                'surname' => "staff",
+                'username' => "staff",
+                'title' => "Mr",
+                'email' => "staffy@example.com",
+                'gender' => "Male",
+                'roles' => "Staff",
+                'first_names' => "staffy",
+                'yearofstudy' => 1
+            ),
+            1 => array (
+                'grade' => "M6UNUTRN",
+                'surname' => "John",
+                'username' => "brzhs5",
+                'title' => "Mr",
+                'email' => "brzhs5@example.com",
+                'gender' => "Male",
+                'roles' => "Student",
+                'first_names' => "Lewis",
+                'yearofstudy' => 1
+            ),
+            2 => array (
+                'grade' => "M6UCVENG",
+                'surname' => "Watson",
+                'username' => "brzamh",
+                'title' => "Mr",
+                'email' => "brzamh@example.com",
+                'gender' => "Male",
+                'roles' => "Student",
+                'first_names' => "Daniel",
+                'yearofstudy' => 1
+            )
+        );
+        $this->assertEquals($expectedTable, $queryTable);
+        $student1 = \userutils::username_exists('brzhs5', $this->db);
+        $student2 = \userutils::username_exists('brzamh', $this->db);
+        $queryTable = $this->query(array('table' => 'sid',
+            'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
+        $expectedTable = array(
+            0 => array(
+                'student_id' => "10000667",
+                'userID' => $student1
+            ),
+            1 => array(
+                'student_id' => "10000670",
+                'userID' => $student2
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
         // Enrolments should not be created as missing session.
-        $this->assertEquals(0, $this->getConnection()->getRowCount('modules_student'));
+        $this->assertEquals($numenrolments, $this->rowcount('modules_student'));
     }
+
     /**
      * Test get enrolments with session only (all enrolments) - skip module with missing members nodes
      * @group sms
@@ -681,16 +1012,76 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->enrolxml3));
         $sms->get_enrolments(2016);
-        $queryTable = $this->getConnection()->createQueryTable('users', 'SELECT id, grade, surname, username, title, email, gender, roles, first_names, yearofstudy FROM users');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("users");
-        $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('sid', 'SELECT student_id, userID FROM sid');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("sid");
-        $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('modules_student', 'SELECT id, userID, idMod, calendar_year FROM modules_student');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("modules_student");
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('grade', 'surname', 'username', 'title', 'email', 'gender', 'roles', 'first_names', 'yearofstudy'),
+            'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
+        $expectedTable = array(
+            0 => array (
+                'grade' => "University Lecturer",
+                'surname' => "staff",
+                'username' => "staff",
+                'title' => "Mr",
+                'email' => "staffy@example.com",
+                'gender' => "Male",
+                'roles' => "Staff",
+                'first_names' => "staffy",
+                'yearofstudy' => 1
+            ),
+            1 => array (
+                'grade' => "M6UNUTRN",
+                'surname' => "John",
+                'username' => "brzhs5",
+                'title' => "Mr",
+                'email' => "brzhs5@example.com",
+                'gender' => "Male",
+                'roles' => "Student",
+                'first_names' => "Lewis",
+                'yearofstudy' => 1
+            ),
+            2 => array (
+                'grade' => "M6UCVENG",
+                'surname' => "Watson",
+                'username' => "brzamh",
+                'title' => "Mr",
+                'email' => "brzamh@example.com",
+                'gender' => "Male",
+                'roles' => "Student",
+                'first_names' => "Daniel",
+                'yearofstudy' => 1
+            )
+        );
+        $this->assertEquals($expectedTable, $queryTable);
+        $student1 = \userutils::username_exists('brzhs5', $this->db);
+        $student2 = \userutils::username_exists('brzamh', $this->db);
+        $queryTable = $this->query(array('table' => 'sid',
+            'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
+        $expectedTable = array(
+            0 => array(
+                'student_id' => "10000667",
+                'userID' => $student1
+            ),
+            1 => array(
+                'student_id' => "10000670",
+                'userID' => $student2
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('userID', 'idMod', 'calendar_year'), 'table' => 'modules_student',
+            'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
+        $expectedTable = array(
+            0 => array (
+                'userID' => $student1,
+                'idMod' => $this->mod['id'],
+                'calendar_year' => 2016
+            ),
+            1 => array (
+                'userID' => $student2,
+                'idMod' => $this->mod['id'],
+                'calendar_year' => 2016
+            )
+        );
+        $this->assertEquals($expectedTable, $queryTable);
     }
+
     /**
      * Test get enrolments with session and moudle id
      * @group sms
@@ -705,49 +1096,130 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->enrolxml));
         $sms->get_enrolments(2016, '00001111');
-        $queryTable = $this->getConnection()->createQueryTable('users', 'SELECT id, grade, surname, username, title, email, gender, roles, first_names, yearofstudy FROM users');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("users");
-        $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('sid', 'SELECT student_id, userID FROM sid');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("sid");
-        $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('modules_student', 'SELECT id, userID, idMod, calendar_year FROM modules_student');
-        $expectedTable = $this->get_expected_data_set('faculty')->getTable("modules_student");
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('grade', 'surname', 'username', 'title', 'email', 'gender', 'roles', 'first_names', 'yearofstudy'),
+            'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
+        $expectedTable = array(
+            0 => array (
+                'grade' => "University Lecturer",
+                'surname' => "staff",
+                'username' => "staff",
+                'title' => "Mr",
+                'email' => "staffy@example.com",
+                'gender' => "Male",
+                'roles' => "Staff",
+                'first_names' => "staffy",
+                'yearofstudy' => 1
+            ),
+            1 => array (
+                'grade' => "M6UNUTRN",
+                'surname' => "John",
+                'username' => "brzhs5",
+                'title' => "Mr",
+                'email' => "brzhs5@example.com",
+                'gender' => "Male",
+                'roles' => "Student",
+                'first_names' => "Lewis",
+                'yearofstudy' => 1
+            ),
+            2 => array (
+                'grade' => "M6UCVENG",
+                'surname' => "Watson",
+                'username' => "brzamh",
+                'title' => "Mr",
+                'email' => "brzamh@example.com",
+                'gender' => "Male",
+                'roles' => "Student",
+                'first_names' => "Daniel",
+                'yearofstudy' => 1
+            )
+        );
+        $this->assertEquals($expectedTable, $queryTable);
+        $student1 = \userutils::username_exists('brzhs5', $this->db);
+        $student2 = \userutils::username_exists('brzamh', $this->db);
+        $queryTable = $this->query(array('table' => 'sid',
+            'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
+        $expectedTable = array(
+            0 => array(
+                'student_id' => "10000667",
+                'userID' => $student1
+            ),
+            1 => array(
+                'student_id' => "10000670",
+                'userID' => $student2
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('userID', 'idMod', 'calendar_year'), 'table' => 'modules_student'));
+        $expectedTable = array(
+            0 => array (
+                'userID' => \userutils::username_exists('brzhs5', $this->db),
+                'idMod' => $this->mod['id'],
+                'calendar_year' => 2016
+            ),
+            1 => array (
+                'userID' => \userutils::username_exists('brzamh', $this->db),
+                'idMod' => $this->mod['id'],
+                'calendar_year' => 2016
+            )
+        );
+        $this->assertEquals($expectedTable, $queryTable);
     }
+
     /**
      * Test install mapping plugin - already installed on setup
      * @group sms
      * @group plugin_cs_sms
      */
     public function test_install() {
-        $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
-        $this->assertEquals('OK', $sms->install($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password')));
+        // Already installed by data generator so just check data tables.
         // Check tables are correct.
-        $queryTable = $this->getConnection()->createQueryTable('plugins', 'SELECT component, version, type FROM plugins');
-        $expectedTable = $this->get_expected_data_set('pluginconfig')->getTable("plugins");
-        $this->assertTablesEqual($expectedTable, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('config', 'SELECT component, setting, value, type FROM config order by 1, 2');
-        $expectedTable = $this->get_expected_data_set('pluginconfig')->getTable("config");
-        $this->assertTablesEqual($expectedTable, $queryTable);
-        $sms->uninstall($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
+        $queryTable = $this->query(array('columns' => array('component', 'type', 'version'), 'table' => 'plugins'));
+        $expectedTable = array(
+            0 => array(
+                'component' => "plugin_cs_sms",
+                'type' => "SMS",
+                'version' => $this->newversion
+            )
+        );
+        $this->assertEquals($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('component', 'setting', 'value', 'type'), 'table' => 'config',
+            'where' => array(array('column' => 'component', 'value' => 'plugin_cs_sms'), array('column' => 'setting', 'value' => 'installed'))));
+        $expectedTable = array(
+            0 => array(
+                'component' => "plugin_cs_sms",
+                'setting' => "installed",
+                'value' => 1,
+                'type' => "boolean"
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
     }
+
     /**
      * Test uninstall mapping plugin - already installed on setup
      * @group sms
      * @group plugin_cs_sms
      */
     public function test_uninstall() {
+        // Already installed by data generator.
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
-        $sms->install($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
         $this->assertEquals('OK', $sms->uninstall($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password')));
         // Check tables are correct.
-        $queryTable = $this->getConnection()->getRowCount('plugins');
+        $queryTable = $this->rowcount('plugins');
         $this->assertEquals(0, $queryTable);
-        $queryTable = $this->getConnection()->createQueryTable('config', 'SELECT component, setting, value, type FROM config  order by 1, 2');
-        $expectedTable = $this->get_expected_data_set('nopluginconfig')->getTable("config");
-        $this->assertTablesEqual($expectedTable, $queryTable);
+        $queryTable = $this->query(array('columns' => array('component', 'setting', 'value', 'type'), 'table' => 'config',
+            'where' => array(array('column' => 'component', 'value' => 'plugin_cs_sms'), array('column' => 'setting', 'value' => 'installed'))));
+        $expectedTable = array(
+            0 => array(
+                'component' => "plugin_cs_sms",
+                'setting' => "installed",
+                'value' => 0,
+                'type' => "boolean"
+            ),
+        );
+        $this->assertEquals($expectedTable, $queryTable);
     }
+
     /**
      * Test check plugin version
      * @group sms
@@ -759,6 +1231,7 @@ class cssmstest extends unittestdatabase {
         $this->assertEquals($sms->get_installed_version(), $sms->get_plugin_version('plugin_cs_sms'));
         $sms->uninstall($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
     }
+
     /**
      * Test supports_module_import
      * @group sms
@@ -775,6 +1248,7 @@ class cssmstest extends unittestdatabase {
         $this->assertEquals($array, $sms->supports_module_import());
         
     }
+
     /**
      * Test supports_module_import - disabled in config
      * @group sms
@@ -787,6 +1261,7 @@ class cssmstest extends unittestdatabase {
         $this->assertFalse($sms->supports_module_import());
         
     }
+
     /**
      * Test supports_faculty_import
      * @group sms
@@ -802,6 +1277,7 @@ class cssmstest extends unittestdatabase {
          'tooltip' => $strings['importfacultiestooltip']);
         $this->assertEquals($array, $sms->supports_faculty_import());
     }
+
     /**
      * Test supports_faculty_import - disabled in config
      * @group sms
@@ -812,6 +1288,7 @@ class cssmstest extends unittestdatabase {
         $this->config->set_setting('enable_faculty', 0, \Config::BOOLEAN, 'plugin_cs_sms');
         $this->assertFalse($sms->supports_faculty_import());
     }
+
     /**
      * Test supports_course_import
      * @group sms
@@ -827,6 +1304,7 @@ class cssmstest extends unittestdatabase {
          'tooltip' => $strings['importcoursestooltip']);
         $this->assertEquals($array, $sms->supports_course_import());
     }
+
     /**
      * Test supports_course_import - disabled in config
      * @group sms
@@ -837,6 +1315,7 @@ class cssmstest extends unittestdatabase {
         $this->config->set_setting('enable_course', 0, \Config::BOOLEAN, 'plugin_cs_sms');
         $this->assertFalse($sms->supports_course_import());
     }
+
     /**
      * Test supports_enrol_import
      * @group sms
@@ -846,6 +1325,7 @@ class cssmstest extends unittestdatabase {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $this->assertTrue($sms->supports_enrol_import());
     }
+
     /**
      * Test supports_enrol_import - disabled in config
      * @group sms
@@ -856,6 +1336,7 @@ class cssmstest extends unittestdatabase {
         $this->config->set_setting('enable_enrolment', 0, \Config::BOOLEAN, 'plugin_cs_sms');
         $this->assertFalse($sms->supports_enrol_import());
     }
+
     /**
      * Test supports_assessment_import
      * @group sms
@@ -871,6 +1352,7 @@ class cssmstest extends unittestdatabase {
          'tooltip' => $strings['importassessmentstooltip']);
         $this->assertEquals($array, $sms->supports_assessment_import());
     }
+
     /**
      * Test supports_assessment_import - disabled in config
      * @group sms
@@ -881,6 +1363,7 @@ class cssmstest extends unittestdatabase {
         $this->config->set_setting('enable_assessment', 0, \Config::BOOLEAN, 'plugin_cs_sms');
         $this->assertFalse($sms->supports_assessment_import());
     }
+
     /**
      * Test get_name
      * @group sms
@@ -890,6 +1373,7 @@ class cssmstest extends unittestdatabase {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $this->assertEquals('Campus Solutions', $sms->get_name());
     }
+
     /**
      * Test enable_plugin
      * @group sms
@@ -906,6 +1390,7 @@ class cssmstest extends unittestdatabase {
         $sms->enable_plugin();
         $this->assertEquals(array('plugin_cs_sms'), $config);
     }
+
     /**
      * Test disable_plugin
      * @group sms
