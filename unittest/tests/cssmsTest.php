@@ -691,6 +691,7 @@ class cssmstest extends unittestdatabase {
      * @group plugin_cs_sms
      */
     public function test_get_faculties_missing_schools() {
+        $numschools = $this->rowcount('schools');
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -718,7 +719,7 @@ class cssmstest extends unittestdatabase {
         );
         $this->assertEquals($expectedTable, $queryTable);
         // Missing schools so no schools created.
-        $this->assertEquals(4, $this->rowcount('schools'));
+        $this->assertEquals($numschools, $this->rowcount('schools'));
     }
 
     /**
@@ -930,6 +931,7 @@ class cssmstest extends unittestdatabase {
      * @group plugin_cs_sms
      */
     public function test_get_enrolments_all_missing_nodes() {
+        $numenrolments = $this->rowcount('modules_student');
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -993,7 +995,7 @@ class cssmstest extends unittestdatabase {
         );
         $this->assertEquals($expectedTable, $queryTable);
         // Enrolments should not be created as missing session.
-        $this->assertEquals(0, $this->rowcount('modules_student'));
+        $this->assertEquals($numenrolments, $this->rowcount('modules_student'));
     }
 
     /**
