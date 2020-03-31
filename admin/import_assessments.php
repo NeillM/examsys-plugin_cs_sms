@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -16,7 +17,7 @@
 
 /**
 * Admin screen to import assessments
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -25,9 +26,7 @@ use plugins\SMS\plugin_cs_sms\plugin_cs_sms;
 
 require '../../../../include/sysadmin_auth.inc';
 require '../../../../include/errors.php';
-
 set_time_limit(0);
-
 $session = check_var('session', 'GET', true, false, true, param::INT);
 $yearutils = new \yearutils($mysqli);
 $supported_sessions = $yearutils->get_supported_years();
@@ -39,5 +38,5 @@ $userObj = \UserObject::get_instance();
 $sms = new plugin_cs_sms($userObj->get_user_ID());
 // Get enrolments.
 $sms->get_assessments($session);
-header("location: " . $configObject->get('cfg_root_path') . "/admin/summative_scheduling.php", true, 303);
+header('location: ' . $configObject->get('cfg_root_path') . '/admin/summative_scheduling.php', true, 303);
 exit();

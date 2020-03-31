@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -16,7 +17,7 @@
 
 /**
 * Admin screen to import faculties and schools
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -24,12 +25,10 @@
 use plugins\SMS\plugin_cs_sms\plugin_cs_sms;
 
 require '../../../../include/sysadmin_auth.inc';
-
 set_time_limit(0);
-
 $userObj = \UserObject::get_instance();
 $sms = new plugin_cs_sms($userObj->get_user_ID());
 // Get faculties and schools.
 $sms->get_faculties();
-header("location: " . $configObject->get('cfg_root_path') . "/admin/list_faculties.php", true, 303);
+header('location: ' . $configObject->get('cfg_root_path') . '/admin/list_faculties.php', true, 303);
 exit();

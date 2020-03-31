@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -18,7 +19,7 @@ namespace plugins\SMS\plugin_cs_sms;
 
 /**
 * User import helper file
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -26,7 +27,10 @@ namespace plugins\SMS\plugin_cs_sms;
 /**
  * User import helper class.
  */
-class user_helper {
+class user_helper
+{
+
+
     /**
      * Parse the user node of the membership xml and create/update users as required
      * @param DOMNodeList $usernode xml for users
@@ -37,12 +41,13 @@ class user_helper {
      * @param array $userupdated list of users already updated so we can skip
      * @return array list of enrolled users
      */
-    static public function get_users($usernode, $moduleextid, $userid, $logfile, $db, &$userupdated) {
+    public static function get_users($usernode, $moduleextid, $userid, $logfile, $db, &$userupdated)
+    {
         $currentenrols = array();
         foreach ($usernode as $users) {
             if ($users->hasChildNodes()) {
                 $xpath = new \DOMXPath($users->ownerDocument);
-                // Student IDs in Rogo are User IDs in Campus Solutions.
+        // Student IDs in Rogo are User IDs in Campus Solutions.
                 try {
                     $externalid = $xpath->query('./UserId', $users)->item(0)->nodeValue;
                 } catch (\exception $e) {
@@ -57,11 +62,11 @@ class user_helper {
                         $id = \UserUtils::studentid_exists($externalid, $db);
                         $params = array();
                         try {
-                            // Status affects Role.
+                        // Status affects Role.
                             if ($xpath->query('./Role', $users)->item(0)->nodeValue == 'Student') {
                                 $params['role'] = self::map_student_status($xpath->query('./Status', $users)->item(0)->nodeValue, $id, $db);
                             } else {
-                                //Non Students not supported.
+            //Non Students not supported.
                                 continue;
                             }
                             $params['studentid'] = $externalid;
@@ -74,14 +79,14 @@ class user_helper {
                             $params['course'] = $xpath->query('./PlanID', $users)->item(0)->nodeValue;
                             $params['year'] = self::map_yearofstudy($xpath->query('./YearOfStudy', $users)->item(0)->nodeValue);
                         } catch (\exception $e) {
-                            // If user data not provided skip to next user.
+                        // If user data not provided skip to next user.
                             continue;
                         }
                         $params['nodeid'] = $node;
                         $currentenrols[$moduleextid][$externalid] = $params['username'];
                         $node++;
                         if ($id) {
-                            // Update User.
+                        // Update User.
                             $params['id'] = $id;
                             $response = $um->update($params, $userid);
                             if ($response['status'] === 100) {
@@ -89,7 +94,7 @@ class user_helper {
                             }
                             $type = 'User Update';
                         } else {
-                            //Create User.
+                        //Create User.
                             $response = $um->create($params, $userid);
                             if ($response['status'] === 100) {
                                 $userupdated[] = $externalid;
@@ -110,7 +115,8 @@ class user_helper {
      * @param string $title title in rogo
      * @return string|null rogo gender or null if not mapped
      */
-    static public function map_gender($csgender, $title) {
+    public static function map_gender($csgender, $title)
+    {
         /*
         Possible Genders from CS
         F - Female
@@ -121,18 +127,23 @@ class user_helper {
         */
         switch ($csgender) {
             case 'F':
-                $gender = 'Female';
+                                                                                                                                                                        $gender = 'Female';
+
                 break;
             case 'M':
-                $gender = 'Male';
+                                                                                                                                                                        $gender = 'Male';
+
                 break;
             case 'O':
             case 'X':
                 $gender = 'Other';
+
                 break;
             default:
                 // Use title in rogo to assume gender.
-                $gender = self::title_to_gender($title);
+                
+                                                                                                                                                                        $gender = self::title_to_gender($title);
+
                 break;
         }
         return $gender;
@@ -143,9 +154,10 @@ class user_helper {
      * @param string $cstitle title in CS
      * @return string|null rogo title or null if not mapped
      */
-    static public function map_title($cstitle) {
+    public static function map_title($cstitle)
+    {
         // Valid Rogo titles Mx|Mr|Mrs|Miss|Ms|Dr|Professor
-        if (preg_match("/^(Mx|Mr|Mrs|Miss|Ms|Dr|Professor)$/", $cstitle)) {
+        if (preg_match('/^(Mx|Mr|Mrs|Miss|Ms|Dr|Professor)$/', $cstitle)) {
             $title = $cstitle;
         } else {
             $title = null;
@@ -159,22 +171,27 @@ class user_helper {
      * @param string $title title in rogo
      * @return string|null rogo gender or null if not mapped
      */
-    static public function title_to_gender($title) {
+    public static function title_to_gender($title)
+    {
         // Valid Rogo titles Mx|Mr|Mrs|Miss|Ms|Dr|Professor
         switch ($title) {
             case 'Mx':
-                $gender = 'Other';
+                                                                              $gender = 'Other';
+
                 break;
             case 'Mr':
-                $gender = 'Male';
+                                                                              $gender = 'Male';
+
                 break;
             case 'Mrs':
             case 'Miss':
             case 'Ms':
                 $gender = 'Female';
+
                 break;
             default:
-                $gender = null;
+                                                                              $gender = null;
+
                 break;
         }
         return $gender;
@@ -187,12 +204,13 @@ class user_helper {
      * @param mysqli $db database connection
      * @return string|null rogo role or null if not mapped
      */
-    static public function map_student_status($csstatus, $userid, $db) {
+    public static function map_student_status($csstatus, $userid, $db)
+    {
         // Users locked internally in Rogo can only be unlocked manually within Rogo.
         if (\UserUtils::has_user_role($userid, 'Locked', $db)) {
             return 'Locked';
         }
-        /*  
+        /*
         Possible Statuses from CS
         AC  Active in Program
         AD  Admitted - should not be sent to rogo so deafults to suspended
@@ -213,9 +231,11 @@ class user_helper {
             case 'DE':
             case 'DM':
                 $role = 'Left';
+
                 break;
             case 'CM':
-                $role = 'Graduate';
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                $role = 'Graduate';
+
                 break;
             case 'AD':
             case 'AP':
@@ -223,9 +243,11 @@ class user_helper {
             case 'SP':
             case 'WT':
                 $role = 'Suspended';
+
                 break;
             default:
-                $role = 'Student';
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                $role = 'Student';
+
                 break;
         }
         return $role;
@@ -236,15 +258,16 @@ class user_helper {
      * @param string $csyear year in CS
      * @return string|null rogo year or null if not mapped
      */
-    static public function map_yearofstudy($csyear) {
-        /*  
+    public static function map_yearofstudy($csyear)
+    {
+        /*
         Possible Statuses from CS
         00-06 - undergraduate year as zero padded integer, maps to single digit integer
         PGT - not releveant to Rogo so map to null
         PGR - not releveant to Rogo so map to null
         FND - maps to 0
          */
-        if (preg_match("/^0[0-6]$/", $csyear)) {
+        if (preg_match('/^0[0-6]$/', $csyear)) {
             $year = substr($csyear, 1);
         } elseif ($csyear == 'FND') {
             $year = 0;

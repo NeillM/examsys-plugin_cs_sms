@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -18,34 +19,33 @@ use testing\unittest\unittestdatabase;
 
 /**
  * Test cs mapping functions
- * 
+ *
  * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
  * @version 1.0
  * @copyright Copyright (c) 2016 onwards The University of Nottingham
  * @package tests
  */
-class cssmstest extends unittestdatabase {
+class cssmstest extends unittestdatabase
+{
+
+
     /**
      * @var array Storage for module data in tests
      */
     private $mod;
-
-    /**
+/**
      * @var array Storage for faculty data in tests
      */
     private $fac;
-
-    /**
+/**
      * @var array Storage for school data in tests
      */
     private $school1, $school2;
-
-    /**
+/**
      * @var integer id for user generated in datageneration
      */
     private $uid;
-
-    /**
+/**
      * @var integer new version of plugin being installed
      */
     private $newversion;
@@ -54,7 +54,8 @@ class cssmstest extends unittestdatabase {
      * Generate data for test.
      * @throws \testing\datagenerator\not_found
      */
-    public function datageneration(): void {
+    public function datageneration(): void
+    {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $this->newversion = $sms->get_file_version();
         $sms->install($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
@@ -199,7 +200,7 @@ class cssmstest extends unittestdatabase {
             <Notes>meh</Notes>
           </Assessment>
         </AssessmentList>';
-    /**
+/**
      * Mock faculty xml
      * @var string
      */
@@ -278,7 +279,7 @@ class cssmstest extends unittestdatabase {
                 </MemberSchools>
             </Faculty>
         </FacultyList>';
-    /**
+/**
      * Mock faculty xml
      * @var string
      */
@@ -290,10 +291,10 @@ class cssmstest extends unittestdatabase {
                 <FacultyDescr>Faculty of Arts and Education</FacultyDescr>
             </Faculty>
         </FacultyList>';
-    /**
+/**
      * Mock course xml
      * @var string
-     */   
+     */
     private $coursexml = '<?xml version="1.0"?>
         <PlanList>
             <Plan>
@@ -344,7 +345,7 @@ class cssmstest extends unittestdatabase {
                 <ProgramDescr>Breast Surgery</ProgramDescr>
             </Plan>
         </PlanList>';
-    /**
+/**
      * Mock module xml
      * @var string
      */
@@ -376,10 +377,10 @@ class cssmstest extends unittestdatabase {
                 <SchoolID>USC-MED</SchoolID>
             </Module>
         </ModuleList>';
-    /**
+/**
      * Mock enrolment xml
      * @var string
-     */    
+     */
     private $enrolxml = '<?xml version="1.0"?>
         <ModuleEnrolments>
             <Module>
@@ -468,10 +469,10 @@ class cssmstest extends unittestdatabase {
                 </Membership>
             </Module>
         </ModuleEnrolments>';
-    /**
+/**
      * Mock enrolment xml
      * @var string
-     */  
+     */
     private $enrolxml2 = '<?xml version="1.0"?>
         <ModuleEnrolments>
             <Module>
@@ -507,10 +508,10 @@ class cssmstest extends unittestdatabase {
                 </Membership>
             </Module>
         </ModuleEnrolments>';
-    /**
+/**
      * Mock enrolment xml
      * @var string
-     */  
+     */
     private $enrolxml3 = '<?xml version="1.0"?>
         <ModuleEnrolments>
             <Module>
@@ -558,7 +559,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_get_assessments() {
+    public function test_get_assessments()
+    {
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -571,48 +573,48 @@ class cssmstest extends unittestdatabase {
         $queryTable = $this->query(array('columns' => array('paperID', 'notes', 'sittings'), 'table' => 'scheduling'));
         $expectedTable = array(
             0 => array(
-                "paperID" => \Paper_utils::get_id_from_externalid('C-00000000033', 'Campus Solutions', $this->db),
-                "notes" => null,
-                "sittings" => 1,
+                'paperID' => \Paper_utils::get_id_from_externalid('C-00000000033', 'Campus Solutions', $this->db),
+                'notes' => null,
+                'sittings' => 1,
             ),
             1 => array(
-                "paperID" => \Paper_utils::get_id_from_externalid('C-00000000035', 'Campus Solutions', $this->db),
-                "notes" => "meh",
-                "sittings" => 1,
+                'paperID' => \Paper_utils::get_id_from_externalid('C-00000000035', 'Campus Solutions', $this->db),
+                'notes' => 'meh',
+                'sittings' => 1,
             ),
         );
         $this->assertEquals($expectedTable, $queryTable);
         $queryTable = $this->query(array('columns' => array('paper_title', 'paper_type', 'exam_duration', 'paper_ownerID', 'calendar_year', 'externalid', 'externalsys'), 'table' => 'properties'));
         $expectedTable = array(
             0 => array(
-                'paper_title' => "Test Exam",
+                'paper_title' => 'Test Exam',
                 'paper_type' => 2,
                 'exam_duration' => 90,
                 'paper_ownerID' => $this->uid,
                 'calendar_year' => 2016,
-                'externalid' => "C-00000000033",
-                'externalsys' => "Campus Solutions"
+                'externalid' => 'C-00000000033',
+                'externalsys' => 'Campus Solutions'
             ),
             1 => array(
-                'paper_title' => "Test Exam 2",
+                'paper_title' => 'Test Exam 2',
                 'paper_type' => 2,
                 'exam_duration' => 60,
                 'paper_ownerID' => $this->uid,
                 'calendar_year' => 2016,
-                'externalid' => "C-00000000035",
-                'externalsys' => "Campus Solutions"
+                'externalid' => 'C-00000000035',
+                'externalsys' => 'Campus Solutions'
             ),
         );
         $this->assertEquals($expectedTable, $queryTable);
         $queryTable = $this->query(array('columns' => array('property_id', 'idMod'), 'table' => 'properties_modules'));
         $expectedTable = array(
             0 => array(
-                "property_id" => \Paper_utils::get_id_from_externalid('C-00000000033', 'Campus Solutions', $this->db),
-                "idMod" => $this->mod['id'],
+                'property_id' => \Paper_utils::get_id_from_externalid('C-00000000033', 'Campus Solutions', $this->db),
+                'idMod' => $this->mod['id'],
             ),
             1 => array(
-                "property_id" => \Paper_utils::get_id_from_externalid('C-00000000035', 'Campus Solutions', $this->db),
-                "idMod" => $this->mod['id'],
+                'property_id' => \Paper_utils::get_id_from_externalid('C-00000000035', 'Campus Solutions', $this->db),
+                'idMod' => $this->mod['id'],
             ),
         );
         $this->assertEquals($expectedTable, $queryTable);
@@ -624,7 +626,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_get_faculties() {
+    public function test_get_faculties()
+    {
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -637,16 +640,16 @@ class cssmstest extends unittestdatabase {
             'where' => array(array('column' => 'name', 'operator' => 'NOT IN', 'value' => array('UNKNOWN Faculty', 'Administrative and Support Units')))));
         $expectedTable = array(
             0 => array (
-                'code' => "TEST",
-                'name' => "Faculty of Testing",
-                'externalid' => "TESTECT",
-                'externalsys' => "Campus Solutions"
+                'code' => 'TEST',
+                'name' => 'Faculty of Testing',
+                'externalid' => 'TESTECT',
+                'externalsys' => 'Campus Solutions'
             ),
             1 => array (
-                'code' => "CFY-AE",
-                'name' => "Faculty of Arts and Education",
-                'externalid' => "CFY-AE",
-                'externalsys' => "Campus Solutions"
+                'code' => 'CFY-AE',
+                'name' => 'Faculty of Arts and Education',
+                'externalid' => 'CFY-AE',
+                'externalsys' => 'Campus Solutions'
             ),
         );
         $this->assertEquals($expectedTable, $queryTable);
@@ -654,32 +657,32 @@ class cssmstest extends unittestdatabase {
             'where' => array(array('column' => 'school', 'operator' => 'NOT IN', 'value' => array('UNKNOWN School', 'Training')))));
         $expectedTable = array(
             0 => array (
-                'code' => "TEST",
-                'school' => "Centre for Testing",
+                'code' => 'TEST',
+                'school' => 'Centre for Testing',
                 'facultyID' => $this->fac['id'],
-                'externalid' => "USC-MED",
-                'externalsys' => "Campus Solutions"
+                'externalid' => 'USC-MED',
+                'externalsys' => 'Campus Solutions'
             ),
             1 => array (
-                'code' => "TEST2",
-                'school' => "Centre for Testing 2",
+                'code' => 'TEST2',
+                'school' => 'Centre for Testing 2',
                 'facultyID' => $this->fac['id'],
-                'externalid' => "USC-ME2",
-                'externalsys' => "Campus Solutions"
+                'externalid' => 'USC-ME2',
+                'externalsys' => 'Campus Solutions'
             ),
             2 => array (
-                'code' => "CSC-CELE",
-                'school' => "Centre for English Language Education",
+                'code' => 'CSC-CELE',
+                'school' => 'Centre for English Language Education',
                 'facultyID' => \facultyutils::get_facultyid_by_code('CFY-AE', $this->db),
-                'externalid' => "CSC-CELE",
-                'externalsys' => "Campus Solutions"
+                'externalid' => 'CSC-CELE',
+                'externalsys' => 'Campus Solutions'
             ),
             3 => array (
-                'code' => "CSC-EDU",
-                'school' => "School of Education",
+                'code' => 'CSC-EDU',
+                'school' => 'School of Education',
                 'facultyID' => \facultyutils::get_facultyid_by_code('CFY-AE', $this->db),
-                'externalid' => "CSC-EDU",
-                'externalsys' => "Campus Solutions"
+                'externalid' => 'CSC-EDU',
+                'externalsys' => 'Campus Solutions'
             )
         );
         $this->assertEquals($expectedTable, $queryTable);
@@ -690,7 +693,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_get_faculties_missing_schools() {
+    public function test_get_faculties_missing_schools()
+    {
         $numschools = $this->rowcount('schools');
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
@@ -700,25 +704,25 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->facultyxml2));
         $sms->get_faculties();
-        // Faculties provided so created.
+// Faculties provided so created.
         $queryTable = $this->query(array('columns' => array('code', 'name', 'externalid', 'externalsys'), 'table' => 'faculty'
         , 'where' => array(array('column' => 'name', 'operator' => 'NOT IN', 'value' => array('UNKNOWN Faculty', 'Administrative and Support Units')))));
         $expectedTable = array(
             0 => array (
-                'code' => "TEST",
-                'name' => "Faculty of Testing",
-                'externalid' => "TESTECT",
-                'externalsys' => "Campus Solutions"
+                'code' => 'TEST',
+                'name' => 'Faculty of Testing',
+                'externalid' => 'TESTECT',
+                'externalsys' => 'Campus Solutions'
             ),
             1 => array (
-                'code' => "CFY-AE",
-                'name' => "Faculty of Arts and Education",
-                'externalid' => "CFY-AE",
-                'externalsys' => "Campus Solutions"
+                'code' => 'CFY-AE',
+                'name' => 'Faculty of Arts and Education',
+                'externalid' => 'CFY-AE',
+                'externalsys' => 'Campus Solutions'
             ),
         );
         $this->assertEquals($expectedTable, $queryTable);
-        // Missing schools so no schools created.
+// Missing schools so no schools created.
         $this->assertEquals($numschools, $this->rowcount('schools'));
     }
 
@@ -727,7 +731,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_get_courses() {
+    public function test_get_courses()
+    {
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -739,25 +744,25 @@ class cssmstest extends unittestdatabase {
         $queryTable = $this->query(array('columns' => array('name', 'description', 'schoolid', 'externalid', 'externalsys'), 'table' => 'courses'));
         $expectedTable = array(
             0 => array (
-                'name' => "M6UNUTRN",
-                'description' => "Nutrition",
+                'name' => 'M6UNUTRN',
+                'description' => 'Nutrition',
                 'schoolid' => $this->school1['id'],
-                'externalid' => "M6UNUTRN",
-                'externalsys' => "Campus Solutions"
+                'externalid' => 'M6UNUTRN',
+                'externalsys' => 'Campus Solutions'
             ),
             1 => array (
-                'name' => "M6UCVENG",
-                'description' => "Civil Engineering",
+                'name' => 'M6UCVENG',
+                'description' => 'Civil Engineering',
                 'schoolid' => $this->school1['id'],
-                'externalid' => "M6UCVENG",
-                'externalsys' => "Campus Solutions"
+                'externalid' => 'M6UCVENG',
+                'externalsys' => 'Campus Solutions'
             ),
             2 => array (
-                'name' => "U8PBRSGY",
-                'description' => "Breast Surgery",
+                'name' => 'U8PBRSGY',
+                'description' => 'Breast Surgery',
                 'schoolid' => $this->school2['id'],
-                'externalid' => "UON|U8PBRSGY",
-                'externalsys' => "Campus Solutions"
+                'externalid' => 'UON|U8PBRSGY',
+                'externalsys' => 'Campus Solutions'
             ),
         );
         $this->assertEquals($expectedTable, $queryTable);
@@ -768,7 +773,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_get_modules() {
+    public function test_get_modules()
+    {
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -781,21 +787,21 @@ class cssmstest extends unittestdatabase {
             'table' => 'modules', 'where' => array(array('column' => 'moduleid', 'operator' => 'NOT IN', 'value' => array('TRAIN', 'SYSTEM')))));
         $expectedTable = array(
             0 => array (
-                'moduleid' => "TESTMOD",
-                'fullname' => "Testing skills",
+                'moduleid' => 'TESTMOD',
+                'fullname' => 'Testing skills',
                 'schoolid' => $this->school1['id'],
-                'externalid' => "00001111",
-                'academic_year_start' => "07/01",
-                'sms' => "Campus Solutions",
+                'externalid' => '00001111',
+                'academic_year_start' => '07/01',
+                'sms' => 'Campus Solutions',
                 'active' => 1
             ),
             1 => array (
-                'moduleid' => "NAAAXXXX",
-                'fullname' => "Self-marketing skills",
+                'moduleid' => 'NAAAXXXX',
+                'fullname' => 'Self-marketing skills',
                 'schoolid' => $this->school1['id'],
-                'externalid' => "030003",
-                'academic_year_start' => "07/01",
-                'sms' => "Campus Solutions",
+                'externalid' => '030003',
+                'academic_year_start' => '07/01',
+                'sms' => 'Campus Solutions',
                 'active' => 1
             ),
         );
@@ -807,7 +813,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_get_module() {
+    public function test_get_module()
+    {
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -820,21 +827,21 @@ class cssmstest extends unittestdatabase {
             'table' => 'modules', 'where' => array(array('column' => 'moduleid', 'operator' => 'NOT IN', 'value' => array('TRAIN', 'SYSTEM')))));
         $expectedTable = array(
             0 => array (
-                'moduleid' => "TESTMOD",
-                'fullname' => "Testing skills",
+                'moduleid' => 'TESTMOD',
+                'fullname' => 'Testing skills',
                 'schoolid' => $this->school1['id'],
-                'externalid' => "00001111",
-                'academic_year_start' => "07/01",
-                'sms' => "Campus Solutions",
+                'externalid' => '00001111',
+                'academic_year_start' => '07/01',
+                'sms' => 'Campus Solutions',
                 'active' => 1
             ),
             1 => array (
-                'moduleid' => "NAAAXXXX",
-                'fullname' => "Self-marketing skills",
+                'moduleid' => 'NAAAXXXX',
+                'fullname' => 'Self-marketing skills',
                 'schoolid' => $this->school1['id'],
-                'externalid' => "030003",
-                'academic_year_start' => "07/01",
-                'sms' => "Campus Solutions",
+                'externalid' => '030003',
+                'academic_year_start' => '07/01',
+                'sms' => 'Campus Solutions',
                 'active' => 1
             ),
         );
@@ -846,7 +853,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_get_enrolments_all() {
+    public function test_get_enrolments_all()
+    {
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -859,36 +867,36 @@ class cssmstest extends unittestdatabase {
             'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
         $expectedTable = array(
             0 => array (
-                'grade' => "University Lecturer",
-                'surname' => "staff",
-                'username' => "staff",
-                'title' => "Mr",
-                'email' => "staffy@example.com",
-                'gender' => "Male",
-                'roles' => "Staff",
-                'first_names' => "staffy",
+                'grade' => 'University Lecturer',
+                'surname' => 'staff',
+                'username' => 'staff',
+                'title' => 'Mr',
+                'email' => 'staffy@example.com',
+                'gender' => 'Male',
+                'roles' => 'Staff',
+                'first_names' => 'staffy',
                 'yearofstudy' => 1
             ),
             1 => array (
-                'grade' => "M6UNUTRN",
-                'surname' => "John",
-                'username' => "brzhs5",
-                'title' => "Mr",
-                'email' => "brzhs5@example.com",
-                'gender' => "Male",
-                'roles' => "Student",
-                'first_names' => "Lewis",
+                'grade' => 'M6UNUTRN',
+                'surname' => 'John',
+                'username' => 'brzhs5',
+                'title' => 'Mr',
+                'email' => 'brzhs5@example.com',
+                'gender' => 'Male',
+                'roles' => 'Student',
+                'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ),
             2 => array (
-                'grade' => "M6UCVENG",
-                'surname' => "Watson",
-                'username' => "brzamh",
-                'title' => "Mr",
-                'email' => "brzamh@example.com",
-                'gender' => "Male",
-                'roles' => "Student",
-                'first_names' => "Daniel",
+                'grade' => 'M6UCVENG',
+                'surname' => 'Watson',
+                'username' => 'brzamh',
+                'title' => 'Mr',
+                'email' => 'brzamh@example.com',
+                'gender' => 'Male',
+                'roles' => 'Student',
+                'first_names' => 'Daniel',
                 'yearofstudy' => 1
             )
         );
@@ -899,11 +907,11 @@ class cssmstest extends unittestdatabase {
             'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
         $expectedTable = array(
             0 => array(
-                'student_id' => "10000667",
+                'student_id' => '10000667',
                 'userID' => $student1
             ),
             1 => array(
-                'student_id' => "10000670",
+                'student_id' => '10000670',
                 'userID' => $student2
             ),
         );
@@ -930,7 +938,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_get_enrolments_all_missing_nodes() {
+    public function test_get_enrolments_all_missing_nodes()
+    {
         $numenrolments = $this->rowcount('modules_student');
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
@@ -940,41 +949,41 @@ class cssmstest extends unittestdatabase {
             ->method('callws')
             ->will($this->returnValue($this->enrolxml2));
         $sms->get_enrolments(2016);
-        // Users should still be created.
+// Users should still be created.
         $queryTable = $this->query(array('columns' => array('grade', 'surname', 'username', 'title', 'email', 'gender', 'roles', 'first_names', 'yearofstudy'),
             'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
         $expectedTable = array(
             0 => array (
-                'grade' => "University Lecturer",
-                'surname' => "staff",
-                'username' => "staff",
-                'title' => "Mr",
-                'email' => "staffy@example.com",
-                'gender' => "Male",
-                'roles' => "Staff",
-                'first_names' => "staffy",
+                'grade' => 'University Lecturer',
+                'surname' => 'staff',
+                'username' => 'staff',
+                'title' => 'Mr',
+                'email' => 'staffy@example.com',
+                'gender' => 'Male',
+                'roles' => 'Staff',
+                'first_names' => 'staffy',
                 'yearofstudy' => 1
             ),
             1 => array (
-                'grade' => "M6UNUTRN",
-                'surname' => "John",
-                'username' => "brzhs5",
-                'title' => "Mr",
-                'email' => "brzhs5@example.com",
-                'gender' => "Male",
-                'roles' => "Student",
-                'first_names' => "Lewis",
+                'grade' => 'M6UNUTRN',
+                'surname' => 'John',
+                'username' => 'brzhs5',
+                'title' => 'Mr',
+                'email' => 'brzhs5@example.com',
+                'gender' => 'Male',
+                'roles' => 'Student',
+                'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ),
             2 => array (
-                'grade' => "M6UCVENG",
-                'surname' => "Watson",
-                'username' => "brzamh",
-                'title' => "Mr",
-                'email' => "brzamh@example.com",
-                'gender' => "Male",
-                'roles' => "Student",
-                'first_names' => "Daniel",
+                'grade' => 'M6UCVENG',
+                'surname' => 'Watson',
+                'username' => 'brzamh',
+                'title' => 'Mr',
+                'email' => 'brzamh@example.com',
+                'gender' => 'Male',
+                'roles' => 'Student',
+                'first_names' => 'Daniel',
                 'yearofstudy' => 1
             )
         );
@@ -985,16 +994,16 @@ class cssmstest extends unittestdatabase {
             'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
         $expectedTable = array(
             0 => array(
-                'student_id' => "10000667",
+                'student_id' => '10000667',
                 'userID' => $student1
             ),
             1 => array(
-                'student_id' => "10000670",
+                'student_id' => '10000670',
                 'userID' => $student2
             ),
         );
         $this->assertEquals($expectedTable, $queryTable);
-        // Enrolments should not be created as missing session.
+// Enrolments should not be created as missing session.
         $this->assertEquals($numenrolments, $this->rowcount('modules_student'));
     }
 
@@ -1003,7 +1012,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_get_enrolments_all_skip_missing_members() {
+    public function test_get_enrolments_all_skip_missing_members()
+    {
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -1016,36 +1026,36 @@ class cssmstest extends unittestdatabase {
             'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
         $expectedTable = array(
             0 => array (
-                'grade' => "University Lecturer",
-                'surname' => "staff",
-                'username' => "staff",
-                'title' => "Mr",
-                'email' => "staffy@example.com",
-                'gender' => "Male",
-                'roles' => "Staff",
-                'first_names' => "staffy",
+                'grade' => 'University Lecturer',
+                'surname' => 'staff',
+                'username' => 'staff',
+                'title' => 'Mr',
+                'email' => 'staffy@example.com',
+                'gender' => 'Male',
+                'roles' => 'Staff',
+                'first_names' => 'staffy',
                 'yearofstudy' => 1
             ),
             1 => array (
-                'grade' => "M6UNUTRN",
-                'surname' => "John",
-                'username' => "brzhs5",
-                'title' => "Mr",
-                'email' => "brzhs5@example.com",
-                'gender' => "Male",
-                'roles' => "Student",
-                'first_names' => "Lewis",
+                'grade' => 'M6UNUTRN',
+                'surname' => 'John',
+                'username' => 'brzhs5',
+                'title' => 'Mr',
+                'email' => 'brzhs5@example.com',
+                'gender' => 'Male',
+                'roles' => 'Student',
+                'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ),
             2 => array (
-                'grade' => "M6UCVENG",
-                'surname' => "Watson",
-                'username' => "brzamh",
-                'title' => "Mr",
-                'email' => "brzamh@example.com",
-                'gender' => "Male",
-                'roles' => "Student",
-                'first_names' => "Daniel",
+                'grade' => 'M6UCVENG',
+                'surname' => 'Watson',
+                'username' => 'brzamh',
+                'title' => 'Mr',
+                'email' => 'brzamh@example.com',
+                'gender' => 'Male',
+                'roles' => 'Student',
+                'first_names' => 'Daniel',
                 'yearofstudy' => 1
             )
         );
@@ -1056,11 +1066,11 @@ class cssmstest extends unittestdatabase {
             'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
         $expectedTable = array(
             0 => array(
-                'student_id' => "10000667",
+                'student_id' => '10000667',
                 'userID' => $student1
             ),
             1 => array(
-                'student_id' => "10000670",
+                'student_id' => '10000670',
                 'userID' => $student2
             ),
         );
@@ -1087,7 +1097,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_get_enrolments() {
+    public function test_get_enrolments()
+    {
         $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
             ->setMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
@@ -1100,36 +1111,36 @@ class cssmstest extends unittestdatabase {
             'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
         $expectedTable = array(
             0 => array (
-                'grade' => "University Lecturer",
-                'surname' => "staff",
-                'username' => "staff",
-                'title' => "Mr",
-                'email' => "staffy@example.com",
-                'gender' => "Male",
-                'roles' => "Staff",
-                'first_names' => "staffy",
+                'grade' => 'University Lecturer',
+                'surname' => 'staff',
+                'username' => 'staff',
+                'title' => 'Mr',
+                'email' => 'staffy@example.com',
+                'gender' => 'Male',
+                'roles' => 'Staff',
+                'first_names' => 'staffy',
                 'yearofstudy' => 1
             ),
             1 => array (
-                'grade' => "M6UNUTRN",
-                'surname' => "John",
-                'username' => "brzhs5",
-                'title' => "Mr",
-                'email' => "brzhs5@example.com",
-                'gender' => "Male",
-                'roles' => "Student",
-                'first_names' => "Lewis",
+                'grade' => 'M6UNUTRN',
+                'surname' => 'John',
+                'username' => 'brzhs5',
+                'title' => 'Mr',
+                'email' => 'brzhs5@example.com',
+                'gender' => 'Male',
+                'roles' => 'Student',
+                'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ),
             2 => array (
-                'grade' => "M6UCVENG",
-                'surname' => "Watson",
-                'username' => "brzamh",
-                'title' => "Mr",
-                'email' => "brzamh@example.com",
-                'gender' => "Male",
-                'roles' => "Student",
-                'first_names' => "Daniel",
+                'grade' => 'M6UCVENG',
+                'surname' => 'Watson',
+                'username' => 'brzamh',
+                'title' => 'Mr',
+                'email' => 'brzamh@example.com',
+                'gender' => 'Male',
+                'roles' => 'Student',
+                'first_names' => 'Daniel',
                 'yearofstudy' => 1
             )
         );
@@ -1140,11 +1151,11 @@ class cssmstest extends unittestdatabase {
             'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
         $expectedTable = array(
             0 => array(
-                'student_id' => "10000667",
+                'student_id' => '10000667',
                 'userID' => $student1
             ),
             1 => array(
-                'student_id' => "10000670",
+                'student_id' => '10000670',
                 'userID' => $student2
             ),
         );
@@ -1170,14 +1181,15 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_install() {
+    public function test_install()
+    {
         // Already installed by data generator so just check data tables.
         // Check tables are correct.
         $queryTable = $this->query(array('columns' => array('component', 'type', 'version'), 'table' => 'plugins'));
         $expectedTable = array(
             0 => array(
-                'component' => "plugin_cs_sms",
-                'type' => "SMS",
+                'component' => 'plugin_cs_sms',
+                'type' => 'SMS',
                 'version' => $this->newversion
             )
         );
@@ -1186,10 +1198,10 @@ class cssmstest extends unittestdatabase {
             'where' => array(array('column' => 'component', 'value' => 'plugin_cs_sms'), array('column' => 'setting', 'value' => 'installed'))));
         $expectedTable = array(
             0 => array(
-                'component' => "plugin_cs_sms",
-                'setting' => "installed",
+                'component' => 'plugin_cs_sms',
+                'setting' => 'installed',
                 'value' => 1,
-                'type' => "boolean"
+                'type' => 'boolean'
             ),
         );
         $this->assertEquals($expectedTable, $queryTable);
@@ -1200,21 +1212,22 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_uninstall() {
+    public function test_uninstall()
+    {
         // Already installed by data generator.
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $this->assertEquals('OK', $sms->uninstall($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password')));
-        // Check tables are correct.
+// Check tables are correct.
         $queryTable = $this->rowcount('plugins');
         $this->assertEquals(0, $queryTable);
         $queryTable = $this->query(array('columns' => array('component', 'setting', 'value', 'type'), 'table' => 'config',
             'where' => array(array('column' => 'component', 'value' => 'plugin_cs_sms'), array('column' => 'setting', 'value' => 'installed'))));
         $expectedTable = array(
             0 => array(
-                'component' => "plugin_cs_sms",
-                'setting' => "installed",
+                'component' => 'plugin_cs_sms',
+                'setting' => 'installed',
                 'value' => 0,
-                'type' => "boolean"
+                'type' => 'boolean'
             ),
         );
         $this->assertEquals($expectedTable, $queryTable);
@@ -1225,7 +1238,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_get_plugin_version() {
+    public function test_get_plugin_version()
+    {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $sms->install($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
         $this->assertEquals($sms->get_installed_version(), $sms->get_plugin_version('plugin_cs_sms'));
@@ -1237,7 +1251,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_supports_module_import() {
+    public function test_supports_module_import()
+    {
         $lang = new \langpack();
         $component = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
         $strings = $lang->get_all_strings($component);
@@ -1246,7 +1261,6 @@ class cssmstest extends unittestdatabase {
          'blurb' => $strings['importmodules'],
          'tooltip' => $strings['importmodulestooltip']);
         $this->assertEquals($array, $sms->supports_module_import());
-        
     }
 
     /**
@@ -1254,12 +1268,12 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_supports_module_import_disabled() {
+    public function test_supports_module_import_disabled()
+    {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $this->config->set_setting('enable_module', 0, \Config::BOOLEAN, 'plugin_cs_sms');
         $this->config->set_setting('enable_enrolment', 0, \Config::BOOLEAN, 'plugin_cs_sms');
         $this->assertFalse($sms->supports_module_import());
-        
     }
 
     /**
@@ -1267,7 +1281,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_supports_faculty_import() {
+    public function test_supports_faculty_import()
+    {
         $lang = new \langpack();
         $component = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
         $strings = $lang->get_all_strings($component);
@@ -1283,7 +1298,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_supports_faculty_import_disabled() {
+    public function test_supports_faculty_import_disabled()
+    {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $this->config->set_setting('enable_faculty', 0, \Config::BOOLEAN, 'plugin_cs_sms');
         $this->assertFalse($sms->supports_faculty_import());
@@ -1294,7 +1310,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_supports_course_import() {
+    public function test_supports_course_import()
+    {
         $lang = new \langpack();
         $component = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
         $strings = $lang->get_all_strings($component);
@@ -1310,7 +1327,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_supports_course_import_disabled() {
+    public function test_supports_course_import_disabled()
+    {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $this->config->set_setting('enable_course', 0, \Config::BOOLEAN, 'plugin_cs_sms');
         $this->assertFalse($sms->supports_course_import());
@@ -1321,7 +1339,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_supports_enrol_import() {
+    public function test_supports_enrol_import()
+    {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $this->assertTrue($sms->supports_enrol_import());
     }
@@ -1331,7 +1350,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_supports_enrol_import_disabled() {
+    public function test_supports_enrol_import_disabled()
+    {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $this->config->set_setting('enable_enrolment', 0, \Config::BOOLEAN, 'plugin_cs_sms');
         $this->assertFalse($sms->supports_enrol_import());
@@ -1342,7 +1362,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_supports_assessment_import() {
+    public function test_supports_assessment_import()
+    {
         $lang = new \langpack();
         $component = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
         $strings = $lang->get_all_strings($component);
@@ -1358,7 +1379,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_supports_assessment_import_disabled() {
+    public function test_supports_assessment_import_disabled()
+    {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $this->config->set_setting('enable_assessment', 0, \Config::BOOLEAN, 'plugin_cs_sms');
         $this->assertFalse($sms->supports_assessment_import());
@@ -1369,7 +1391,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_get_name() {
+    public function test_get_name()
+    {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $this->assertEquals('Campus Solutions', $sms->get_name());
     }
@@ -1379,13 +1402,14 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_enable_plugin() {
+    public function test_enable_plugin()
+    {
         $config = $this->config->get_setting('plugin_sms', 'enabled_plugin');
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
-        // Check already enabled.
+// Check already enabled.
         $sms->enable_plugin();
         $this->assertEquals(array('plugin_cs_sms'), $config);
-        // Disable so we can test enabling.
+// Disable so we can test enabling.
         $sms->disable_plugin();
         $sms->enable_plugin();
         $this->assertEquals(array('plugin_cs_sms'), $config);
@@ -1396,7 +1420,8 @@ class cssmstest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_disable_plugin() {
+    public function test_disable_plugin()
+    {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $sms->disable_plugin();
         $config = $this->config->get_setting('plugin_sms', 'enabled_plugin');

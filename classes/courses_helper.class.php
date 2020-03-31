@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -15,9 +16,10 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace plugins\SMS\plugin_cs_sms;
+
 /**
 * Courses processig file
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -25,7 +27,10 @@ namespace plugins\SMS\plugin_cs_sms;
 /**
  * Courses helper class.
  */
-class courses_helper {
+class courses_helper
+{
+
+
     /**
      * Process courses WS response
      * @param string xml $response xml from course WS
@@ -37,7 +42,8 @@ class courses_helper {
      * @param array $args arguments used to call web service
      * @return boolean|array false on error, list of current plan ids on success
      */
-    static public function process($response, $userid, $strings, $db, $logfile, $validation, $args) {
+    public static function process($response, $userid, $strings, $db, $logfile, $validation, $args)
+    {
         // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
@@ -53,15 +59,15 @@ class courses_helper {
         $plans = $data->getElementsByTagName('Plan');
         $currentplans = array();
         $node = 1;
-        // Create / Update Courses.
+// Create / Update Courses.
         $cm = new \api\coursemanagement($db);
         foreach ($plans as $plan) {
             $xpath = new \DOMXPath($plan->ownerDocument);
-            // The PlanID in Campus Solutions is the Course External ID in Rogo.
+        // The PlanID in Campus Solutions is the Course External ID in Rogo.
             try {
                 $externalid = $xpath->query('./PlanID', $plan)->item(0)->nodeValue;
             } catch (\exception $e) {
-                // If externalid not provided skip to next course.
+        // If externalid not provided skip to next course.
                 continue;
             }
             if (!is_null($externalid)) {
@@ -73,7 +79,7 @@ class courses_helper {
                     $params['description'] = $xpath->query('./PlanDescr', $plan)->item(0)->nodeValue;
                     $params['schoolextid'] = $xpath->query('./SchoolID', $plan)->item(0)->nodeValue;
                 } catch (\exception $e) {
-                    // If course data not provided skip to next course.
+                // If course data not provided skip to next course.
                     continue;
                 }
                 $params['externalid'] = $externalid;
@@ -81,11 +87,11 @@ class courses_helper {
                 $params['nodeid'] = $node;
                 $node++;
                 if ($courseid) {
-                    // If ExternalID exists call coursemanagement update api.
+                // If ExternalID exists call coursemanagement update api.
                     $response = $cm->update($params, $userid);
                     $type = 'Course Update';
                 } else {
-                    // If ExternalID new call coursemanagement create api.
+                // If ExternalID new call coursemanagement create api.
                     $response = $cm->create($params, $userid);
                     $type = 'Course Create';
                 }
@@ -97,17 +103,18 @@ class courses_helper {
 
     /**
      * Delete courses that have been removed from CS
-     * 
+     *
      * @param array $currentplans list of course ids in CS
      * @param string $logfile log file location
      * @param integer $userid user to record actions under
      * @param mysqli $db db connection
      */
-    static public function delete_courses($currentplans, $logfile, $userid, $db) {
+    public static function delete_courses($currentplans, $logfile, $userid, $db)
+    {
         $cm = new \api\coursemanagement($db);
         $delete = \CourseUtils::diff_external_courses_to_internal_courses($currentplans, plugin_cs_sms::SMS, $db);
         $node = 1;
-        // Try to delete course via coursemanagement delete api.
+// Try to delete course via coursemanagement delete api.
         foreach ($delete as $deleteid) {
             $params = array();
             $params['externalid'] = $deleteid;

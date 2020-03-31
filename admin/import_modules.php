@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -16,7 +17,7 @@
 
 /**
 * Admin screen to import modules
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -24,18 +25,15 @@
 use plugins\SMS\plugin_cs_sms\plugin_cs_sms;
 
 define('AJAX_REQUEST', true);
-
 require '../../../../include/sysadmin_auth.inc';
 require '../../../../include/errors.php';
-
 set_time_limit(0);
-
 $session = \param::required('session', \param::INT, \param::FETCH_POST);
 $id = \param::required('id', \param::ALPHANUM, \param::FETCH_POST);
 $yearutils = new \yearutils($mysqli);
 $supported_sessions = $yearutils->get_supported_years();
 if (!array_key_exists($session, $supported_sessions)) {
-    echo json_encode("ERROR");
+    echo json_encode('ERROR');
     exit();
 }
 
@@ -45,4 +43,4 @@ $sms = new plugin_cs_sms($userObj->get_user_ID());
 $sms->get_modules();
 // Get enrolments.
 $sms->get_enrolments($session, $id);
-echo json_encode("SUCCESS");
+echo json_encode('SUCCESS');

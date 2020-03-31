@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -15,9 +16,10 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace plugins\SMS\plugin_cs_sms;
+
 /**
 * Gradebook publishing file
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -25,21 +27,22 @@ namespace plugins\SMS\plugin_cs_sms;
 /**
  * Gradebook helper class.
  */
-class gradebook_helper {
+class gradebook_helper
+{
+
+
     
     /**
      * Campus Solutions Result status type 'imported'
      * @var string
      */
     const RESULTSTATUS_IMPORTED = '07-Imported';
-
-    /**
+/**
      * Campus Solutions Result type 'AM'
      * @var string
      */
     const RESULTTYPE_AM = 'AM Result';
-
-    /**
+/**
      * Gradebook object
      * @var gradebook
      */
@@ -51,11 +54,12 @@ class gradebook_helper {
      * @param string $gradebookdir path to directory to write file
      * @param string $path path to plugin
      */
-    static public function publish($session, $gradebookdir, $path) {
+    public static function publish($session, $gradebookdir, $path)
+    {
         $configObject = \Config::get_instance();
         $db = $configObject->db;
         $render = new \render($configObject, $path . DIRECTORY_SEPARATOR . 'templates');
-        // Only interested in summative papers.
+// Only interested in summative papers.
         $papers = \Paper_utils::get_finalised_papers($session, '2', $db);
         self::$gradebook = new \gradebook($db);
         foreach ($papers as $paper_id) {
@@ -67,12 +71,12 @@ class gradebook_helper {
                 if ($configObject->get_setting('plugin_cs_sms', 'gradebook_md5')) {
                     $suffix = md5($response_xml);
                 } else {
-                    $suffix = date("YmdHis");
+                    $suffix = date('YmdHis');
                 }
                 $logfile = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $session . '-' . $activtyid . '-' . $suffix . '.xml';
-                // If md5 enabled we only write a file if a change has occured i.e. a grade has been added
+        // If md5 enabled we only write a file if a change has occured i.e. a grade has been added
                 // If md5 is disabled we only write a file if the datetime has changed which is essentially always
-                if(!file_exists($logfile)) {
+                if (!file_exists($logfile)) {
                     file_put_contents($logfile, $response_xml);
                 }
             }
@@ -85,12 +89,13 @@ class gradebook_helper {
      * @param mysqli $db db connection
      * @return array|bool actvity id and gradebook or false if non
      */
-    static private function get_paper_gradebook($paper_id, $db) {
+    private static function get_paper_gradebook($paper_id, $db)
+    {
         $response = array();
         $paperdetails = \Paper_utils::get_paper_properties($paper_id, $db);
         $activityid = $paperdetails['externalid'];
         $activitysys = $paperdetails['externalsys'];
-        // Only interested in campus solutions assessments.
+// Only interested in campus solutions assessments.
         if (is_null($activityid) or $activitysys != plugin_cs_sms::SMS) {
             return false;
         }
@@ -138,7 +143,8 @@ class gradebook_helper {
      * CS cannot handle negative marks so we round up to zero
      * @param integer $mark mark to round up
      */
-    static private function round_up_negative($mark) {
+    private static function round_up_negative($mark)
+    {
         if ($mark < 0) {
             return 0;
         }
