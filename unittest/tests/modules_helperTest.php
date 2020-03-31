@@ -15,9 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
-use testing\unittest\unittest,
+use testing\unittest\unittest;
+use plugins\SMS\plugin_cs_sms\modules_helper as modules_helper;
 
-    plugins\SMS\plugin_cs_sms\modules_helper as modules_helper;
 /**
  * Test modules helper functions
  *
@@ -39,11 +39,11 @@ class modules_helpertest extends UnitTest
     {
         // UK CS module code.
         $this->assertEquals('COMP1001', modules_helper::module_campus_mapping('COMP1001_U'));
-// CN CS module code.
+        // CN CS module code.
         $this->assertEquals('COMP1001_UNNC', modules_helper::module_campus_mapping('COMP1001_C'));
-// MY CS module code.
+        // MY CS module code.
         $this->assertEquals('COMP1001_UNMC', modules_helper::module_campus_mapping('COMP1001_M'));
-// Non naming convention module code.
+        // Non naming convention module code.
         $this->assertEquals('ABCDEF', modules_helper::module_campus_mapping('ABCDEF'));
     }
 }

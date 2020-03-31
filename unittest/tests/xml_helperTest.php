@@ -28,9 +28,6 @@ use plugins\SMS\plugin_cs_sms\xml_helper as xml_helper;
  */
 class xml_helpertest extends unittestdatabase
 {
-
-
-
     /**
      * Generate data for test.
      */
@@ -47,7 +44,7 @@ class xml_helpertest extends unittestdatabase
     public function test_check_for_error()
     {
         $userid = 0;
-// Error.
+        // Error.
         $data = '<?xml version="1.0"?>
             <Error><Header>Header Info</Header><Detail>Some Details</Detail></Error>';
         $doc = new DOMDocument();
@@ -62,7 +59,7 @@ class xml_helpertest extends unittestdatabase
             )
         );
         $this->assertEquals($expectedTable, $queryTable);
-// No Error.
+        // No Error.
         $data = '<?xml version="1.0"?>
             <FacultyList></FacultyList>';
         $doc = new DOMDocument();

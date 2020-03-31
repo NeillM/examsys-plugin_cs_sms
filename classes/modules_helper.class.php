@@ -112,12 +112,10 @@ class modules_helper
             if (isset($info['country'])) {
                 switch ($info['country']) {
                     case 'C':
-                                                                                                                                                                                                                                                                                                                    $modulecode .= '_UNNC';
-
+                        $modulecode .= '_UNNC';
                         break;
                     case 'M':
-                                                                                                                                                                                                                                                                                                                $modulecode .= '_UNMC';
-
+                        $modulecode .= '_UNMC';
                         break;
                     default:
                         break;

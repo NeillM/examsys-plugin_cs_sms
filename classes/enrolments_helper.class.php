@@ -65,7 +65,7 @@ class enrolments_helper
         foreach ($enrolments as $enrolment) {
             $currentenrols = array();
             $xpath = new \DOMXPath($enrolment->ownerDocument);
-             // The ModuleID in Campus Solutions is the Module External ID in Rogo.
+            // The ModuleID in Campus Solutions is the Module External ID in Rogo.
             try {
                 $externalid = $xpath->query('./ModuleID', $enrolment)->item(0)->nodeValue;
             } catch (\exception $e) {
@@ -77,7 +77,7 @@ class enrolments_helper
                 try {
                     $usermembership = $xpath->query('./Membership', $enrolment)->item(0)->childNodes;
                 } catch (\exception $e) {
-                        // If membership node not provided cannot proceed with current module enrolments.
+                    // If membership node not provided cannot proceed with current module enrolments.
                     continue;
                 }
                 // Enrol / Unerol users.
@@ -133,8 +133,8 @@ class enrolments_helper
                             $node++;
                             log_helper::log('UnEnrol', $params, $response, $logfile);
                             if ($response['statuscode'] === 100) {
-                                    $smsimports[$moduleid]['unenrolcount']++;
-                                    $smsimports[$moduleid]['unenrolusers'] .= $member['username'] . ',';
+                                $smsimports[$moduleid]['unenrolcount']++;
+                                $smsimports[$moduleid]['unenrolusers'] .= $member['username'] . ',';
                             }
                         }
                     }

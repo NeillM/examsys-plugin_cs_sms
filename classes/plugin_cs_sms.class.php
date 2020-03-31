@@ -59,7 +59,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
      */
     private $validation;
 
-/**
+    /**
      * List of campuses.
      * @var array
      */

@@ -27,25 +27,27 @@ use testing\unittest\unittestdatabase;
  */
 class cssmstest extends unittestdatabase
 {
-
-
     /**
      * @var array Storage for module data in tests
      */
     private $mod;
-/**
+
+    /**
      * @var array Storage for faculty data in tests
      */
     private $fac;
-/**
+
+    /**
      * @var array Storage for school data in tests
      */
     private $school1, $school2;
-/**
+
+    /**
      * @var integer id for user generated in datageneration
      */
     private $uid;
-/**
+
+    /**
      * @var integer new version of plugin being installed
      */
     private $newversion;
@@ -200,7 +202,8 @@ class cssmstest extends unittestdatabase
             <Notes>meh</Notes>
           </Assessment>
         </AssessmentList>';
-/**
+
+    /**
      * Mock faculty xml
      * @var string
      */
@@ -279,7 +282,8 @@ class cssmstest extends unittestdatabase
                 </MemberSchools>
             </Faculty>
         </FacultyList>';
-/**
+
+    /**
      * Mock faculty xml
      * @var string
      */
@@ -291,7 +295,8 @@ class cssmstest extends unittestdatabase
                 <FacultyDescr>Faculty of Arts and Education</FacultyDescr>
             </Faculty>
         </FacultyList>';
-/**
+
+    /**
      * Mock course xml
      * @var string
      */
@@ -345,7 +350,8 @@ class cssmstest extends unittestdatabase
                 <ProgramDescr>Breast Surgery</ProgramDescr>
             </Plan>
         </PlanList>';
-/**
+
+    /**
      * Mock module xml
      * @var string
      */
@@ -377,7 +383,8 @@ class cssmstest extends unittestdatabase
                 <SchoolID>USC-MED</SchoolID>
             </Module>
         </ModuleList>';
-/**
+
+    /**
      * Mock enrolment xml
      * @var string
      */
@@ -469,7 +476,8 @@ class cssmstest extends unittestdatabase
                 </Membership>
             </Module>
         </ModuleEnrolments>';
-/**
+
+    /**
      * Mock enrolment xml
      * @var string
      */
@@ -508,7 +516,8 @@ class cssmstest extends unittestdatabase
                 </Membership>
             </Module>
         </ModuleEnrolments>';
-/**
+
+    /**
      * Mock enrolment xml
      * @var string
      */
@@ -704,7 +713,7 @@ class cssmstest extends unittestdatabase
             ->method('callws')
             ->will($this->returnValue($this->facultyxml2));
         $sms->get_faculties();
-// Faculties provided so created.
+        // Faculties provided so created.
         $queryTable = $this->query(array('columns' => array('code', 'name', 'externalid', 'externalsys'), 'table' => 'faculty'
         , 'where' => array(array('column' => 'name', 'operator' => 'NOT IN', 'value' => array('UNKNOWN Faculty', 'Administrative and Support Units')))));
         $expectedTable = array(
@@ -722,7 +731,7 @@ class cssmstest extends unittestdatabase
             ),
         );
         $this->assertEquals($expectedTable, $queryTable);
-// Missing schools so no schools created.
+        // Missing schools so no schools created.
         $this->assertEquals($numschools, $this->rowcount('schools'));
     }
 
@@ -949,7 +958,7 @@ class cssmstest extends unittestdatabase
             ->method('callws')
             ->will($this->returnValue($this->enrolxml2));
         $sms->get_enrolments(2016);
-// Users should still be created.
+        // Users should still be created.
         $queryTable = $this->query(array('columns' => array('grade', 'surname', 'username', 'title', 'email', 'gender', 'roles', 'first_names', 'yearofstudy'),
             'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
         $expectedTable = array(
@@ -1003,7 +1012,7 @@ class cssmstest extends unittestdatabase
             ),
         );
         $this->assertEquals($expectedTable, $queryTable);
-// Enrolments should not be created as missing session.
+        // Enrolments should not be created as missing session.
         $this->assertEquals($numenrolments, $this->rowcount('modules_student'));
     }
 
@@ -1217,7 +1226,7 @@ class cssmstest extends unittestdatabase
         // Already installed by data generator.
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $this->assertEquals('OK', $sms->uninstall($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password')));
-// Check tables are correct.
+        // Check tables are correct.
         $queryTable = $this->rowcount('plugins');
         $this->assertEquals(0, $queryTable);
         $queryTable = $this->query(array('columns' => array('component', 'setting', 'value', 'type'), 'table' => 'config',
@@ -1406,10 +1415,10 @@ class cssmstest extends unittestdatabase
     {
         $config = $this->config->get_setting('plugin_sms', 'enabled_plugin');
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
-// Check already enabled.
+        // Check already enabled.
         $sms->enable_plugin();
         $this->assertEquals(array('plugin_cs_sms'), $config);
-// Disable so we can test enabling.
+        // Disable so we can test enabling.
         $sms->disable_plugin();
         $sms->enable_plugin();
         $this->assertEquals(array('plugin_cs_sms'), $config);
