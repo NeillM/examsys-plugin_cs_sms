@@ -29,8 +29,6 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class courses_helper
 {
-
-
     /**
      * Process courses WS response
      * @param string xml $response xml from course WS
@@ -59,15 +57,15 @@ class courses_helper
         $plans = $data->getElementsByTagName('Plan');
         $currentplans = array();
         $node = 1;
-// Create / Update Courses.
+        // Create / Update Courses.
         $cm = new \api\coursemanagement($db);
         foreach ($plans as $plan) {
             $xpath = new \DOMXPath($plan->ownerDocument);
-        // The PlanID in Campus Solutions is the Course External ID in Rogo.
+            // The PlanID in Campus Solutions is the Course External ID in Rogo.
             try {
                 $externalid = $xpath->query('./PlanID', $plan)->item(0)->nodeValue;
             } catch (\exception $e) {
-        // If externalid not provided skip to next course.
+                // If externalid not provided skip to next course.
                 continue;
             }
             if (!is_null($externalid)) {
@@ -79,7 +77,7 @@ class courses_helper
                     $params['description'] = $xpath->query('./PlanDescr', $plan)->item(0)->nodeValue;
                     $params['schoolextid'] = $xpath->query('./SchoolID', $plan)->item(0)->nodeValue;
                 } catch (\exception $e) {
-                // If course data not provided skip to next course.
+                    // If course data not provided skip to next course.
                     continue;
                 }
                 $params['externalid'] = $externalid;
@@ -87,11 +85,11 @@ class courses_helper
                 $params['nodeid'] = $node;
                 $node++;
                 if ($courseid) {
-                // If ExternalID exists call coursemanagement update api.
+                    // If ExternalID exists call coursemanagement update api.
                     $response = $cm->update($params, $userid);
                     $type = 'Course Update';
                 } else {
-                // If ExternalID new call coursemanagement create api.
+                    // If ExternalID new call coursemanagement create api.
                     $response = $cm->create($params, $userid);
                     $type = 'Course Create';
                 }
@@ -114,7 +112,7 @@ class courses_helper
         $cm = new \api\coursemanagement($db);
         $delete = \CourseUtils::diff_external_courses_to_internal_courses($currentplans, plugin_cs_sms::SMS, $db);
         $node = 1;
-// Try to delete course via coursemanagement delete api.
+        // Try to delete course via coursemanagement delete api.
         foreach ($delete as $deleteid) {
             $params = array();
             $params['externalid'] = $deleteid;

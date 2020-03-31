@@ -29,8 +29,6 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class enrolments_helper
 {
-
-
     /**
      * Process enrolment WS response
      * @param string xml $response xml from enrolment WS
@@ -59,7 +57,7 @@ class enrolments_helper
         }
         $enrolments = $data->getElementsByTagName('Module');
         $current_enrols = array();
-// Enrol/UnEnrol users on to modules.
+        // Enrol/UnEnrol users on to modules.
         $mm = new \api\modulemanagement($db);
         $smsimports = array();
         $node = 1;
@@ -67,26 +65,26 @@ class enrolments_helper
         foreach ($enrolments as $enrolment) {
             $currentenrols = array();
             $xpath = new \DOMXPath($enrolment->ownerDocument);
-        // The ModuleID in Campus Solutions is the Module External ID in Rogo.
+             // The ModuleID in Campus Solutions is the Module External ID in Rogo.
             try {
                 $externalid = $xpath->query('./ModuleID', $enrolment)->item(0)->nodeValue;
             } catch (\exception $e) {
-        // If externalid not provided skip to next module.
+                // If externalid not provided skip to next module.
                 continue;
             }
             if (!is_null($externalid)) {
-        // Create/update users.
+                // Create/update users.
                 try {
                     $usermembership = $xpath->query('./Membership', $enrolment)->item(0)->childNodes;
                 } catch (\exception $e) {
-                // If membership node not provided cannot proceed with current module enrolments.
+                        // If membership node not provided cannot proceed with current module enrolments.
                     continue;
                 }
                 // Enrol / Unerol users.
                 $details = \module_utils::get_full_details('external', $externalid, $db, plugin_cs_sms::SMS);
                 $moduleid = $details['idMod'];
                 $activemodule = true;
-        // Check if only syncing active modules.
+                // Check if only syncing active modules.
                 if ($active) {
                     $activemodule = $details['active'];
                 }
@@ -101,14 +99,14 @@ class enrolments_helper
                     $params['moduleextid'] = $externalid;
                     $params['moduleextsys'] = plugin_cs_sms::SMS;
                     $params['session'] = $session;
-        // Enrol.
+                    // Enrol.
                     foreach ($currentenrols[$externalid] as $userexternalid => $username) {
-        // Student IDs in Rogo are User IDs in Campus Solutions.
+                        // Student IDs in Rogo are User IDs in Campus Solutions.
                         $params['studentid'] = $userexternalid;
                         try {
                             $params['session'] = $xpath->query('./Year', $enrolment)->item(0)->nodeValue;
                         } catch (\exception $e) {
-                        // If session not provided no enrolments can take place.
+                            // If session not provided no enrolments can take place.
                             break;
                         }
                         $params['attempt'] = 1;

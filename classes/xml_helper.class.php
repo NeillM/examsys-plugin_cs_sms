@@ -29,8 +29,6 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class xml_helper
 {
-
-
     /**
      * Check if xml response is an error.
      * @param DOMDocument $data xml response

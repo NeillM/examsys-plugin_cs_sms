@@ -29,8 +29,6 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class log_helper
 {
-
-
     /**
      * Log to application error
      * @param integer $userid user to log error to
@@ -78,10 +76,10 @@ class log_helper
         if ($logfile != '') {
             $updatelog = "\n\n" . '--' . date('YmdHis') . '--' . $type . "\n\nREQUEST  " . implode(';', $request);
             if ($response['statuscode'] !== 100) {
-            // Log failure.
+                // Log failure.
                 $state = 'FAILURE';
             } else {
-            // Log success.
+                // Log success.
                 $state = 'SUCCESS';
             }
             if ($logfile != '') {

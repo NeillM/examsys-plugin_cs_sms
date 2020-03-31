@@ -29,8 +29,6 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class modules_helper
 {
-
-
     /**
      * Process modules WS response
      * @param string xml $response xml from module WS
@@ -44,7 +42,7 @@ class modules_helper
     public static function process($response, $userid, $strings, $logfile, $validation, $args)
     {
         $config = \Config::get_instance();
-// Parse returned XML.
+        // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
         if (xml_helper::check_for_error($data, $userid, $config->db, 'module feed', $args)) {
@@ -58,15 +56,15 @@ class modules_helper
         $modules = $data->getElementsByTagName('Module');
         $currentmodules = array();
         $node = 1;
-// Create / Update modules.
+        // Create / Update modules.
         $mm = new \api\modulemanagement($config->db);
         foreach ($modules as $module) {
             $xpath = new \DOMXPath($module->ownerDocument);
-        // The ModuleID in Campus Solutions is the Module External ID in Rogo.
+            // The ModuleID in Campus Solutions is the Module External ID in Rogo.
             try {
                 $externalid = $xpath->query('./ModuleID', $module)->item(0)->nodeValue;
             } catch (\exception $e) {
-        // If externalid not provided skip to next module.
+            // If externalid not provided skip to next module.
                 continue;
             }
             if (!is_null($externalid)) {
@@ -78,18 +76,18 @@ class modules_helper
                     $params['name'] = $xpath->query('./Description', $module)->item(0)->nodeValue;
                     $params['schoolextid'] = $xpath->query('./SchoolID', $module)->item(0)->nodeValue;
                 } catch (\exception $e) {
-                // If module data not provided skip to next module.
+                    // If module data not provided skip to next module.
                     continue;
                 }
                 $params['nodeid'] = $node;
                 $params['sms'] = plugin_cs_sms::SMS;
                 $modid = \module_utils::get_id_from_externalid($externalid, plugin_cs_sms::SMS, $config->db);
                 if ($modid) {
-                // If ExternalID exists call modulemanagement update api.
+                    // If ExternalID exists call modulemanagement update api.
                     $response = $mm->update($params, $userid);
                     $type = 'Module Update';
                 } else {
-                // If ExternalID new call modulemanagement create api.
+                    // If ExternalID new call modulemanagement create api.
                     $response = $mm->create($params, $userid);
                     $type = 'Module Create';
                 }
@@ -126,7 +124,7 @@ class modules_helper
                 }
             }
         } else {
-        // Return source module code if naming convention not recognised.
+            // Return source module code if naming convention not recognised.
             $modulecode = $sourcecode;
         }
         return $modulecode;
@@ -142,7 +140,7 @@ class modules_helper
     {
         $config = \Config::get_instance();
         $details = \module_utils::get_full_details('external', $externalid, $config->db, plugin_cs_sms::SMS);
-// Check for Campus Solution modules codes and map campus. Default to UK(U).
+        // Check for Campus Solution modules codes and map campus. Default to UK(U).
         if (preg_match('/^[A-Z]{4}[F1-5][0-9]{3}_UNNC$/', $details['moduleid'])) {
             $campuscode = 'C';
         } elseif (preg_match('/^[A-Z]{4}[F1-5][0-9]{3}_UNMC$/', $details['moduleid'])) {
@@ -165,9 +163,9 @@ class modules_helper
         $config = \Config::get_instance();
         $node = 1;
         $mm = new \api\modulemanagement($config->db);
-// Delete modules that have been removed from CS.
+        // Delete modules that have been removed from CS.
         $delete = \module_utils::diff_external_modules_to_internal_modules($currentmodules, plugin_cs_sms::SMS, $config->db);
-// Try to delete course via modulemanagement delete api.
+        // Try to delete course via modulemanagement delete api.
         foreach ($delete as $deleteid) {
             $params = array();
             $params['externalid'] = $deleteid;
@@ -191,16 +189,13 @@ class modules_helper
         $modules = array();
         switch ($campus) {
             case 'C':
-                                                                                                                            $modcode = 'AND moduleid LIKE \'%_UNNC\'';
-
+                $modcode = 'AND moduleid LIKE \'%_UNNC\'';
                 break;
             case 'M':
-                                                                                                                        $modcode = 'AND moduleid LIKE \'%_UNMC\'';
-
+                $modcode = 'AND moduleid LIKE \'%_UNMC\'';
                 break;
             default:
-                                                                                                                        $modcode = 'AND moduleid NOT LIKE \'%_UNMC\' AND moduleid NOT LIKE \'%_UNNC\'';
-
+                $modcode = 'AND moduleid NOT LIKE \'%_UNMC\' AND moduleid NOT LIKE \'%_UNNC\'';
                 break;
         }
         if ($active) {

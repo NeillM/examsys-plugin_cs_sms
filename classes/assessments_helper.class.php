@@ -29,9 +29,6 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class assessments_helper
 {
-
-
-    
     /**
      * List of valid assessment types.
      * SUMMATIVE - CS only currently mapping one exam type to Rogo (summative)
@@ -65,25 +62,25 @@ class assessments_helper
             }
         }
         $assessments = $data->getElementsByTagName('Assessment');
-// Schedule assessments.
+        // Schedule assessments.
         $am = new \api\assessmentmanagement($db);
         $node = 1;
         foreach ($assessments as $assessment) {
             $xpath = new \DOMXPath($assessment->ownerDocument);
-        // The AssessmentID in Campus Solutions is the Properties External ID in Rogo.
+            // The AssessmentID in Campus Solutions is the Properties External ID in Rogo.
             try {
                 $externalid = $xpath->query('./AssessmentID', $assessment)->item(0)->nodeValue;
-// Skip invalid assessment types.
+                // Skip invalid assessment types.
                 $assessmenttype = $xpath->query('./AssessmentType', $assessment)->item(0)->nodeValue;
                 if (!self::validate_type($assessmenttype)) {
                     continue;
                 }
             } catch (\exception $e) {
-        // If externalid not provided skip to next assessment.
+                // If externalid not provided skip to next assessment.
                 continue;
             }
             if (!is_null($externalid)) {
-        // Schedule assessment.
+                // Schedule assessment.
                 $params = array();
                 $params['externalid'] = $externalid;
                 $params['externalsys'] = plugin_cs_sms::SMS;
@@ -97,7 +94,7 @@ class assessments_helper
                     $modules = $xpath->query('./Modules', $assessment)->item(0)->childNodes;
                     $params['extmodules'] = self::process_module($modules);
                 } catch (\exception $e) {
-                // If the above are not provided we cannot create the assessment.
+                    // If the above are not provided we cannot create the assessment.
                     continue;
                 }
                 // Default optionals to null.
@@ -112,7 +109,7 @@ class assessments_helper
                         $params['month'] = $month->nodeValue;
                     }
                 } catch (\exception $e) {
-                // Optional so dont care.
+                    // Optional so dont care.
                 }
                 try {
                     $cohort = $xpath->query('./CohortSize', $assessment)->item(0);
@@ -120,7 +117,7 @@ class assessments_helper
                         $params['cohort_size'] = $cohort->nodeValue;
                     }
                 } catch (\exception $e) {
-                // Optional so dont care.
+                    // Optional so dont care.
                 }
                 try {
                     $barrier = $xpath->query('./Barriers', $assessment)->item(0);
@@ -128,7 +125,7 @@ class assessments_helper
                         $params['barriers'] = $barrier->nodeValue;
                     }
                 } catch (\exception $e) {
-                // Optional so dont care.
+                    // Optional so dont care.
                 }
                 try {
                     $campus = $xpath->query('./Campus', $assessment)->item(0);
@@ -136,7 +133,7 @@ class assessments_helper
                         $params['campus'] = $campus->nodeValue;
                     }
                 } catch (\exception $e) {
-                // Optional so dont care.
+                    // Optional so dont care.
                 }
                 try {
                     $notes = $xpath->query('./Notes', $assessment)->item(0);
@@ -144,13 +141,13 @@ class assessments_helper
                         $params['notes'] = $notes->nodeValue;
                     }
                 } catch (\exception $e) {
-                // Optional so dont care.
+                    // Optional so dont care.
                 }
                 $params['nodeid'] = $node;
                 $node++;
                 if ($assessmenttype == 'SUMMATIVE') {
                     $response = $am->schedule($params, $userid);
-                // Convert array to string for logging
+                    // Convert array to string for logging
                     $loggingmodules = $params['extmodules'];
                     $params['extmodules'] = '';
                     foreach ($loggingmodules as $extmod) {
@@ -200,7 +197,7 @@ class assessments_helper
         try {
             $username = $xpath->query('./UserName', $usernode)->item(0)->nodeValue;
         } catch (\exception $e) {
-        // Should not get here but fail gracefully later on.
+            // Should not get here but fail gracefully later on.
             $username = null;
         }
         return \UserUtils::username_exists($username, $db);

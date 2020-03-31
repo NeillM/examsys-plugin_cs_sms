@@ -29,48 +29,54 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class plugin_cs_sms extends \plugins\plugins_sms
 {
-
-
     /**
      * Name of the plugin;
      * @var string
      */
     protected $plugin = 'plugin_cs_sms';
-/**
+
+    /**
      * Language pack component.
      * @var string
      */
     protected $langcomponent = 'plugins/SMS/plugin_cs_sms/plugin_cs_sms';
-/**
+
+    /**
      * Land pack strings.
      * @var string
      */
     private $strings;
-/**
+
+    /**
      * User running import.
      * @var integer
      */
     private $userid;
-/**
+
+    /**
      * Schema validation status.
      * @var boolean
      */
     private $validation;
+
 /**
      * List of campuses.
      * @var array
      */
     private $campuslist;
-/**
+
+    /**
      * Name of external student management system.
      * @var string
      */
     const SMS = 'Campus Solutions';
-/**
+
+    /**
      * Campus Solutions web service version.
      * @var string
      */
     const CSVERSIONONE = 'v1';
+
     /**
      * Set the availbe land pack strings for the plugin
      */
@@ -146,7 +152,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
         $options = array(CURLOPT_TIMEOUT => $timeout,
             CURLOPT_SSL_VERIFYPEER => $this->config->get_setting($this->plugin, 'ssl_verify')
         );
-// Auth options.
+        // Auth options.
         if ($username != '') {
             $authoptions = array(CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
                 CURLOPT_USERPWD => $username . ':' . $password);
@@ -203,7 +209,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             $logfile = log_helper::set_logfile($this->logdir, 'enrol');
             $targeted = $this->config->get_setting($this->plugin, 'target_module_enrolments');
             $active = $this->config->get_setting($this->plugin, 'active_modules_only');
-        // If external id is provided we can select the specific campus to call.
+            // If external id is provided we can select the specific campus to call.
             if (!is_null($externalid)) {
                 $campuses[] = modules_helper::get_campus_code($externalid);
             } else {
@@ -211,7 +217,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             }
             foreach ($campuses as $campus) {
                 $args = array('academic_session' => $session, 'campus' => $campus);
-        // Targeted list of modules.
+                // Targeted list of modules.
                 if (is_null($externalid) and $targeted) {
                     $targetmodules = modules_helper::get_target_modules($campus, $active);
                     foreach ($targetmodules as $eid) {
@@ -222,7 +228,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
                         }
                     }
                 } else {
-                // Specific module.
+                    // Specific module.
                     if (!is_null($externalid)) {
                         $args['externalid'] = $externalid;
                     }
@@ -337,7 +343,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             $logfile = log_helper::set_logfile($this->logdir, 'module');
             $singleexternal = false;
             $currentmodules = array();
-        // If external id is provided we can select the specific campus to call.
+            // If external id is provided we can select the specific campus to call.
             if (!is_null($externalid)) {
                 $campuses[] = modules_helper::get_campus_code($externalid);
             } else {
@@ -360,9 +366,9 @@ class plugin_cs_sms extends \plugins\plugins_sms
             }
             // Check if delete modules is enabled.
             $delete = $this->config->get_setting($this->plugin, 'enable_delete_modules');
-        // Do not diff modules on single module update.
+            // Do not diff modules on single module update.
             if (!$singleexternal and $delete) {
-        // Delete modules no longer in CS
+                // Delete modules no longer in CS
                 modules_helper::delete_modules($currentmodules, $logfile, $this->userid);
             }
             unlink($lockfile);

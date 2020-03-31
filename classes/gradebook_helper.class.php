@@ -29,20 +29,19 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class gradebook_helper
 {
-
-
-    
     /**
      * Campus Solutions Result status type 'imported'
      * @var string
      */
     const RESULTSTATUS_IMPORTED = '07-Imported';
-/**
+
+    /**
      * Campus Solutions Result type 'AM'
      * @var string
      */
     const RESULTTYPE_AM = 'AM Result';
-/**
+
+    /**
      * Gradebook object
      * @var gradebook
      */
@@ -59,7 +58,7 @@ class gradebook_helper
         $configObject = \Config::get_instance();
         $db = $configObject->db;
         $render = new \render($configObject, $path . DIRECTORY_SEPARATOR . 'templates');
-// Only interested in summative papers.
+        // Only interested in summative papers.
         $papers = \Paper_utils::get_finalised_papers($session, '2', $db);
         self::$gradebook = new \gradebook($db);
         foreach ($papers as $paper_id) {
@@ -74,7 +73,7 @@ class gradebook_helper
                     $suffix = date('YmdHis');
                 }
                 $logfile = $gradebookdir . DIRECTORY_SEPARATOR . 'ROGO-' . $session . '-' . $activtyid . '-' . $suffix . '.xml';
-        // If md5 enabled we only write a file if a change has occured i.e. a grade has been added
+                // If md5 enabled we only write a file if a change has occured i.e. a grade has been added
                 // If md5 is disabled we only write a file if the datetime has changed which is essentially always
                 if (!file_exists($logfile)) {
                     file_put_contents($logfile, $response_xml);
@@ -95,7 +94,7 @@ class gradebook_helper
         $paperdetails = \Paper_utils::get_paper_properties($paper_id, $db);
         $activityid = $paperdetails['externalid'];
         $activitysys = $paperdetails['externalsys'];
-// Only interested in campus solutions assessments.
+        // Only interested in campus solutions assessments.
         if (is_null($activityid) or $activitysys != plugin_cs_sms::SMS) {
             return false;
         }

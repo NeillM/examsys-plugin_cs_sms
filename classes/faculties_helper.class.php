@@ -29,8 +29,6 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class faculties_helper
 {
-
-
     /**
      * Process faculties WS response
      * @param string xml $response xml from faculty WS
@@ -59,15 +57,15 @@ class faculties_helper
         $currentfaculties = array();
         $currentschools = array();
         $node = 1;
-// Create / Update faculties.
+        // Create / Update faculties.
         $fm = new \api\facultymanagement($db);
         foreach ($faculties as $faculty) {
             $xpath = new \DOMXPath($faculty->ownerDocument);
-        // The FacultyID in Campus Solutions is the Faculty External ID in Rogo.
+            // The FacultyID in Campus Solutions is the Faculty External ID in Rogo.
             try {
                 $externalid = $xpath->query('./FacultyID', $faculty)->item(0)->nodeValue;
             } catch (\exception $e) {
-        // If externalid not provided skip to next faculty.
+                // If externalid not provided skip to next faculty.
                 continue;
             }
             if (!is_null($externalid)) {
@@ -78,7 +76,7 @@ class faculties_helper
                     $params['code'] = $xpath->query('./FacultyCode', $faculty)->item(0)->nodeValue;
                     $params['name'] = $xpath->query('./FacultyDescr', $faculty)->item(0)->nodeValue;
                 } catch (\exception $e) {
-                // If data not provided skip to next faculty.
+                    // If data not provided skip to next faculty.
                     continue;
                 }
                 $params['externalid'] = $externalid;
@@ -86,11 +84,11 @@ class faculties_helper
                 $params['nodeid'] = $node;
                 $node++;
                 if ($facultyid) {
-                // If ExternalID exists call facultymanagement update api.
+                    // If ExternalID exists call facultymanagement update api.
                     $response = $fm->update($params, $userid);
                     $type = 'Faculty Update';
                 } else {
-                // If ExternalID new call facultymanagement create api.
+                    // If ExternalID new call facultymanagement create api.
                     $response = $fm->create($params, $userid);
                     $type = 'Faculty Create';
                 }
@@ -98,7 +96,7 @@ class faculties_helper
                 try {
                     $memberschools = $xpath->query('./MemberSchools', $faculty)->item(0)->childNodes;
                 } catch (\exception $e) {
-                // If school data not provided skip to next faculty.
+                    // If school data not provided skip to next faculty.
                     continue;
                 }
                 $currentschools = array_merge($currentschools, school_helper::get_schools($memberschools, $externalid, $db, $userid, $logfile));
@@ -122,9 +120,9 @@ class faculties_helper
         $node = 1;
         $fm = new \api\facultymanagement($db);
         $sm = new \api\schoolmanagement($db);
-// Delete schools that have been removed from CS.
+        // Delete schools that have been removed from CS.
         $delete = \SchoolUtils::diff_external_schools_to_internal_schools($currentschools, plugin_cs_sms::SMS, $db);
-// Try to delete course via schoolmanagement delete api.
+        // Try to delete course via schoolmanagement delete api.
         foreach ($delete as $deleteid) {
             $params = array();
             $params['externalid'] = $deleteid;
@@ -135,7 +133,7 @@ class faculties_helper
         }
         // Delete faculties that have been removed from CS.
         $delete = \FacultyUtils::diff_external_faculties_to_internal_faculties($currentfaculties, plugin_cs_sms::SMS, $db);
-// Try to delete course via facultymanagement delete api.
+        // Try to delete course via facultymanagement delete api.
         foreach ($delete as $deleteid) {
             $params = array();
             $params['externalid'] = $deleteid;

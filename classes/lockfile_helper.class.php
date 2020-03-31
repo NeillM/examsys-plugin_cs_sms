@@ -29,8 +29,6 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class lockfile_helper
 {
-
-
     /**
      * Timeout lock file after a day - removes lock file.
      * @param string $lockfile filename of lock file
