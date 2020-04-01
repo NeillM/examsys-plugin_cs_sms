@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -15,9 +16,10 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace plugins\SMS\plugin_cs_sms;
+
 /**
 * Courses processig file
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -25,7 +27,8 @@ namespace plugins\SMS\plugin_cs_sms;
 /**
  * Courses helper class.
  */
-class courses_helper {
+class courses_helper
+{
     /**
      * Process courses WS response
      * @param string xml $response xml from course WS
@@ -37,7 +40,8 @@ class courses_helper {
      * @param array $args arguments used to call web service
      * @return boolean|array false on error, list of current plan ids on success
      */
-    static public function process($response, $userid, $strings, $db, $logfile, $validation, $args) {
+    public static function process($response, $userid, $strings, $db, $logfile, $validation, $args)
+    {
         // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
@@ -97,13 +101,14 @@ class courses_helper {
 
     /**
      * Delete courses that have been removed from CS
-     * 
+     *
      * @param array $currentplans list of course ids in CS
      * @param string $logfile log file location
      * @param integer $userid user to record actions under
      * @param mysqli $db db connection
      */
-    static public function delete_courses($currentplans, $logfile, $userid, $db) {
+    public static function delete_courses($currentplans, $logfile, $userid, $db)
+    {
         $cm = new \api\coursemanagement($db);
         $delete = \CourseUtils::diff_external_courses_to_internal_courses($currentplans, plugin_cs_sms::SMS, $db);
         $node = 1;

@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -18,7 +19,7 @@ namespace plugins\SMS\plugin_cs_sms;
 
 /**
 * Logging helper file
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -26,7 +27,8 @@ namespace plugins\SMS\plugin_cs_sms;
 /**
  * Log class.
  */
-class log_helper {
+class log_helper
+{
     /**
      * Log to application error
      * @param integer $userid user to log error to
@@ -35,7 +37,8 @@ class log_helper {
      * @param array $args arguments used to call web service
      * @param mysqli $db db connection
      */
-    static public function log_app_warning($userid, $string, $errorline, $db, $args) {
+    public static function log_app_warning($userid, $string, $errorline, $db, $args)
+    {
         $log = new \Logger($db);
         $username = 'plugin_cs_sms';
         $errorfile = $_SERVER['PHP_SELF'];
@@ -48,12 +51,13 @@ class log_helper {
      * @param string $type type of ws call
      * @return string log file path
      */
-    static public function set_logfile($logdir, $type) {
+    public static function set_logfile($logdir, $type)
+    {
         if ($logdir != '') {
             if (PHP_SAPI == 'cli') {
                 $type .= '-cli';
             }
-            $logfile = $logdir . DIRECTORY_SEPARATOR . $type . '.log.' . date("Ymd");
+            $logfile = $logdir . DIRECTORY_SEPARATOR . $type . '.log.' . date('Ymd');
         } else {
             $logfile = '';
         }
@@ -67,9 +71,10 @@ class log_helper {
      * @param array $response response data to log
      * @param string $logfile file to log to
      */
-    static public function log($type, $request, $response, $logfile) {
+    public static function log($type, $request, $response, $logfile)
+    {
         if ($logfile != '') {
-            $updatelog = "\n\n" . "--" . date("YmdHis") . "--" . $type ."\n\nREQUEST  " . implode(';', $request);
+            $updatelog = "\n\n" . '--' . date('YmdHis') . '--' . $type . "\n\nREQUEST  " . implode(';', $request);
             if ($response['statuscode'] !== 100) {
                 // Log failure.
                 $state = 'FAILURE';
@@ -78,9 +83,9 @@ class log_helper {
                 $state = 'SUCCESS';
             }
             if ($logfile != '') {
-                $updatelog .= "\n\n" . "RESPONSE  " . $state . ' '. $response['id'] . ' ' . $response['externalid'] . ' ' . $response['statuscode']
+                $updatelog .= "\n\n" . 'RESPONSE  ' . $state . ' ' . $response['id'] . ' ' . $response['externalid'] . ' ' . $response['statuscode']
                     . ' ' . $response['status'];
-                file_put_contents($logfile , $updatelog, FILE_APPEND);
+                file_put_contents($logfile, $updatelog, FILE_APPEND);
             }
         }
     }

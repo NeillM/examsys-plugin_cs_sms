@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -15,9 +16,10 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace plugins\SMS\plugin_cs_sms;
+
 /**
 * Enrolments processig file
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -25,7 +27,8 @@ namespace plugins\SMS\plugin_cs_sms;
 /**
  * Enrolments helper class.
  */
-class enrolments_helper {
+class enrolments_helper
+{
     /**
      * Process enrolment WS response
      * @param string xml $response xml from enrolment WS
@@ -39,7 +42,8 @@ class enrolments_helper {
      * @param array $args arguments used to call web service
      * @return boolean true on success, false on error
      */
-    static public function process($response, $userid, $strings, $db, $logfile, $session, $validation, $active, $args) {
+    public static function process($response, $userid, $strings, $db, $logfile, $session, $validation, $active, $args)
+    {
         // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
@@ -138,8 +142,16 @@ class enrolments_helper {
                     $smsimports[$moduleid]['enrolusers'] = rtrim($smsimports[$moduleid]['enrolusers'], ',');
                     $smsimports[$moduleid]['unenrolusers'] = rtrim($smsimports[$moduleid]['unenrolusers'], ',');
                     if ($smsimports[$moduleid]['unenrolcount'] > 0 or $smsimports[$moduleid]['enrolcount'] > 0) {
-                        \module_utils::log_sms_imports($moduleid, $smsimports[$moduleid]['enrolcount'], $smsimports[$moduleid]['enrolusers'], 
-                            $smsimports[$moduleid]['unenrolcount'], $smsimports[$moduleid]['unenrolusers'], 'Campus Solutions', $session, $db);
+                        \module_utils::log_sms_imports(
+                            $moduleid,
+                            $smsimports[$moduleid]['enrolcount'],
+                            $smsimports[$moduleid]['enrolusers'],
+                            $smsimports[$moduleid]['unenrolcount'],
+                            $smsimports[$moduleid]['unenrolusers'],
+                            'Campus Solutions',
+                            $session,
+                            $db
+                        );
                     }
                 }
             }

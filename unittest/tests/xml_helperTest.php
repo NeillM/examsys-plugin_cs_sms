@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -16,20 +17,22 @@
 
 use testing\unittest\unittestdatabase;
 use plugins\SMS\plugin_cs_sms\xml_helper as xml_helper;
+
 /**
  * Test xml helper functions
- * 
+ *
  * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
  * @version 1.0
  * @copyright Copyright (c) 2016 onwards The University of Nottingham
  * @package tests
  */
-class xml_helpertest extends unittestdatabase {
-
+class xml_helpertest extends unittestdatabase
+{
     /**
      * Generate data for test.
      */
-    public function datageneration() : void {
+    public function datageneration(): void
+    {
         // Currently only base data required.
     }
 
@@ -38,7 +41,8 @@ class xml_helpertest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_check_for_error() {
+    public function test_check_for_error()
+    {
         $userid = 0;
         // Error.
         $data = '<?xml version="1.0"?>

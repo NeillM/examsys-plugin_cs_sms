@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -15,9 +16,10 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace plugins\SMS\plugin_cs_sms;
+
 /**
 * Faculties processig file
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -25,7 +27,8 @@ namespace plugins\SMS\plugin_cs_sms;
 /**
  * Faculties helper class.
  */
-class faculties_helper {
+class faculties_helper
+{
     /**
      * Process faculties WS response
      * @param string xml $response xml from faculty WS
@@ -37,7 +40,8 @@ class faculties_helper {
      * @param array $args arguments used to call web service
      * @return boolean|array false on error, list of facultes and schools in CS on success
      */
-    static public function process($response, $userid, $strings, $db, $logfile, $validation, $args) {
+    public static function process($response, $userid, $strings, $db, $logfile, $validation, $args)
+    {
         // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
@@ -67,7 +71,7 @@ class faculties_helper {
             if (!is_null($externalid)) {
                 $currentfaculties[] = $externalid;
                 $params = array();
-                $facultyid= \FacultyUtils::get_facultyid_from_externalid($externalid, plugin_cs_sms::SMS, $db);
+                $facultyid = \FacultyUtils::get_facultyid_from_externalid($externalid, plugin_cs_sms::SMS, $db);
                 try {
                     $params['code'] = $xpath->query('./FacultyCode', $faculty)->item(0)->nodeValue;
                     $params['name'] = $xpath->query('./FacultyDescr', $faculty)->item(0)->nodeValue;
@@ -91,7 +95,7 @@ class faculties_helper {
                 log_helper::log($type, $params, $response, $logfile);
                 try {
                     $memberschools = $xpath->query('./MemberSchools', $faculty)->item(0)->childNodes;
-                 } catch (\exception $e) {
+                } catch (\exception $e) {
                     // If school data not provided skip to next faculty.
                     continue;
                 }
@@ -104,14 +108,15 @@ class faculties_helper {
 
     /**
      * Delete facultes/schools that have been removed from CS
-     * 
+     *
      * @param array $currentschools of schools ids in CS
      * @param array $currentfaculties of faculty ids in CS
      * @param string $logfile log file location
      * @param integer $userid user to record actions under
      * @param mysqli $db db connection
      */
-    static public function delete_faculties_schools($currentschools, $currentfaculties, $logfile, $userid, $db) {
+    public static function delete_faculties_schools($currentschools, $currentfaculties, $logfile, $userid, $db)
+    {
         $node = 1;
         $fm = new \api\facultymanagement($db);
         $sm = new \api\schoolmanagement($db);

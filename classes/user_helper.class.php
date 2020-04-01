@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -18,7 +19,7 @@ namespace plugins\SMS\plugin_cs_sms;
 
 /**
 * User import helper file
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -26,7 +27,8 @@ namespace plugins\SMS\plugin_cs_sms;
 /**
  * User import helper class.
  */
-class user_helper {
+class user_helper
+{
     /**
      * Parse the user node of the membership xml and create/update users as required
      * @param DOMNodeList $usernode xml for users
@@ -37,7 +39,8 @@ class user_helper {
      * @param array $userupdated list of users already updated so we can skip
      * @return array list of enrolled users
      */
-    static public function get_users($usernode, $moduleextid, $userid, $logfile, $db, &$userupdated) {
+    public static function get_users($usernode, $moduleextid, $userid, $logfile, $db, &$userupdated)
+    {
         $currentenrols = array();
         foreach ($usernode as $users) {
             if ($users->hasChildNodes()) {
@@ -110,15 +113,14 @@ class user_helper {
      * @param string $title title in rogo
      * @return string|null rogo gender or null if not mapped
      */
-    static public function map_gender($csgender, $title) {
-        /*
-        Possible Genders from CS
-        F - Female
-        M - Male
-        O - Other
-        U - Unknown
-        X - Intersex
-        */
+    public static function map_gender($csgender, $title)
+    {
+         // Possible Genders from CS
+         //  F - Female
+         //  M - Male
+         //  O - Other
+         //  U - Unknown
+         //  X - Intersex
         switch ($csgender) {
             case 'F':
                 $gender = 'Female';
@@ -143,9 +145,10 @@ class user_helper {
      * @param string $cstitle title in CS
      * @return string|null rogo title or null if not mapped
      */
-    static public function map_title($cstitle) {
+    public static function map_title($cstitle)
+    {
         // Valid Rogo titles Mx|Mr|Mrs|Miss|Ms|Dr|Professor
-        if (preg_match("/^(Mx|Mr|Mrs|Miss|Ms|Dr|Professor)$/", $cstitle)) {
+        if (preg_match('/^(Mx|Mr|Mrs|Miss|Ms|Dr|Professor)$/', $cstitle)) {
             $title = $cstitle;
         } else {
             $title = null;
@@ -159,7 +162,8 @@ class user_helper {
      * @param string $title title in rogo
      * @return string|null rogo gender or null if not mapped
      */
-    static public function title_to_gender($title) {
+    public static function title_to_gender($title)
+    {
         // Valid Rogo titles Mx|Mr|Mrs|Miss|Ms|Dr|Professor
         switch ($title) {
             case 'Mx':
@@ -187,26 +191,26 @@ class user_helper {
      * @param mysqli $db database connection
      * @return string|null rogo role or null if not mapped
      */
-    static public function map_student_status($csstatus, $userid, $db) {
+    public static function map_student_status($csstatus, $userid, $db)
+    {
         // Users locked internally in Rogo can only be unlocked manually within Rogo.
         if (\UserUtils::has_user_role($userid, 'Locked', $db)) {
             return 'Locked';
         }
-        /*  
-        Possible Statuses from CS
-        AC  Active in Program
-        AD  Admitted - should not be sent to rogo so deafults to suspended
-        AP  Applicant - should not be sent to rogo so deafults to suspended
-        CM  Completed Program
-        CN  Cancelled
-        DC  Discontinued
-        DE  Deceased
-        DM  Dismissed
-        LA  Leave of Absence - leave as Student role
-        PM  Prematriculant - should not be sent to rogo so deafults to suspended
-        SP  Suspended
-        WT  Waitlisted - should not be sent to rogo so deafults to suspended
-        */
+
+        // Possible Statuses from CS
+        // AC  Active in Program
+        // AD  Admitted - should not be sent to rogo so deafults to suspended
+        // AP  Applicant - should not be sent to rogo so deafults to suspended
+        // CM  Completed Program
+        // CN  Cancelled
+        // DC  Discontinued
+        // DE  Deceased
+        // DM  Dismissed
+        // LA  Leave of Absence - leave as Student role
+        // PM  Prematriculant - should not be sent to rogo so deafults to suspended
+        // SP  Suspended
+        // WT  Waitlisted - should not be sent to rogo so deafults to suspended
         switch ($csstatus) {
             case 'CN':
             case 'DC':
@@ -236,15 +240,14 @@ class user_helper {
      * @param string $csyear year in CS
      * @return string|null rogo year or null if not mapped
      */
-    static public function map_yearofstudy($csyear) {
-        /*  
-        Possible Statuses from CS
-        00-06 - undergraduate year as zero padded integer, maps to single digit integer
-        PGT - not releveant to Rogo so map to null
-        PGR - not releveant to Rogo so map to null
-        FND - maps to 0
-         */
-        if (preg_match("/^0[0-6]$/", $csyear)) {
+    public static function map_yearofstudy($csyear)
+    {
+        // Possible Statuses from CS
+        // 00-06 - undergraduate year as zero padded integer, maps to single digit integer
+        // PGT - not releveant to Rogo so map to null
+        // PGR - not releveant to Rogo so map to null
+        // FND - maps to 0
+        if (preg_match('/^0[0-6]$/', $csyear)) {
             $year = substr($csyear, 1);
         } elseif ($csyear == 'FND') {
             $year = 0;

@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -15,9 +16,10 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace plugins\SMS\plugin_cs_sms;
+
 /**
 * Modules processig file
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -25,7 +27,8 @@ namespace plugins\SMS\plugin_cs_sms;
 /**
  * Modules helper class.
  */
-class modules_helper {
+class modules_helper
+{
     /**
      * Process modules WS response
      * @param string xml $response xml from module WS
@@ -36,7 +39,8 @@ class modules_helper {
      * @param array $args arguments used to call web service
      * @return boolean|array false on error, list of current module ids on success
      */
-    static public function process($response, $userid, $strings, $logfile, $validation, $args) {
+    public static function process($response, $userid, $strings, $logfile, $validation, $args)
+    {
         $config = \Config::get_instance();
         // Parse returned XML.
         $data = new \DOMDocument();
@@ -99,9 +103,10 @@ class modules_helper {
      * @param string $sourcecode module code return by web service
      * @return string module code to store in rogo
      */
-    static public function module_campus_mapping($sourcecode) {
+    public static function module_campus_mapping($sourcecode)
+    {
         // Check if source is campus solutions module code.
-        preg_match("/^(?P<module>[A-Z]{4}[F1-5][0-9]{3})(_(?P<country>U|C|M))?$/", $sourcecode, $info);
+        preg_match('/^(?P<module>[A-Z]{4}[F1-5][0-9]{3})(_(?P<country>U|C|M))?$/', $sourcecode, $info);
         if (count($info) > 0) {
             $modulecode = $info['module'];
             if (isset($info['country'])) {
@@ -125,32 +130,34 @@ class modules_helper {
 
     /**
      * Get campus solutions campus code from rogo module
-     * 
+     *
      * @param string $externalid campus id for module
      * @return string campus code
      */
-    static public function get_campus_code($externalid) {
+    public static function get_campus_code($externalid)
+    {
         $config = \Config::get_instance();
         $details = \module_utils::get_full_details('external', $externalid, $config->db, plugin_cs_sms::SMS);
         // Check for Campus Solution modules codes and map campus. Default to UK(U).
-        if (preg_match("/^[A-Z]{4}[F1-5][0-9]{3}_UNNC$/", $details['moduleid'])) {
-          $campuscode = 'C';
-        } elseif (preg_match("/^[A-Z]{4}[F1-5][0-9]{3}_UNMC$/", $details['moduleid'])) {
-          $campuscode = 'M';
+        if (preg_match('/^[A-Z]{4}[F1-5][0-9]{3}_UNNC$/', $details['moduleid'])) {
+            $campuscode = 'C';
+        } elseif (preg_match('/^[A-Z]{4}[F1-5][0-9]{3}_UNMC$/', $details['moduleid'])) {
+            $campuscode = 'M';
         } else {
-          $campuscode = 'U';
+            $campuscode = 'U';
         }
         return $campuscode;
     }
 
     /**
      * Delete modules that have been removed from CS
-     * 
+     *
      * @param array $currentmodules list of module ids in CS
      * @param string $logfile log file location
      * @param integer $userid user to record actions under
      */
-    static public function delete_modules($currentmodules, $logfile, $userid) {
+    public static function delete_modules($currentmodules, $logfile, $userid)
+    {
         $config = \Config::get_instance();
         $node = 1;
         $mm = new \api\modulemanagement($config->db);
@@ -173,7 +180,8 @@ class modules_helper {
      * @param boolean $active filter by active modules
      * @return array modules
      */
-    static public function get_target_modules($campus, $active) {
+    public static function get_target_modules($campus, $active)
+    {
         $config = \Config::get_instance();
         $sms = plugin_cs_sms::SMS;
         $modules = array();

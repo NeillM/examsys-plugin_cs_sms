@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -18,7 +19,7 @@ namespace plugins\SMS\plugin_cs_sms;
 
 /**
 * Lock file helper file
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2017 onwards The University of Nottingham
 */
@@ -26,13 +27,15 @@ namespace plugins\SMS\plugin_cs_sms;
 /**
  * Lock file helper class.
  */
-class lockfile_helper {
+class lockfile_helper
+{
     /**
      * Timeout lock file after a day - removes lock file.
      * @param string $lockfile filename of lock file
      * @param integer $lifespan lifespan of lock file in hours
      */
-    static public function lockfiletimeout($lockfile, $lifespan) {
+    public static function lockfiletimeout($lockfile, $lifespan)
+    {
         if (file_exists($lockfile)) {
             $lastlocked = file_get_contents($lockfile);
             $onedayago = strtotime('-$lifespan hour', time());

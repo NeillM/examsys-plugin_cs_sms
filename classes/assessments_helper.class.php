@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -15,9 +16,10 @@
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace plugins\SMS\plugin_cs_sms;
+
 /**
 * Assessments processig file
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -25,8 +27,8 @@ namespace plugins\SMS\plugin_cs_sms;
 /**
  * Assessments helper class.
  */
-class assessments_helper {
-    
+class assessments_helper
+{
     /**
      * List of valid assessment types.
      * SUMMATIVE - CS only currently mapping one exam type to Rogo (summative)
@@ -46,7 +48,8 @@ class assessments_helper {
      * @param array $args arguments used to call web service
      * @return boolean true on success, false on error
      */
-    static public function process($response, $userid, $strings, $db, $logfile, $session, $validation, $args) {
+    public static function process($response, $userid, $strings, $db, $logfile, $session, $validation, $args)
+    {
         // Parse returned XML.
         $data = new \DOMDocument();
         $data->loadXML($response);
@@ -163,10 +166,11 @@ class assessments_helper {
      * @param mysqli $db db connection
      * @return mixed user rogo id or false if not found, null if missing.
      */
-    static private function process_owner($ownernode, $db) {
+    private static function process_owner($ownernode, $db)
+    {
         if (is_null($ownernode)) {
-          throw new \Exception('owners tag missing');
-          exit();
+            throw new \Exception('owners tag missing');
+            exit();
         }
         $userid = null;
         foreach ($ownernode as $owner) {
@@ -187,7 +191,8 @@ class assessments_helper {
      * @param mysqli $db db connection
      * @return mixed user rogo id or false if not found, null if missing.
      */
-    static private function get_owner($usernode, $db) {
+    private static function get_owner($usernode, $db)
+    {
         $xpath = new \DOMXPath($usernode->ownerDocument);
         try {
             $username = $xpath->query('./UserName', $usernode)->item(0)->nodeValue;
@@ -203,10 +208,11 @@ class assessments_helper {
      * @param DOMNodeList $modulenode xml for modules
      * @return array list of module external ids.
      */
-    static private function process_module($modulenode) {
+    private static function process_module($modulenode)
+    {
         if (is_null($modulenode)) {
-          throw new \Exception('modules tag missing');
-          exit();
+            throw new \Exception('modules tag missing');
+            exit();
         }
         $modulesarray = array();
         $i = 0;
@@ -229,7 +235,8 @@ class assessments_helper {
      * @param string $type assessment type.
      * @return boolean true if valid, false otherwise
      */
-    static private function validate_type($type) {
+    private static function validate_type($type)
+    {
         return in_array($type, self::$validtypes);
     }
 }

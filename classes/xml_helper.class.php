@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -18,7 +19,7 @@ namespace plugins\SMS\plugin_cs_sms;
 
 /**
 * Xml helper file
-* 
+*
 * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
 * @copyright Copyright (c) 2016 onwards The University of Nottingham
 */
@@ -26,7 +27,8 @@ namespace plugins\SMS\plugin_cs_sms;
 /**
  * Xml helper class.
  */
-class xml_helper {
+class xml_helper
+{
     /**
      * Check if xml response is an error.
      * @param DOMDocument $data xml response
@@ -36,7 +38,8 @@ class xml_helper {
      * @param array $args arguments used to call web service
      * @return boolean true on error
      */
-    static public function check_for_error($data, $userid, $db, $ws, $args) {
+    public static function check_for_error($data, $userid, $db, $ws, $args)
+    {
         $errornode = $data->getElementsByTagName('Error');
         foreach ($errornode as $error) {
             $errorstring = null;
@@ -60,7 +63,8 @@ class xml_helper {
      * @param mysqli $db db connection
      * @return boolean true if valid xml
      */
-    static public function validate($data, $schemaname, $userid, $strings, $db) {
+    public static function validate($data, $schemaname, $userid, $strings, $db)
+    {
         // Enable user error handling.
         libxml_use_internal_errors(true);
         $schema = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'schema' . DIRECTORY_SEPARATOR . $schemaname . '.xsd';

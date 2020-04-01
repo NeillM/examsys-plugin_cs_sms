@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -22,11 +23,12 @@
  * @copyright Copyright (c) 2016 The University of Nottingham
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 use plugins\SMS\plugin_cs_sms\plugin_cs_sms;
 
 // Only run from the command line!
 if (PHP_SAPI != 'cli') {
-  die("Please run this script from the CLI!\n");
+    die("Please run this script from the CLI!\n");
 }
 
 // Lets look to see what arguments have been passed.
@@ -34,9 +36,7 @@ $options = 'hy::';
 $longoptions = array(
     'help',
 );
-
 $optionslist = getopt($options, $longoptions);
-
 // Check if we should display help to the user.
 if (isset($optionslist['h']) || isset($optionslist['help'])) {
     echo <<<HELP
@@ -55,32 +55,33 @@ Parameters:
                     This value is optional. Defaults to current calendar year.
 
 HELP;
-exit();
+    exit();
 }
 
 set_time_limit(0);
-
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/load_config.php';
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/custom_error_handler.inc';
-
 // Start class autoloading.
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/autoload.inc.php';
 autoloader::init();
-
 $configObject = \Config::get_instance();
 $notice = UserNotices::get_instance();
-
 // Set year based on command line argument or use default.
 if (isset($optionslist['y']) and !is_null($optionslist['y'])) {
     $year = $optionslist['y'];
 } else {
-    $year = date("Y");
+    $year = date('Y');
 }
 
-$mysqli = \DBUtils::get_mysqli_link($configObject->get('cfg_db_host'), $configObject->get('cfg_db_sysadmin_user'),
-    $configObject->get('cfg_db_sysadmin_passwd'), $configObject->get('cfg_db_database'), $configObject->get('cfg_db_charset'),
-    $notice, $configObject->get('dbclass'));
-
+$mysqli = \DBUtils::get_mysqli_link(
+    $configObject->get('cfg_db_host'),
+    $configObject->get('cfg_db_sysadmin_user'),
+    $configObject->get('cfg_db_sysadmin_passwd'),
+    $configObject->get('cfg_db_database'),
+    $configObject->get('cfg_db_charset'),
+    $notice,
+    $configObject->get('dbclass')
+);
 $configObject->set_db_object($mysqli);
 // Run sms if enabled.
 $sms = new plugin_cs_sms(0);

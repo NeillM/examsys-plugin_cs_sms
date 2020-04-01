@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Rogō
 //
 // Rogō is free software: you can redistribute it and/or modify
@@ -16,20 +17,23 @@
 
 use testing\unittest\unittestdatabase;
 use plugins\SMS\plugin_cs_sms\user_helper as user_helper;
+
 /**
  * Test user helper functions
- * 
+ *
  * @author Dr Joseph Baxter <joseph.baxter@nottingham.ac.uk>
  * @version 1.0
  * @copyright Copyright (c) 2016 onwards The University of Nottingham
  * @package tests
  */
-class user_helpertest extends unittestdatabase {
+class user_helpertest extends unittestdatabase
+{
     /**
      * Generate data for test.
      * @throws \testing\datagenerator\not_found
      */
-    public function datageneration(): void {
+    public function datageneration(): void
+    {
         $datagenerator = $this->get_datagenerator('users', 'core');
         $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy1', 'roles' => 'Student', 'sid' => 'dgsfg345235b'));
         $this->uid1 = $user['id'];
@@ -64,7 +68,8 @@ class user_helpertest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_map_gender() {
+    public function test_map_gender()
+    {
         // Other gender.
         $this->assertEquals('Other', user_helper::map_gender('X', 'Mx'));
         // Male gender.
@@ -82,7 +87,8 @@ class user_helpertest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_map_title() {
+    public function test_map_title()
+    {
         // Known titles.Mx|Mr|Mrs|Miss|Ms|Dr|Professor
         $this->assertEquals('Professor', user_helper::map_title('Professor'));
         $this->assertEquals('Dr', user_helper::map_title('Dr'));
@@ -102,7 +108,8 @@ class user_helpertest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_title_to_gender() {
+    public function test_title_to_gender()
+    {
         // Other gender.
         $this->assertEquals('Other', user_helper::title_to_gender('Mx'));
         // Male gender.
@@ -123,7 +130,8 @@ class user_helpertest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_map_student_status() {
+    public function test_map_student_status()
+    {
         // User Cancelled.
         $this->assertEquals('Left', user_helper::map_student_status('CN', $this->uid1, $this->db));
         // User Discontinued.
@@ -157,7 +165,8 @@ class user_helpertest extends unittestdatabase {
      * @group sms
      * @group plugin_cs_sms
      */
-    public function test_map_yearofstudy() {
+    public function test_map_yearofstudy()
+    {
         // Valid year 06.
         $this->assertEquals(6, user_helper::map_yearofstudy('06'));
         // Valid year 05.
