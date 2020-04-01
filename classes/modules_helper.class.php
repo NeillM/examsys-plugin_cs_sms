@@ -64,7 +64,7 @@ class modules_helper
             try {
                 $externalid = $xpath->query('./ModuleID', $module)->item(0)->nodeValue;
             } catch (\exception $e) {
-            // If externalid not provided skip to next module.
+                // If externalid not provided skip to next module.
                 continue;
             }
             if (!is_null($externalid)) {

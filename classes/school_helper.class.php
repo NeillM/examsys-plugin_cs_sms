@@ -47,7 +47,7 @@ class school_helper
         foreach ($schoolnode as $school) {
             $xpath = new \DOMXPath($school->ownerDocument);
             if ($school->hasChildNodes()) {
-            // The SchoolID in Campus Solutions is the School External ID in Rogo.
+                // The SchoolID in Campus Solutions is the School External ID in Rogo.
                 try {
                     $externalid = $xpath->query('./SchoolID', $school)->item(0)->nodeValue;
                 } catch (\exception $e) {

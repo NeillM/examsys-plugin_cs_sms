@@ -115,14 +115,12 @@ class user_helper
      */
     public static function map_gender($csgender, $title)
     {
-        /**
-         * Possible Genders from CS
-         * F - Female
-         * M - Male
-         * O - Other
-         * U - Unknown
-         * X - Intersex
-         */
+         // Possible Genders from CS
+         //  F - Female
+         //  M - Male
+         //  O - Other
+         //  U - Unknown
+         //  X - Intersex
         switch ($csgender) {
             case 'F':
                 $gender = 'Female';
@@ -199,21 +197,20 @@ class user_helper
         if (\UserUtils::has_user_role($userid, 'Locked', $db)) {
             return 'Locked';
         }
-        /**
-         * Possible Statuses from CS
-         * AC  Active in Program
-         * AD  Admitted - should not be sent to rogo so deafults to suspended
-         * AP  Applicant - should not be sent to rogo so deafults to suspended
-         * CM  Completed Program
-         * CN  Cancelled
-         * DC  Discontinued
-         * DE  Deceased
-         * DM  Dismissed
-         * LA  Leave of Absence - leave as Student role
-         * PM  Prematriculant - should not be sent to rogo so deafults to suspended
-         * SP  Suspended
-         * WT  Waitlisted - should not be sent to rogo so deafults to suspended
-         */
+
+        // Possible Statuses from CS
+        // AC  Active in Program
+        // AD  Admitted - should not be sent to rogo so deafults to suspended
+        // AP  Applicant - should not be sent to rogo so deafults to suspended
+        // CM  Completed Program
+        // CN  Cancelled
+        // DC  Discontinued
+        // DE  Deceased
+        // DM  Dismissed
+        // LA  Leave of Absence - leave as Student role
+        // PM  Prematriculant - should not be sent to rogo so deafults to suspended
+        // SP  Suspended
+        // WT  Waitlisted - should not be sent to rogo so deafults to suspended
         switch ($csstatus) {
             case 'CN':
             case 'DC':
@@ -245,13 +242,11 @@ class user_helper
      */
     public static function map_yearofstudy($csyear)
     {
-        /**
-         * Possible Statuses from CS
-         * 00-06 - undergraduate year as zero padded integer, maps to single digit integer
-         * PGT - not releveant to Rogo so map to null
-         * PGR - not releveant to Rogo so map to null
-         * FND - maps to 0
-          */
+        // Possible Statuses from CS
+        // 00-06 - undergraduate year as zero padded integer, maps to single digit integer
+        // PGT - not releveant to Rogo so map to null
+        // PGR - not releveant to Rogo so map to null
+        // FND - maps to 0
         if (preg_match('/^0[0-6]$/', $csyear)) {
             $year = substr($csyear, 1);
         } elseif ($csyear == 'FND') {
