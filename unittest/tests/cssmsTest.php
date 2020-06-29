@@ -792,8 +792,28 @@ class cssmstest extends unittestdatabase
             ->method('callws')
             ->will($this->returnValue($this->modulexml));
         $sms->get_modules();
-        $queryTable = $this->query(array('columns' => array('moduleid', 'fullname', 'schoolid', 'externalid', 'academic_year_start', 'sms', 'active'),
-            'table' => 'modules', 'where' => array(array('column' => 'moduleid', 'operator' => 'NOT IN', 'value' => array('TRAIN', 'SYSTEM')))));
+        $queryTable = $this->query(
+            array(
+                'columns' => array(
+                    'moduleid',
+                    'fullname',
+                    'schoolid',
+                    'externalid',
+                    'academic_year_start',
+                    'sms',
+                    'active'
+                    ),
+                'table' => 'modules',
+                'where' => array(
+                    array(
+                        'column' => 'moduleid',
+                        'operator' => 'NOT IN',
+                        'value' => array('TRAIN', 'SYSTEM')
+                    ),
+                ),
+                'orderby' => array('moduleid DESC'),
+            )
+        );
         $expectedTable = array(
             0 => array (
                 'moduleid' => 'TESTMOD',
@@ -832,8 +852,28 @@ class cssmstest extends unittestdatabase
             ->method('callws')
             ->will($this->returnValue($this->modulexml));
         $sms->get_modules('030003', 2016);
-        $queryTable = $this->query(array('columns' => array('moduleid', 'fullname', 'schoolid', 'externalid', 'academic_year_start', 'sms', 'active'),
-            'table' => 'modules', 'where' => array(array('column' => 'moduleid', 'operator' => 'NOT IN', 'value' => array('TRAIN', 'SYSTEM')))));
+        $queryTable = $this->query(
+            array(
+                'columns' => array(
+                    'moduleid',
+                    'fullname',
+                    'schoolid',
+                    'externalid',
+                    'academic_year_start',
+                    'sms',
+                    'active'
+                ),
+                'table' => 'modules',
+                'where' => array(
+                    array(
+                        'column' => 'moduleid',
+                        'operator' => 'NOT IN',
+                        'value' => array('TRAIN', 'SYSTEM')
+                    ),
+                ),
+                'orderby' => array('moduleid DESC'),
+            )
+        );
         $expectedTable = array(
             0 => array (
                 'moduleid' => 'TESTMOD',
