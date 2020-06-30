@@ -792,8 +792,28 @@ class cssmstest extends unittestdatabase
             ->method('callws')
             ->will($this->returnValue($this->modulexml));
         $sms->get_modules();
-        $queryTable = $this->query(array('columns' => array('moduleid', 'fullname', 'schoolid', 'externalid', 'academic_year_start', 'sms', 'active'),
-            'table' => 'modules', 'where' => array(array('column' => 'moduleid', 'operator' => 'NOT IN', 'value' => array('TRAIN', 'SYSTEM')))));
+        $queryTable = $this->query(
+            array(
+                'columns' => array(
+                    'moduleid',
+                    'fullname',
+                    'schoolid',
+                    'externalid',
+                    'academic_year_start',
+                    'sms',
+                    'active'
+                    ),
+                'table' => 'modules',
+                'where' => array(
+                    array(
+                        'column' => 'moduleid',
+                        'operator' => 'NOT IN',
+                        'value' => array('TRAIN', 'SYSTEM')
+                    ),
+                ),
+                'orderby' => array('moduleid DESC'),
+            )
+        );
         $expectedTable = array(
             0 => array (
                 'moduleid' => 'TESTMOD',
@@ -832,8 +852,28 @@ class cssmstest extends unittestdatabase
             ->method('callws')
             ->will($this->returnValue($this->modulexml));
         $sms->get_modules('030003', 2016);
-        $queryTable = $this->query(array('columns' => array('moduleid', 'fullname', 'schoolid', 'externalid', 'academic_year_start', 'sms', 'active'),
-            'table' => 'modules', 'where' => array(array('column' => 'moduleid', 'operator' => 'NOT IN', 'value' => array('TRAIN', 'SYSTEM')))));
+        $queryTable = $this->query(
+            array(
+                'columns' => array(
+                    'moduleid',
+                    'fullname',
+                    'schoolid',
+                    'externalid',
+                    'academic_year_start',
+                    'sms',
+                    'active'
+                ),
+                'table' => 'modules',
+                'where' => array(
+                    array(
+                        'column' => 'moduleid',
+                        'operator' => 'NOT IN',
+                        'value' => array('TRAIN', 'SYSTEM')
+                    ),
+                ),
+                'orderby' => array('moduleid DESC'),
+            )
+        );
         $expectedTable = array(
             0 => array (
                 'moduleid' => 'TESTMOD',
@@ -872,8 +912,28 @@ class cssmstest extends unittestdatabase
             ->method('callws')
             ->will($this->returnValue($this->enrolxml));
         $sms->get_enrolments(2016);
-        $queryTable = $this->query(array('columns' => array('grade', 'surname', 'username', 'title', 'email', 'gender', 'roles', 'first_names', 'yearofstudy'),
-            'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
+        $queryTable = $this->query(
+            array(
+                'columns' => array(
+                    'grade',
+                    'surname',
+                    'username',
+                    'title',
+                    'email',
+                    'gender',
+                    'first_names',
+                    'yearofstudy'
+                ),
+                'table' => 'users',
+                'where' => array(
+                    array(
+                        'column' => 'username',
+                        'operator' => 'NOT IN',
+                        'value' => array('admin', 'cron', 'test1', 'test2')
+                    )
+                )
+            )
+        );
         $expectedTable = array(
             0 => array (
                 'grade' => 'University Lecturer',
@@ -882,7 +942,6 @@ class cssmstest extends unittestdatabase
                 'title' => 'Mr',
                 'email' => 'staffy@example.com',
                 'gender' => 'Male',
-                'roles' => 'Staff',
                 'first_names' => 'staffy',
                 'yearofstudy' => 1
             ),
@@ -893,7 +952,6 @@ class cssmstest extends unittestdatabase
                 'title' => 'Mr',
                 'email' => 'brzhs5@example.com',
                 'gender' => 'Male',
-                'roles' => 'Student',
                 'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ),
@@ -904,7 +962,6 @@ class cssmstest extends unittestdatabase
                 'title' => 'Mr',
                 'email' => 'brzamh@example.com',
                 'gender' => 'Male',
-                'roles' => 'Student',
                 'first_names' => 'Daniel',
                 'yearofstudy' => 1
             )
@@ -912,6 +969,9 @@ class cssmstest extends unittestdatabase
         $this->assertEquals($expectedTable, $queryTable);
         $student1 = \userutils::username_exists('brzhs5', $this->db);
         $student2 = \userutils::username_exists('brzamh', $this->db);
+        $this->assertEquals('Staff', implode(Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
+        $this->assertEquals('Student', implode(Role::getUsersRoles($student1)));
+        $this->assertEquals('Student', implode(Role::getUsersRoles($student2)));
         $queryTable = $this->query(array('table' => 'sid',
             'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
         $expectedTable = array(
@@ -959,8 +1019,28 @@ class cssmstest extends unittestdatabase
             ->will($this->returnValue($this->enrolxml2));
         $sms->get_enrolments(2016);
         // Users should still be created.
-        $queryTable = $this->query(array('columns' => array('grade', 'surname', 'username', 'title', 'email', 'gender', 'roles', 'first_names', 'yearofstudy'),
-            'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
+        $queryTable = $this->query(
+            array(
+                'columns' => array(
+                    'grade',
+                    'surname',
+                    'username',
+                    'title',
+                    'email',
+                    'gender',
+                    'first_names',
+                    'yearofstudy'
+                ),
+                'table' => 'users',
+                'where' => array(
+                    array(
+                        'column' => 'username',
+                        'operator' => 'NOT IN',
+                        'value' => array('admin', 'cron', 'test1', 'test2')
+                    )
+                )
+            )
+        );
         $expectedTable = array(
             0 => array (
                 'grade' => 'University Lecturer',
@@ -969,7 +1049,6 @@ class cssmstest extends unittestdatabase
                 'title' => 'Mr',
                 'email' => 'staffy@example.com',
                 'gender' => 'Male',
-                'roles' => 'Staff',
                 'first_names' => 'staffy',
                 'yearofstudy' => 1
             ),
@@ -980,7 +1059,6 @@ class cssmstest extends unittestdatabase
                 'title' => 'Mr',
                 'email' => 'brzhs5@example.com',
                 'gender' => 'Male',
-                'roles' => 'Student',
                 'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ),
@@ -991,7 +1069,6 @@ class cssmstest extends unittestdatabase
                 'title' => 'Mr',
                 'email' => 'brzamh@example.com',
                 'gender' => 'Male',
-                'roles' => 'Student',
                 'first_names' => 'Daniel',
                 'yearofstudy' => 1
             )
@@ -999,6 +1076,9 @@ class cssmstest extends unittestdatabase
         $this->assertEquals($expectedTable, $queryTable);
         $student1 = \userutils::username_exists('brzhs5', $this->db);
         $student2 = \userutils::username_exists('brzamh', $this->db);
+        $this->assertEquals('Staff', implode(Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
+        $this->assertEquals('Student', implode(Role::getUsersRoles($student1)));
+        $this->assertEquals('Student', implode(Role::getUsersRoles($student2)));
         $queryTable = $this->query(array('table' => 'sid',
             'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
         $expectedTable = array(
@@ -1031,8 +1111,28 @@ class cssmstest extends unittestdatabase
             ->method('callws')
             ->will($this->returnValue($this->enrolxml3));
         $sms->get_enrolments(2016);
-        $queryTable = $this->query(array('columns' => array('grade', 'surname', 'username', 'title', 'email', 'gender', 'roles', 'first_names', 'yearofstudy'),
-            'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
+        $queryTable = $this->query(
+            array(
+                'columns' => array(
+                    'grade',
+                    'surname',
+                    'username',
+                    'title',
+                    'email',
+                    'gender',
+                    'first_names',
+                    'yearofstudy'
+                ),
+                'table' => 'users',
+                'where' => array(
+                    array(
+                        'column' => 'username',
+                        'operator' => 'NOT IN',
+                        'value' => array('admin', 'cron', 'test1', 'test2')
+                    )
+                )
+            )
+        );
         $expectedTable = array(
             0 => array (
                 'grade' => 'University Lecturer',
@@ -1041,7 +1141,6 @@ class cssmstest extends unittestdatabase
                 'title' => 'Mr',
                 'email' => 'staffy@example.com',
                 'gender' => 'Male',
-                'roles' => 'Staff',
                 'first_names' => 'staffy',
                 'yearofstudy' => 1
             ),
@@ -1052,7 +1151,6 @@ class cssmstest extends unittestdatabase
                 'title' => 'Mr',
                 'email' => 'brzhs5@example.com',
                 'gender' => 'Male',
-                'roles' => 'Student',
                 'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ),
@@ -1063,7 +1161,6 @@ class cssmstest extends unittestdatabase
                 'title' => 'Mr',
                 'email' => 'brzamh@example.com',
                 'gender' => 'Male',
-                'roles' => 'Student',
                 'first_names' => 'Daniel',
                 'yearofstudy' => 1
             )
@@ -1071,6 +1168,9 @@ class cssmstest extends unittestdatabase
         $this->assertEquals($expectedTable, $queryTable);
         $student1 = \userutils::username_exists('brzhs5', $this->db);
         $student2 = \userutils::username_exists('brzamh', $this->db);
+        $this->assertEquals('Staff', implode(Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
+        $this->assertEquals('Student', implode(Role::getUsersRoles($student1)));
+        $this->assertEquals('Student', implode(Role::getUsersRoles($student2)));
         $queryTable = $this->query(array('table' => 'sid',
             'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
         $expectedTable = array(
@@ -1116,7 +1216,7 @@ class cssmstest extends unittestdatabase
             ->method('callws')
             ->will($this->returnValue($this->enrolxml));
         $sms->get_enrolments(2016, '00001111');
-        $queryTable = $this->query(array('columns' => array('grade', 'surname', 'username', 'title', 'email', 'gender', 'roles', 'first_names', 'yearofstudy'),
+        $queryTable = $this->query(array('columns' => array('grade', 'surname', 'username', 'title', 'email', 'gender', 'first_names', 'yearofstudy'),
             'table' => 'users', 'where' => array(array('column' => 'username', 'operator' => 'NOT IN', 'value' => array('admin', 'cron', 'test1', 'test2')))));
         $expectedTable = array(
             0 => array (
@@ -1126,7 +1226,6 @@ class cssmstest extends unittestdatabase
                 'title' => 'Mr',
                 'email' => 'staffy@example.com',
                 'gender' => 'Male',
-                'roles' => 'Staff',
                 'first_names' => 'staffy',
                 'yearofstudy' => 1
             ),
@@ -1137,7 +1236,6 @@ class cssmstest extends unittestdatabase
                 'title' => 'Mr',
                 'email' => 'brzhs5@example.com',
                 'gender' => 'Male',
-                'roles' => 'Student',
                 'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ),
@@ -1148,7 +1246,6 @@ class cssmstest extends unittestdatabase
                 'title' => 'Mr',
                 'email' => 'brzamh@example.com',
                 'gender' => 'Male',
-                'roles' => 'Student',
                 'first_names' => 'Daniel',
                 'yearofstudy' => 1
             )
@@ -1156,6 +1253,9 @@ class cssmstest extends unittestdatabase
         $this->assertEquals($expectedTable, $queryTable);
         $student1 = \userutils::username_exists('brzhs5', $this->db);
         $student2 = \userutils::username_exists('brzamh', $this->db);
+        $this->assertEquals('Staff', implode(Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
+        $this->assertEquals('Student', implode(Role::getUsersRoles($student1)));
+        $this->assertEquals('Student', implode(Role::getUsersRoles($student2)));
         $queryTable = $this->query(array('table' => 'sid',
             'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
         $expectedTable = array(
