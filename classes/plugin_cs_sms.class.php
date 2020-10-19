@@ -195,7 +195,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
      * @params integer $session academic session to sync enrolments with
      * @params integer $externalid external system module id
      */
-    public function get_enrolments($session, $externalid = null)
+    public function get_enrolments($session = null, $externalid = null)
     {
         if (!$this->is_enabled() or !$this->is_configured('enrolment')) {
             return;
@@ -215,6 +215,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             } else {
                 $campuses = $this->campuslist;
             }
+            $yearutils = new \yearutils($this->config->db);
             foreach ($campuses as $campus) {
                 $args = array('academic_session' => $session, 'campus' => $campus);
                 // Targeted list of modules.
@@ -222,9 +223,16 @@ class plugin_cs_sms extends \plugins\plugins_sms
                     $targetmodules = modules_helper::get_target_modules($campus, $active);
                     foreach ($targetmodules as $eid) {
                         $args['externalid'] = $eid;
+                        // Get current academic session for module it non provided.
+                        if (is_null($args['academic_session'])) {
+                            $modid = \module_utils::get_id_from_externalid($eid, plugin_cs_sms::SMS, $this->config->db);
+                            $args['academic_session'] = $yearutils->get_current_session(
+                                \module_utils::getAcademicYearStart($modid)
+                            );
+                        }
                         $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
                         if ($response != '') {
-                            enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active, $args);
+                            enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $args['academic_session'], $this->validation, $active, $args);
                         }
                     }
                 } else {
@@ -232,9 +240,16 @@ class plugin_cs_sms extends \plugins\plugins_sms
                     if (!is_null($externalid)) {
                         $args['externalid'] = $externalid;
                     }
+                    // Get current academic session for module it non provided.
+                    if (is_null($args['academic_session'])) {
+                        $modid = \module_utils::get_id_from_externalid($eid, plugin_cs_sms::SMS, $this->config->db);
+                        $args['academic_session'] = $yearutils->get_current_session(
+                            \module_utils::getAcademicYearStart($modid)
+                        );
+                    }
                     $response = $this->callws('RogoEnrolments', self::CSVERSIONONE, $args);
                     if ($response != '') {
-                        enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $active, $args);
+                        enrolments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $args['academic_session'], $this->validation, $active, $args);
                     }
                 }
             }
