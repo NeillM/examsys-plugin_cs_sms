@@ -66,11 +66,14 @@ echo date('Y-m-d H:i:s') . " Modules Sync Complete..\n";
 // 4. Sync enrolments.
 $yearutils = new \yearutils($mysqli);
 $current_year = $yearutils->get_current_session();
-$sms->get_enrolments($current_year);
+$sms->get_enrolments();
 // Sync previous year enrolments.
 $prev_modules = \module_utils::get_sync_previous_year_modules($sms::SMS);
 foreach ($prev_modules as $module) {
-    $sms->get_enrolments($current_year - 1, $module);
+    // Sync 'previous' year.
+    $modid = \module_utils::get_id_from_externalid($module, $sms::SMS, $mysqli);
+    $session = $yearutils->get_previous_session(\module_utils::getAcademicYearStart($modid));
+    $sms->get_enrolments($session, $module);
 }
 echo date('Y-m-d H:i:s') . " Enrolments Sync Complete..\n";
 // 5. Sync assessments.
