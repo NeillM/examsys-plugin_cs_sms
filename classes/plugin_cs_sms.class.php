@@ -85,7 +85,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
         $langpack = new \langpack();
         $this->strings = $langpack->get_all_strings($this->langcomponent);
     }
-    
+
     /**
      * Is the plugin function configured
      * @param stiring $function name of function
@@ -99,7 +99,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
         }
         return false;
     }
-    
+
     /**
      * Is this plugin enabled
      * @return boolean true if enabled
@@ -128,7 +128,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
         $this->validation = $this->config->get_setting($this->plugin, 'validate_schema');
         $this->gradebookdir = $this->config->get_setting($this->plugin, 'gradebooklocation');
     }
-    
+
     /**
      * Call web service to retrieve information.
      * @param string $type type of web service to call i.e. RogoProgPlan for courses
@@ -256,7 +256,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             unlink($lockfile);
         }
     }
-    
+
     /**
      * Update module in an academic session
      * Updates module details and enrolments
@@ -271,7 +271,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
         $this->get_modules($externalid, $session);
         $this->get_enrolments($session, $externalid);
     }
-    
+
     /**
      * Get faculties/schools.
      */
@@ -305,7 +305,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             unlink($lockfile);
         }
     }
-    
+
     /**
      * Get courses
      */
@@ -337,7 +337,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             unlink($lockfile);
         }
     }
-    
+
     /**
      * Get modules
      * @params integer $externalid external system module id
@@ -389,7 +389,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             unlink($lockfile);
         }
     }
-        
+
     /**
      * Write a gradebook for an academic session to a file to be processed by campus solutions.
      * @param integer $session academic session to publish gradebook for
@@ -422,7 +422,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             return false;
         }
     }
-    
+
     /**
      * Check if faculty/school import is supported by the plugin
      * @return array|bool import url and translation strings, false if faculty/school import not supported
@@ -435,7 +435,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             return false;
         }
     }
-    
+
     /**
      * Check if course import is supported by the plugin
      * @return array|bool import url and translation strings, false  if course import not supported
@@ -448,7 +448,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             return false;
         }
     }
-    
+
     /**
      * Check if enrolment import is supported by the plugin
      * @return array|bool false if enrolment import not supported
@@ -461,7 +461,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             return false;
         }
     }
-    
+
     /**
      * Check if assessment import is supported by the plugin
      * @return array|bool import url and translation strings, false  if assessment import not supported
@@ -474,7 +474,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             return false;
         }
     }
-    
+
     /**
      * Get name of sms
      * @return string name of sms
