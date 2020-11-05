@@ -40,7 +40,12 @@ class cssmstest extends unittestdatabase
     /**
      * @var array Storage for school data in tests
      */
-    private $school1, $school2;
+    private $school1;
+
+    /**
+     * @var array Storage for school data in tests
+     */
+    private $school2;
 
     /**
      * @var integer id for user generated in datageneration
