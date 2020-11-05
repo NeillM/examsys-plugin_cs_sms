@@ -33,13 +33,13 @@ class gradebook_helper
      * Campus Solutions Result status type 'imported'
      * @var string
      */
-    const RESULTSTATUS_IMPORTED = '07-Imported';
+    public const RESULTSTATUS_IMPORTED = '07-Imported';
 
     /**
      * Campus Solutions Result type 'AM'
      * @var string
      */
-    const RESULTTYPE_AM = 'AM Result';
+    public const RESULTTYPE_AM = 'AM Result';
 
     /**
      * Gradebook object

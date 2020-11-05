@@ -69,13 +69,13 @@ class plugin_cs_sms extends \plugins\plugins_sms
      * Name of external student management system.
      * @var string
      */
-    const SMS = 'Campus Solutions';
+    public const SMS = 'Campus Solutions';
 
     /**
      * Campus Solutions web service version.
      * @var string
      */
-    const CSVERSIONONE = 'v1';
+    public const CSVERSIONONE = 'v1';
 
     /**
      * Set the availbe land pack strings for the plugin
