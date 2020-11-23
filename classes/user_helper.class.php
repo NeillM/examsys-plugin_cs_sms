@@ -216,10 +216,10 @@ class user_helper
             case 'DC':
             case 'DE':
             case 'DM':
-                $role = 'Left';
+                $role = 'left';
                 break;
             case 'CM':
-                $role = 'Graduate';
+                $role = 'graduate';
                 break;
             case 'AD':
             case 'AP':

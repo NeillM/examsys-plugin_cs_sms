@@ -408,7 +408,7 @@ class cssmstest extends unittestdatabase
                         <Gender>Male</Gender>
                         <PlanID>M6UNUTRN</PlanID>
                         <YearOfStudy>01</YearOfStudy>
-                        <Status>Enrolled</Status>
+                        <Status>AC</Status>
                         <Role>Student</Role>
                     </User>
                 </Membership>
@@ -427,7 +427,7 @@ class cssmstest extends unittestdatabase
                         <Gender>Male</Gender>
                         <PlanID>M6UNUTRN</PlanID>
                         <YearOfStudy>01</YearOfStudy>
-                        <Status>Enrolled</Status>
+                        <Status>AC</Status>
                         <Role>Student</Role>
                     </User>
                     <User>
@@ -440,7 +440,7 @@ class cssmstest extends unittestdatabase
                         <Gender>Male</Gender>
                         <PlanID>M6UNUTRN</PlanID>
                         <YearOfStudy>01</YearOfStudy>
-                        <Status>Enrolled</Status>
+                        <Status>AC</Status>
                         <Role>Student</Role>
                     </User>
                     <User>
@@ -453,7 +453,7 @@ class cssmstest extends unittestdatabase
                         <Gender>Male</Gender>
                         <PlanID>M6UCVENG</PlanID>
                         <YearOfStudy>01</YearOfStudy>
-                        <Status>Enrolled</Status>
+                        <Status>AC</Status>
                     </User>
                     <User>
                         <UserId>10000670</UserId>
@@ -462,7 +462,7 @@ class cssmstest extends unittestdatabase
                         <Username>brzamh</Username>
                         <PlanID>M6UCVENG</PlanID>
                         <YearOfStudy>01</YearOfStudy>
-                        <Status>Enrolled</Status>
+                        <Status>AC</Status>
                         <Role>Student</Role>
                     </User>
                     <User>
@@ -475,7 +475,7 @@ class cssmstest extends unittestdatabase
                         <Gender>Male</Gender>
                         <PlanID>M6UCVENG</PlanID>
                         <YearOfStudy>01</YearOfStudy>
-                        <Status>Enrolled</Status>
+                        <Status>AC</Status>
                         <Role>Student</Role>
                     </User>
                 </Membership>
@@ -502,7 +502,7 @@ class cssmstest extends unittestdatabase
                         <Gender>Male</Gender>
                         <PlanID>M6UNUTRN</PlanID>
                         <YearOfStudy>01</YearOfStudy>
-                        <Status>Enrolled</Status>
+                        <Status>AC</Status>
                         <Role>Student</Role>
                     </User>
                     <User>
@@ -515,7 +515,7 @@ class cssmstest extends unittestdatabase
                         <Gender>Male</Gender>
                         <PlanID>M6UCVENG</PlanID>
                         <YearOfStudy>01</YearOfStudy>
-                        <Status>Enrolled</Status>
+                        <Status>AC</Status>
                         <Role>Student</Role>
                     </User>
                 </Membership>
@@ -548,7 +548,7 @@ class cssmstest extends unittestdatabase
                         <Gender>Male</Gender>
                         <PlanID>M6UNUTRN</PlanID>
                         <YearOfStudy>01</YearOfStudy>
-                        <Status>Enrolled</Status>
+                        <Status>AC</Status>
                         <Role>Student</Role>
                     </User>
                     <User>
@@ -561,7 +561,7 @@ class cssmstest extends unittestdatabase
                         <Gender>Male</Gender>
                         <PlanID>M6UCVENG</PlanID>
                         <YearOfStudy>01</YearOfStudy>
-                        <Status>Enrolled</Status>
+                        <Status>DM</Status>
                         <Role>Student</Role>
                     </User>
                 </Membership>
@@ -1102,7 +1102,9 @@ class cssmstest extends unittestdatabase
     }
 
     /**
-     * Test get enrolments with session only (all enrolments) - skip module with missing members nodes
+     * Test get enrolments with session only (all enrolments)
+     * - skip module with missing members nodes
+     * - do not enrol left student
      * @group sms
      * @group plugin_cs_sms
      */
@@ -1159,46 +1161,25 @@ class cssmstest extends unittestdatabase
                 'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ),
-            2 => array (
-                'grade' => 'M6UCVENG',
-                'surname' => 'Watson',
-                'username' => 'brzamh',
-                'title' => 'Mr',
-                'email' => 'brzamh@example.com',
-                'gender' => 'Male',
-                'first_names' => 'Daniel',
-                'yearofstudy' => 1
-            )
         );
         $this->assertEquals($expectedTable, $queryTable);
         $student1 = \userutils::username_exists('brzhs5', $this->db);
-        $student2 = \userutils::username_exists('brzamh', $this->db);
         $this->assertEquals('Staff', implode(Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
         $this->assertEquals('Student', implode(Role::getUsersRoles($student1)));
-        $this->assertEquals('Student', implode(Role::getUsersRoles($student2)));
         $queryTable = $this->query(array('table' => 'sid',
-            'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
+            'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1)))));
         $expectedTable = array(
             0 => array(
                 'student_id' => '10000667',
                 'userID' => $student1
             ),
-            1 => array(
-                'student_id' => '10000670',
-                'userID' => $student2
-            ),
         );
         $this->assertEquals($expectedTable, $queryTable);
         $queryTable = $this->query(array('columns' => array('userID', 'idMod', 'calendar_year'), 'table' => 'modules_student',
-            'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1, $student2)))));
+            'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1)))));
         $expectedTable = array(
             0 => array (
                 'userID' => $student1,
-                'idMod' => $this->mod['id'],
-                'calendar_year' => 2016
-            ),
-            1 => array (
-                'userID' => $student2,
                 'idMod' => $this->mod['id'],
                 'calendar_year' => 2016
             )
