@@ -133,15 +133,15 @@ class user_helpertest extends unittestdatabase
     public function test_map_student_status()
     {
         // User Cancelled.
-        $this->assertEquals('Left', user_helper::map_student_status('CN', $this->uid1, $this->db));
+        $this->assertEquals('left', user_helper::map_student_status('CN', $this->uid1, $this->db));
         // User Discontinued.
-        $this->assertEquals('Left', user_helper::map_student_status('DC', $this->uid2, $this->db));
+        $this->assertEquals('left', user_helper::map_student_status('DC', $this->uid2, $this->db));
         // User Deceased.
-        $this->assertEquals('Left', user_helper::map_student_status('DE', $this->uid3, $this->db));
+        $this->assertEquals('left', user_helper::map_student_status('DE', $this->uid3, $this->db));
         // User Dismissed.
-        $this->assertEquals('Left', user_helper::map_student_status('DM', $this->uid4, $this->db));
+        $this->assertEquals('left', user_helper::map_student_status('DM', $this->uid4, $this->db));
         // Completed Program.
-        $this->assertEquals('Graduate', user_helper::map_student_status('CM', $this->uid5, $this->db));
+        $this->assertEquals('graduate', user_helper::map_student_status('CM', $this->uid5, $this->db));
         // User Admitted.
         $this->assertEquals('Suspended', user_helper::map_student_status('AD', $this->uid6, $this->db));
         // User Applicant.
