@@ -1161,11 +1161,23 @@ class cssmstest extends unittestdatabase
                 'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ),
+            2 => array (
+                'grade' => 'M6UCVENG',
+                'surname' => 'Watson',
+                'username' => 'brzamh',
+                'title' => 'Mr',
+                'email' => 'brzamh@example.com',
+                'gender' => 'Male',
+                'first_names' => 'Daniel',
+                'yearofstudy' => 1
+            ),
         );
         $this->assertEquals($expectedTable, $queryTable);
         $student1 = \userutils::username_exists('brzhs5', $this->db);
+        $student2 = \userutils::username_exists('brzamh', $this->db);
         $this->assertEquals('Staff', implode(Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
         $this->assertEquals('Student', implode(Role::getUsersRoles($student1)));
+        $this->assertEquals('left', implode(Role::getUsersRoles($student2)));
         $queryTable = $this->query(array('table' => 'sid',
             'where' => array(array('column' => 'userID', 'operator' => 'IN', 'value' => array($student1)))));
         $expectedTable = array(
