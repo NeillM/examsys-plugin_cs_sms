@@ -132,19 +132,24 @@ class modules_helper
      * Get campus solutions campus code from rogo module
      *
      * @param string $externalid campus id for module
+     * @thows \Exception
      * @return string campus code
      */
     public static function get_campus_code($externalid)
     {
         $config = \Config::get_instance();
         $details = \module_utils::get_full_details('external', $externalid, $config->db, plugin_cs_sms::SMS);
-        // Check for Campus Solution modules codes and map campus. Default to UK(U).
-        if (preg_match('/^[A-Z]{4}[F1-5][0-9]{3}_UNNC$/', $details['moduleid'])) {
-            $campuscode = 'C';
-        } elseif (preg_match('/^[A-Z]{4}[F1-5][0-9]{3}_UNMC$/', $details['moduleid'])) {
-            $campuscode = 'M';
+        if (is_array($details)) {
+            // Check for Campus Solution modules codes and map campus. Default to UK(U).
+            if (preg_match('/^[A-Z]{4}[F1-5][0-9]{3}_UNNC$/', $details['moduleid'])) {
+                $campuscode = 'C';
+            } elseif (preg_match('/^[A-Z]{4}[F1-5][0-9]{3}_UNMC$/', $details['moduleid'])) {
+                $campuscode = 'M';
+            } else {
+                $campuscode = 'U';
+            }
         } else {
-            $campuscode = 'U';
+            throw new \Exception('Module does not exist in system.');
         }
         return $campuscode;
     }
