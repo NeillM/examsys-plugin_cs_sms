@@ -54,7 +54,7 @@ class xml_helper
         }
         return false;
     }
-    
+
     /**
      * Check if xml validates against schema
      * @param DOMDocument $data xml response

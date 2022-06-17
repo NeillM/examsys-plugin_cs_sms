@@ -102,7 +102,7 @@ class faculties_helper
                 $currentschools = array_merge($currentschools, school_helper::get_schools($memberschools, $externalid, $db, $userid, $logfile));
             }
         }
-        
+
         return array($currentfaculties, $currentschools);
     }
 
