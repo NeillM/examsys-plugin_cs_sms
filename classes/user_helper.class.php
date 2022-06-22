@@ -139,7 +139,7 @@ class user_helper
         }
         return $gender;
     }
-    
+
     /**
      * Function to map title supplied by CS to title in Rogo
      * @param string $cstitle title in CS
@@ -155,7 +155,7 @@ class user_helper
         }
         return $title;
     }
-    
+
     /**
      * Function to map title to gender
      * @param string $csgender gender in CS
@@ -183,7 +183,7 @@ class user_helper
         }
         return $gender;
     }
-    
+
     /**
      * Function to map status supplied by CS to role in Rogo
      * @param string $csstatus status in CS

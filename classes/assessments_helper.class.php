@@ -35,7 +35,7 @@ class assessments_helper
      * @var array $validtypes
      */
     private static $validtypes = array('SUMMATIVE');
-    
+
     /**
      * Process assessment WS response
      * @param string xml $response xml from enrolment WS
@@ -184,7 +184,7 @@ class assessments_helper
         }
         return $userid;
     }
-    
+
     /**
      * Get owner from node
      * @param DOMNode $usernode xml for user
@@ -202,7 +202,7 @@ class assessments_helper
         }
         return \UserUtils::username_exists($username, $db);
     }
-     
+
     /**
      * Process modules node
      * @param DOMNodeList $modulenode xml for modules
