@@ -33,9 +33,9 @@ class log_helper
      * Log to application error
      * @param integer $userid user to log error to
      * @param array $string error string
-     * @param integer $errline line web service was called
+     * @param int $errorline line web service was called
+     * @param \mysqli $db db connection
      * @param array $args arguments used to call web service
-     * @param mysqli $db db connection
      */
     public static function log_app_warning($userid, $string, $errorline, $db, $args)
     {

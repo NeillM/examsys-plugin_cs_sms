@@ -34,7 +34,7 @@ class faculties_helper
      * @param string xml $response xml from faculty WS
      * @param integer $userid user to record actions under
      * @param array $strings lnaguage strings
-     * @param mysqli $db db connection
+     * @param \mysqli $db db connection
      * @param string $logfile log file location
      * @param boolean $validation validate xml response against schema
      * @param array $args arguments used to call web service
@@ -113,7 +113,7 @@ class faculties_helper
      * @param array $currentfaculties of faculty ids in CS
      * @param string $logfile log file location
      * @param integer $userid user to record actions under
-     * @param mysqli $db db connection
+     * @param \mysqli $db db connection
      */
     public static function delete_faculties_schools($currentschools, $currentfaculties, $logfile, $userid, $db)
     {

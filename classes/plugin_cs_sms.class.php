@@ -88,7 +88,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
 
     /**
      * Is the plugin function configured
-     * @param stiring $function name of function
+     * @param string $function name of function
      * @return boolean true if configured
      */
     private function is_configured($function)
@@ -115,7 +115,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
 
     /**
      * Constructor
-     * @param mysqli $mysqli db connection
+     * @param \mysqli $mysqli db connection
      * @param integer $userid rogo id of user running import
      */
     public function __construct($userid = 0)

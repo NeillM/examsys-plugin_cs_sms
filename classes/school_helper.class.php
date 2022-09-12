@@ -31,9 +31,9 @@ class school_helper
 {
     /**
      * Parse the school members node of the facultylist xml and create/update schools where required
-     * @param DOMNodeList $schoolnode xml for schools
+     * @param \DOMNodeList $schoolnode xml for schools
      * @param string $facultyextid external system id of faculty
-     * @param mysqli $db db connection
+     * @param \mysqli $db db connection
      * @param integer $userid user to log action to
      * @param string $logfile log file location
      * @return array list of schools in faculty
