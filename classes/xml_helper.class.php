@@ -75,5 +75,6 @@ class xml_helper
         }
         // Disable user error handling.
         libxml_use_internal_errors(false);
+        return true;
     }
 }
