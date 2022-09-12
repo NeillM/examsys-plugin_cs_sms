@@ -59,10 +59,10 @@ HELP;
 }
 
 set_time_limit(0);
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/load_config.php';
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/custom_error_handler.inc';
+require_once dirname(__FILE__, 5) . '/include/load_config.php';
+require_once dirname(__FILE__, 5) . '/include/custom_error_handler.inc';
 // Start class autoloading.
-require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/include/autoload.inc.php';
+require_once dirname(__FILE__, 5) . '/include/autoload.inc.php';
 autoloader::init();
 $configObject = \Config::get_instance();
 $notice = UserNotices::get_instance();
