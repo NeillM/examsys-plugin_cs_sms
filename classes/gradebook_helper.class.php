@@ -43,7 +43,7 @@ class gradebook_helper
 
     /**
      * Gradebook object
-     * @var gradebook
+     * @var \gradebook
      */
     private static $gradebook;
 
@@ -85,7 +85,7 @@ class gradebook_helper
     /**
      * Get gradebook gradebook for paper
      * @param integer $paper_id paper identifier
-     * @param mysqli $db db connection
+     * @param \mysqli $db db connection
      * @return array|bool actvity id and gradebook or false if non
      */
     private static function get_paper_gradebook($paper_id, $db)

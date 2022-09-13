@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
 
+use plugins\SMS\plugin_cs_sms\plugin_cs_sms;
 use testing\unittest\unittestdatabase;
 
 /**
@@ -575,8 +576,8 @@ class cssmstest extends unittestdatabase
      */
     public function test_get_assessments()
     {
-        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
-            ->setMethods(array('callws'))
+        $sms = $this->getMockBuilder(plugin_cs_sms::class)
+            ->onlyMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
             ->getMock();
         $sms->expects($this->once())
@@ -642,8 +643,8 @@ class cssmstest extends unittestdatabase
      */
     public function test_get_faculties()
     {
-        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
-            ->setMethods(array('callws'))
+        $sms = $this->getMockBuilder(plugin_cs_sms::class)
+            ->onlyMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
             ->getMock();
         $sms->expects($this->once())
@@ -710,8 +711,8 @@ class cssmstest extends unittestdatabase
     public function test_get_faculties_missing_schools()
     {
         $numschools = $this->rowcount('schools');
-        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
-            ->setMethods(array('callws'))
+        $sms = $this->getMockBuilder(plugin_cs_sms::class)
+            ->onlyMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
             ->getMock();
         $sms->expects($this->once())
@@ -747,8 +748,8 @@ class cssmstest extends unittestdatabase
      */
     public function test_get_courses()
     {
-        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
-            ->setMethods(array('callws'))
+        $sms = $this->getMockBuilder(plugin_cs_sms::class)
+            ->onlyMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
             ->getMock();
         $sms->expects($this->once())
@@ -789,8 +790,8 @@ class cssmstest extends unittestdatabase
      */
     public function test_get_modules()
     {
-        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
-            ->setMethods(array('callws'))
+        $sms = $this->getMockBuilder(plugin_cs_sms::class)
+            ->onlyMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
             ->getMock();
         $sms->expects($this->once())
@@ -849,8 +850,8 @@ class cssmstest extends unittestdatabase
      */
     public function test_get_module()
     {
-        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
-            ->setMethods(array('callws'))
+        $sms = $this->getMockBuilder(plugin_cs_sms::class)
+            ->onlyMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
             ->getMock();
         $sms->expects($this->once())
@@ -909,8 +910,8 @@ class cssmstest extends unittestdatabase
      */
     public function test_get_enrolments_all()
     {
-        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
-            ->setMethods(array('callws'))
+        $sms = $this->getMockBuilder(plugin_cs_sms::class)
+            ->onlyMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
             ->getMock();
         $sms->expects($this->once())
@@ -1015,8 +1016,8 @@ class cssmstest extends unittestdatabase
     public function test_get_enrolments_all_missing_nodes()
     {
         $numenrolments = $this->rowcount('modules_student');
-        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
-            ->setMethods(array('callws'))
+        $sms = $this->getMockBuilder(plugin_cs_sms::class)
+            ->onlyMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
             ->getMock();
         $sms->expects($this->once())
@@ -1110,8 +1111,8 @@ class cssmstest extends unittestdatabase
      */
     public function test_get_enrolments_all_skip_missing_members()
     {
-        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
-            ->setMethods(array('callws'))
+        $sms = $this->getMockBuilder(plugin_cs_sms::class)
+            ->onlyMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
             ->getMock();
         $sms->expects($this->once())
@@ -1206,8 +1207,8 @@ class cssmstest extends unittestdatabase
      */
     public function test_get_enrolments()
     {
-        $sms = $this->getMockBuilder('plugins\SMS\plugin_cs_sms\plugin_cs_sms')
-            ->setMethods(array('callws'))
+        $sms = $this->getMockBuilder(plugin_cs_sms::class)
+            ->onlyMethods(array('callws'))
             ->setConstructorArgs(array($this->db, 0))
             ->getMock();
         $sms->expects($this->once())
@@ -1349,7 +1350,7 @@ class cssmstest extends unittestdatabase
     {
         $sms = new plugins\SMS\plugin_cs_sms\plugin_cs_sms();
         $sms->install($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
-        $this->assertEquals($sms->get_installed_version(), $sms->get_plugin_version('plugin_cs_sms'));
+        $this->assertEquals($sms->get_installed_version(), $sms->get_plugin_version());
         $sms->uninstall($this->config->get('cfg_phpunit_db_user'), $this->config->get('cfg_phpunit_db_password'));
     }
 

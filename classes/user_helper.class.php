@@ -31,11 +31,11 @@ class user_helper
 {
     /**
      * Parse the user node of the membership xml and create/update users as required
-     * @param DOMNodeList $usernode xml for users
+     * @param \DOMNodeList $usernode xml for users
      * @param string $moduleextid external system module id
      * @param integer $userid user to log action to
      * @param string $logfile log file location
-     * @param mysqli $db db connection
+     * @param \mysqli $db db connection
      * @param array $userupdated list of users already updated so we can skip
      * @return array list of enrolled users
      */
@@ -188,7 +188,7 @@ class user_helper
      * Function to map status supplied by CS to role in Rogo
      * @param string $csstatus status in CS
      * @param integer $userid users rogo internal id
-     * @param mysqli $db database connection
+     * @param \mysqli $db database connection
      * @return string|null rogo role or null if not mapped
      */
     public static function map_student_status($csstatus, $userid, $db)

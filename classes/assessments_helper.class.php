@@ -41,7 +41,7 @@ class assessments_helper
      * @param string xml $response xml from enrolment WS
      * @param integer $userid user to record actions under
      * @param array $strings lnaguage strings
-     * @param mysqli $db db connection
+     * @param \mysqli $db db connection
      * @param string $logfile log file location
      * @param integer $session academic session for enrolments
      * @param boolean $validation validate xml response against schema
@@ -162,8 +162,8 @@ class assessments_helper
 
     /**
      * Process owners node
-     * @param DOMNodeList $ownernode xml for owners
-     * @param mysqli $db db connection
+     * @param \DOMNodeList $ownernode xml for owners
+     * @param \mysqli $db db connection
      * @return mixed user rogo id or false if not found, null if missing.
      */
     private static function process_owner($ownernode, $db)
@@ -187,8 +187,8 @@ class assessments_helper
 
     /**
      * Get owner from node
-     * @param DOMNode $usernode xml for user
-     * @param mysqli $db db connection
+     * @param \DOMNode $usernode xml for user
+     * @param \mysqli $db db connection
      * @return mixed user rogo id or false if not found, null if missing.
      */
     private static function get_owner($usernode, $db)
@@ -205,7 +205,7 @@ class assessments_helper
 
     /**
      * Process modules node
-     * @param DOMNodeList $modulenode xml for modules
+     * @param \DOMNodeList $modulenode xml for modules
      * @return array list of module external ids.
      */
     private static function process_module($modulenode)

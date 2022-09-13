@@ -34,7 +34,7 @@ class enrolments_helper
      * @param string xml $response xml from enrolment WS
      * @param integer $userid user to record actions under
      * @param array $strings lnaguage strings
-     * @param mysqli $db db connection
+     * @param \mysqli $db db connection
      * @param string $logfile log file location
      * @param integer $session academic session for enrolments
      * @param boolean $validation validate xml response against schema

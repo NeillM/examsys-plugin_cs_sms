@@ -28,8 +28,6 @@ use plugins\SMS\plugin_cs_sms\modules_helper as modules_helper;
  */
 class modules_helpertest extends UnitTest
 {
-
-
     /**
      * Test module mapping
      * @group sms

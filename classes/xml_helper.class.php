@@ -31,9 +31,9 @@ class xml_helper
 {
     /**
      * Check if xml response is an error.
-     * @param DOMDocument $data xml response
+     * @param \DOMDocument $data xml response
      * @param integer $userid user used to log error to
-     * @param mysqli $db db connection
+     * @param \mysqli $db db connection
      * @param string $ws name of web service called
      * @param array $args arguments used to call web service
      * @return boolean true on error
@@ -57,10 +57,10 @@ class xml_helper
 
     /**
      * Check if xml validates against schema
-     * @param DOMDocument $data xml response
+     * @param \DOMDocument $data xml response
      * @param string $schemaname name of schema file
      * @param integer $userid user used to log error to
-     * @param mysqli $db db connection
+     * @param \mysqli $db db connection
      * @return boolean true if valid xml
      */
     public static function validate($data, $schemaname, $userid, $strings, $db)
@@ -75,5 +75,6 @@ class xml_helper
         }
         // Disable user error handling.
         libxml_use_internal_errors(false);
+        return true;
     }
 }

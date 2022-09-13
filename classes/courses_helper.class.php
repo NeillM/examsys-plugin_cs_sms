@@ -34,7 +34,7 @@ class courses_helper
      * @param string xml $response xml from course WS
      * @param integer $userid user to record actions under
      * @param array $strings lnaguage strings
-     * @param mysqli $db db connection
+     * @param \mysqli $db db connection
      * @param string $logfile log file location
      * @param boolean $validation validate xml response against schema
      * @param array $args arguments used to call web service
@@ -105,7 +105,7 @@ class courses_helper
      * @param array $currentplans list of course ids in CS
      * @param string $logfile log file location
      * @param integer $userid user to record actions under
-     * @param mysqli $db db connection
+     * @param \mysqli $db db connection
      */
     public static function delete_courses($currentplans, $logfile, $userid, $db)
     {
