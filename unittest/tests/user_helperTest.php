@@ -1,19 +1,19 @@
 <?php
 
-// This file is part of Rogō
+// This file is part of ExamSys
 //
-// Rogō is free software: you can redistribute it and/or modify
+// ExamSys is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Rogō is distributed in the hope that it will be useful,
+// ExamSys is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
+// along with ExamSys.  If not, see <http://www.gnu.org/licenses/>.
 
 use testing\unittest\unittestdatabase;
 use plugins\SMS\plugin_cs_sms\user_helper as user_helper;
@@ -156,7 +156,7 @@ class user_helpertest extends unittestdatabase
         $this->assertEquals('Suspended', user_helper::map_student_status('WT', $this->uid11, $this->db));
         // User Active.
         $this->assertEquals('Student', user_helper::map_student_status('AC', $this->uid12, $this->db));
-        // User Locked interanlly in Rogo
+        // User Locked interanlly in ExamSys
         $this->assertEquals('Locked', user_helper::map_student_status('AC', $this->uid13, $this->db));
     }
 
