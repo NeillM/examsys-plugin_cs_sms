@@ -1,19 +1,19 @@
 <?php
 
-// This file is part of Rogō
+// This file is part of ExamSys
 //
-// Rogō is free software: you can redistribute it and/or modify
+// ExamSys is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Rogō is distributed in the hope that it will be useful,
+// ExamSys is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
+// along with ExamSys.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace plugins\SMS\plugin_cs_sms;
 
@@ -60,7 +60,7 @@ class modules_helper
         $mm = new \api\modulemanagement($config->db);
         foreach ($modules as $module) {
             $xpath = new \DOMXPath($module->ownerDocument);
-            // The ModuleID in Campus Solutions is the Module External ID in Rogo.
+            // The ModuleID in Campus Solutions is the Module External ID in ExamSys.
             try {
                 $externalid = $xpath->query('./ModuleID', $module)->item(0)->nodeValue;
             } catch (\exception $e) {
@@ -98,10 +98,10 @@ class modules_helper
     }
 
     /**
-     * Map campus solutions module code to rogo module code
-     * Rogo appends campus name to module code for China and Malaysia
+     * Map campus solutions module code to ExamSys module code
+     * ExamSys appends campus name to module code for China and Malaysia
      * @param string $sourcecode module code return by web service
-     * @return string module code to store in rogo
+     * @return string module code to store in ExamSys
      */
     public static function module_campus_mapping($sourcecode)
     {
@@ -129,7 +129,7 @@ class modules_helper
     }
 
     /**
-     * Get campus solutions campus code from rogo module
+     * Get campus solutions campus code from ExamSys module
      *
      * @param string $externalid campus id for module
      * @thows \Exception
@@ -180,7 +180,7 @@ class modules_helper
     }
 
     /**
-     * Get modules in Rogo that we want to action
+     * Get modules in ExamSys that we want to action
      * @param string $campus university campus
      * @param boolean $active filter by active modules
      * @return array modules

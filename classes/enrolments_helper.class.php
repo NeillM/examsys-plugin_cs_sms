@@ -1,19 +1,19 @@
 <?php
 
-// This file is part of Rogō
+// This file is part of ExamSys
 //
-// Rogō is free software: you can redistribute it and/or modify
+// ExamSys is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Rogō is distributed in the hope that it will be useful,
+// ExamSys is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Rogō.  If not, see <http://www.gnu.org/licenses/>.
+// along with ExamSys.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace plugins\SMS\plugin_cs_sms;
 
@@ -65,7 +65,7 @@ class enrolments_helper
         foreach ($enrolments as $enrolment) {
             $currentenrols = array();
             $xpath = new \DOMXPath($enrolment->ownerDocument);
-            // The ModuleID in Campus Solutions is the Module External ID in Rogo.
+            // The ModuleID in Campus Solutions is the Module External ID in ExamSys.
             try {
                 $externalid = $xpath->query('./ModuleID', $enrolment)->item(0)->nodeValue;
             } catch (\exception $e) {
@@ -101,7 +101,7 @@ class enrolments_helper
                     $params['session'] = $session;
                     // Enrol.
                     foreach ($currentenrols[$externalid] as $userexternalid => $username) {
-                        // Student IDs in Rogo are User IDs in Campus Solutions.
+                        // Student IDs in ExamSys are User IDs in Campus Solutions.
                         $params['studentid'] = $userexternalid;
                         try {
                             $params['session'] = $xpath->query('./Year', $enrolment)->item(0)->nodeValue;
