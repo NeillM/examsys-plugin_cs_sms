@@ -124,7 +124,8 @@ class plugin_cs_sms extends \plugins\plugins_sms
         $this->set_lang_strings();
         $this->logdir = $this->config->get_setting($this->plugin, 'loglocation');
         $this->userid = $userid;
-        $this->campuslist = explode(',', ($this->config->get_setting($this->plugin, 'campuslist')));
+        $campuslist = $this->config->get_setting($this->plugin, 'campuslist') ?? '';
+        $this->campuslist = explode(',', ($campuslist));
         $this->validation = $this->config->get_setting($this->plugin, 'validate_schema');
         $this->gradebookdir = $this->config->get_setting($this->plugin, 'gradebooklocation');
     }
