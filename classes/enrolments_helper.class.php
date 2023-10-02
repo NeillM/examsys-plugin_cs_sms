@@ -82,77 +82,87 @@ class enrolments_helper
                 }
                 // Enrol / Unerol users.
                 $details = \module_utils::get_full_details('external', $externalid, $db, plugin_cs_sms::SMS);
+
+                if ($details === false) {
+                    // The module does not exist in ExamSys, so skip enrolling this user..
+                    continue;
+                }
+
                 $moduleid = $details['idMod'];
-                $activemodule = true;
+                $process = true;
                 // Check if only syncing active modules.
                 if ($active) {
-                    $activemodule = $details['active'];
+                    $process = $details['active'];
                 }
-                // We only enrol/unenrol if the module exists in rogo.
-                if ($moduleid && $activemodule) {
-                    $currentenrols = user_helper::get_users($usermembership, $externalid, $userid, $logfile, $db, $userupdated);
-                    $smsimports[$moduleid]['enrolcount'] = 0;
-                    $smsimports[$moduleid]['enrolusers'] = '';
-                    $smsimports[$moduleid]['unenrolcount'] = 0;
-                    $smsimports[$moduleid]['unenrolusers'] = '';
-                    $params = array();
-                    $params['moduleextid'] = $externalid;
-                    $params['moduleextsys'] = plugin_cs_sms::SMS;
-                    $params['session'] = $session;
-                    // Enrol.
-                    foreach ($currentenrols[$externalid] as $userexternalid => $username) {
-                        // Student IDs in ExamSys are User IDs in Campus Solutions.
-                        $params['studentid'] = $userexternalid;
-                        try {
-                            $params['session'] = $xpath->query('./Year', $enrolment)->item(0)->nodeValue;
-                        } catch (\exception $e) {
-                            // If session not provided no enrolments can take place.
-                            break;
-                        }
-                        $params['attempt'] = 1;
+
+                if (!$process) {
+                    // We should not process enrolments for this module, because it is not active
+                    // while we are only processing enrolments for active modules.
+                    continue;
+                }
+
+                $currentenrols = user_helper::get_users($usermembership, $externalid, $userid, $logfile, $db, $userupdated);
+                $smsimports[$moduleid]['enrolcount'] = 0;
+                $smsimports[$moduleid]['enrolusers'] = '';
+                $smsimports[$moduleid]['unenrolcount'] = 0;
+                $smsimports[$moduleid]['unenrolusers'] = '';
+                $params = array();
+                $params['moduleextid'] = $externalid;
+                $params['moduleextsys'] = plugin_cs_sms::SMS;
+                $params['session'] = $session;
+                // Enrol.
+                foreach ($currentenrols[$externalid] as $userexternalid => $username) {
+                    // Student IDs in ExamSys are User IDs in Campus Solutions.
+                    $params['studentid'] = $userexternalid;
+                    try {
+                        $params['session'] = $xpath->query('./Year', $enrolment)->item(0)->nodeValue;
+                    } catch (\exception $e) {
+                        // If session not provided no enrolments can take place.
+                        break;
+                    }
+                    $params['attempt'] = 1;
+                    $params['nodeid'] = $node;
+                    $node++;
+                    $response = $mm->enrol($params, $userid);
+                    log_helper::log('Enrol', $params, $response, $logfile);
+                    if ($response['statuscode'] === 100) {
+                        $smsimports[$moduleid]['enrolcount']++;
+                        $smsimports[$moduleid]['enrolusers'] .= $username . ',';
+                    }
+                }
+                // Unenrol.
+                $params = array();
+                $params['moduleextid'] = $externalid;
+                $params['moduleextsys'] = plugin_cs_sms::SMS;
+                $params['session'] = $session;
+                $membership = \module_utils::get_student_members($session, $moduleid, $db);
+                foreach ($membership as $idx => $member) {
+                    if (!key_exists($member['studentid'], $currentenrols[$externalid])) {
+                        $params['studentid'] = $member['studentid'];
                         $params['nodeid'] = $node;
+                        $response = $mm->unenrol($params, $userid);
                         $node++;
-                        $response = $mm->enrol($params, $userid);
-                        log_helper::log('Enrol', $params, $response, $logfile);
+                        log_helper::log('UnEnrol', $params, $response, $logfile);
                         if ($response['statuscode'] === 100) {
-                            $smsimports[$moduleid]['enrolcount']++;
-                            $smsimports[$moduleid]['enrolusers'] .= $username . ',';
+                            $smsimports[$moduleid]['unenrolcount']++;
+                            $smsimports[$moduleid]['unenrolusers'] .= $member['username'] . ',';
                         }
                     }
-                    // Unenrol.
-                    $params = array();
-                    $params['moduleextid'] = $externalid;
-                    $params['moduleextsys'] = plugin_cs_sms::SMS;
-                    $params['session'] = $session;
-                    $membership = \module_utils::get_student_members($session, $moduleid, $db);
-                    foreach ($membership as $idx => $member) {
-                        if (!key_exists($member['studentid'], $currentenrols[$externalid])) {
-                            $params['studentid'] = $member['studentid'];
-                            $params['nodeid'] = $node;
-                            $response = $mm->unenrol($params, $userid);
-                            $node++;
-                            log_helper::log('UnEnrol', $params, $response, $logfile);
-                            if ($response['statuscode'] === 100) {
-                                $smsimports[$moduleid]['unenrolcount']++;
-                                $smsimports[$moduleid]['unenrolusers'] .= $member['username'] . ',';
-                            }
-                        }
-                    }
-                    // Update SMS import log table.
-                    $smsimports[$moduleid]['enrolusers'] = rtrim($smsimports[$moduleid]['enrolusers'], ',');
-                    $smsimports[$moduleid]['unenrolusers'] = rtrim($smsimports[$moduleid]['unenrolusers'], ',');
-                    if ($smsimports[$moduleid]['unenrolcount'] > 0 or $smsimports[$moduleid]['enrolcount'] > 0) {
-                        \module_utils::log_sms_imports(
-                            $moduleid,
-                            $smsimports[$moduleid]['enrolcount'],
-                            $smsimports[$moduleid]['enrolusers'],
-                            $smsimports[$moduleid]['unenrolcount'],
-                            $smsimports[$moduleid]['unenrolusers'],
-                            'Campus Solutions',
-                            $session,
-                            $db
-                        );
-                    }
+                }
+                // Update SMS import log table.
+                $smsimports[$moduleid]['enrolusers'] = rtrim($smsimports[$moduleid]['enrolusers'], ',');
+                $smsimports[$moduleid]['unenrolusers'] = rtrim($smsimports[$moduleid]['unenrolusers'], ',');
+                if ($smsimports[$moduleid]['unenrolcount'] > 0 or $smsimports[$moduleid]['enrolcount'] > 0) {
+                    \module_utils::log_sms_imports(
+                        $moduleid,
+                        $smsimports[$moduleid]['enrolcount'],
+                        $smsimports[$moduleid]['enrolusers'],
+                        $smsimports[$moduleid]['unenrolcount'],
+                        $smsimports[$moduleid]['unenrolusers'],
+                        'Campus Solutions',
+                        $session,
+                        $db
+                    );
                 }
             }
         }
