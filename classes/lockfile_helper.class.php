@@ -38,7 +38,7 @@ class lockfile_helper
     {
         if (file_exists($lockfile)) {
             $lastlocked = file_get_contents($lockfile);
-            $onedayago = strtotime('-$lifespan hour', time());
+            $onedayago = strtotime("-$lifespan hour", time());
             if ($lastlocked < $onedayago) {
                 unlink($lockfile);
             }
