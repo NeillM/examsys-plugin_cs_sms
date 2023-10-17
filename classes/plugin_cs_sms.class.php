@@ -248,7 +248,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
                     }
                     // Get current academic session for module it non provided.
                     if (is_null($args['academic_session'])) {
-                        $modid = \module_utils::get_id_from_externalid($eid, plugin_cs_sms::SMS, $this->config->db);
+                        $modid = \module_utils::get_id_from_externalid($externalid, plugin_cs_sms::SMS, $this->config->db);
                         $args['academic_session'] = $yearutils->get_current_session(
                             \module_utils::getAcademicYearStart($modid)
                         );
