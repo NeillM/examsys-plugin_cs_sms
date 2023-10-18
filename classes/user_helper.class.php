@@ -41,7 +41,10 @@ class user_helper
      */
     public static function get_users($usernode, $moduleextid, $userid, $logfile, $db, &$userupdated)
     {
-        $currentenrols = array();
+        $currentenrols = [
+            // We need to have the correct structure even if there are no enrolments.
+            $moduleextid => [],
+        ];
         foreach ($usernode as $users) {
             if ($users->hasChildNodes()) {
                 $xpath = new \DOMXPath($users->ownerDocument);
