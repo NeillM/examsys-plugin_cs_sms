@@ -654,13 +654,13 @@ class cssmstest extends unittestdatabase
         $queryTable = $this->query(['columns' => ['code', 'name', 'externalid', 'externalsys'], 'table' => 'faculty',
             'where' => [['column' => 'name', 'operator' => 'NOT IN', 'value' => ['UNKNOWN Faculty', 'Administrative and Support Units']]]]);
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'code' => 'TEST',
                 'name' => 'Faculty of Testing',
                 'externalid' => 'TESTECT',
                 'externalsys' => 'Campus Solutions'
             ],
-            1 =>  [
+            1 => [
                 'code' => 'CFY-AE',
                 'name' => 'Faculty of Arts and Education',
                 'externalid' => 'CFY-AE',
@@ -671,28 +671,28 @@ class cssmstest extends unittestdatabase
         $queryTable = $this->query(['columns' => ['code', 'school', 'facultyID', 'externalid', 'externalsys'], 'table' => 'schools',
             'where' => [['column' => 'school', 'operator' => 'NOT IN', 'value' => ['UNKNOWN School', 'Training']]]]);
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'code' => 'TEST',
                 'school' => 'Centre for Testing',
                 'facultyID' => $this->fac['id'],
                 'externalid' => 'USC-MED',
                 'externalsys' => 'Campus Solutions'
             ],
-            1 =>  [
+            1 => [
                 'code' => 'TEST2',
                 'school' => 'Centre for Testing 2',
                 'facultyID' => $this->fac['id'],
                 'externalid' => 'USC-ME2',
                 'externalsys' => 'Campus Solutions'
             ],
-            2 =>  [
+            2 => [
                 'code' => 'CSC-CELE',
                 'school' => 'Centre for English Language Education',
                 'facultyID' => \facultyutils::get_facultyid_by_code('CFY-AE', $this->db),
                 'externalid' => 'CSC-CELE',
                 'externalsys' => 'Campus Solutions'
             ],
-            3 =>  [
+            3 => [
                 'code' => 'CSC-EDU',
                 'school' => 'School of Education',
                 'facultyID' => \facultyutils::get_facultyid_by_code('CFY-AE', $this->db),
@@ -723,13 +723,13 @@ class cssmstest extends unittestdatabase
         $queryTable = $this->query(['columns' => ['code', 'name', 'externalid', 'externalsys'], 'table' => 'faculty'
         , 'where' => [['column' => 'name', 'operator' => 'NOT IN', 'value' => ['UNKNOWN Faculty', 'Administrative and Support Units']]]]);
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'code' => 'TEST',
                 'name' => 'Faculty of Testing',
                 'externalid' => 'TESTECT',
                 'externalsys' => 'Campus Solutions'
             ],
-            1 =>  [
+            1 => [
                 'code' => 'CFY-AE',
                 'name' => 'Faculty of Arts and Education',
                 'externalid' => 'CFY-AE',
@@ -758,21 +758,21 @@ class cssmstest extends unittestdatabase
         $sms->get_courses();
         $queryTable = $this->query(['columns' => ['name', 'description', 'schoolid', 'externalid', 'externalsys'], 'table' => 'courses']);
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'name' => 'M6UNUTRN',
                 'description' => 'Nutrition',
                 'schoolid' => $this->school1['id'],
                 'externalid' => 'M6UNUTRN',
                 'externalsys' => 'Campus Solutions'
             ],
-            1 =>  [
+            1 => [
                 'name' => 'M6UCVENG',
                 'description' => 'Civil Engineering',
                 'schoolid' => $this->school1['id'],
                 'externalid' => 'M6UCVENG',
                 'externalsys' => 'Campus Solutions'
             ],
-            2 =>  [
+            2 => [
                 'name' => 'U8PBRSGY',
                 'description' => 'Breast Surgery',
                 'schoolid' => $this->school2['id'],
@@ -821,7 +821,7 @@ class cssmstest extends unittestdatabase
             ]
         );
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'moduleid' => 'TESTMOD',
                 'fullname' => 'Testing skills',
                 'schoolid' => $this->school1['id'],
@@ -830,7 +830,7 @@ class cssmstest extends unittestdatabase
                 'sms' => 'Campus Solutions',
                 'active' => 1
             ],
-            1 =>  [
+            1 => [
                 'moduleid' => 'NAAAXXXX',
                 'fullname' => 'Self-marketing skills',
                 'schoolid' => $this->school1['id'],
@@ -881,7 +881,7 @@ class cssmstest extends unittestdatabase
             ]
         );
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'moduleid' => 'TESTMOD',
                 'fullname' => 'Testing skills',
                 'schoolid' => $this->school1['id'],
@@ -890,7 +890,7 @@ class cssmstest extends unittestdatabase
                 'sms' => 'Campus Solutions',
                 'active' => 1
             ],
-            1 =>  [
+            1 => [
                 'moduleid' => 'NAAAXXXX',
                 'fullname' => 'Self-marketing skills',
                 'schoolid' => $this->school1['id'],
@@ -941,7 +941,7 @@ class cssmstest extends unittestdatabase
             ]
         );
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'grade' => 'University Lecturer',
                 'surname' => 'staff',
                 'username' => 'staff',
@@ -951,7 +951,7 @@ class cssmstest extends unittestdatabase
                 'first_names' => 'staffy',
                 'yearofstudy' => 1
             ],
-            1 =>  [
+            1 => [
                 'grade' => 'M6UNUTRN',
                 'surname' => 'John',
                 'username' => 'brzhs5',
@@ -961,7 +961,7 @@ class cssmstest extends unittestdatabase
                 'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ],
-            2 =>  [
+            2 => [
                 'grade' => 'M6UCVENG',
                 'surname' => 'Watson',
                 'username' => 'brzamh',
@@ -994,12 +994,12 @@ class cssmstest extends unittestdatabase
         $queryTable = $this->query(['columns' => ['userID', 'idMod', 'calendar_year'], 'table' => 'modules_student',
             'where' => [['column' => 'userID', 'operator' => 'IN', 'value' => [$student1, $student2]]]]);
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'userID' => $student1,
                 'idMod' => $this->mod['id'],
                 'calendar_year' => 2016
             ],
-            1 =>  [
+            1 => [
                 'userID' => $student2,
                 'idMod' => $this->mod['id'],
                 'calendar_year' => 2016
@@ -1048,7 +1048,7 @@ class cssmstest extends unittestdatabase
             ]
         );
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'grade' => 'University Lecturer',
                 'surname' => 'staff',
                 'username' => 'staff',
@@ -1058,7 +1058,7 @@ class cssmstest extends unittestdatabase
                 'first_names' => 'staffy',
                 'yearofstudy' => 1
             ],
-            1 =>  [
+            1 => [
                 'grade' => 'M6UNUTRN',
                 'surname' => 'John',
                 'username' => 'brzhs5',
@@ -1068,7 +1068,7 @@ class cssmstest extends unittestdatabase
                 'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ],
-            2 =>  [
+            2 => [
                 'grade' => 'M6UCVENG',
                 'surname' => 'Watson',
                 'username' => 'brzamh',
@@ -1142,7 +1142,7 @@ class cssmstest extends unittestdatabase
             ]
         );
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'grade' => 'University Lecturer',
                 'surname' => 'staff',
                 'username' => 'staff',
@@ -1152,7 +1152,7 @@ class cssmstest extends unittestdatabase
                 'first_names' => 'staffy',
                 'yearofstudy' => 1
             ],
-            1 =>  [
+            1 => [
                 'grade' => 'M6UNUTRN',
                 'surname' => 'John',
                 'username' => 'brzhs5',
@@ -1162,7 +1162,7 @@ class cssmstest extends unittestdatabase
                 'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ],
-            2 =>  [
+            2 => [
                 'grade' => 'M6UCVENG',
                 'surname' => 'Watson',
                 'username' => 'brzamh',
@@ -1191,7 +1191,7 @@ class cssmstest extends unittestdatabase
         $queryTable = $this->query(['columns' => ['userID', 'idMod', 'calendar_year'], 'table' => 'modules_student',
             'where' => [['column' => 'userID', 'operator' => 'IN', 'value' => [$student1]]]]);
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'userID' => $student1,
                 'idMod' => $this->mod['id'],
                 'calendar_year' => 2016
@@ -1218,7 +1218,7 @@ class cssmstest extends unittestdatabase
         $queryTable = $this->query(['columns' => ['grade', 'surname', 'username', 'title', 'email', 'gender', 'first_names', 'yearofstudy'],
             'table' => 'users', 'where' => [['column' => 'username', 'operator' => 'NOT IN', 'value' => ['admin', 'cron', 'test1', 'test2']]]]);
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'grade' => 'University Lecturer',
                 'surname' => 'staff',
                 'username' => 'staff',
@@ -1228,7 +1228,7 @@ class cssmstest extends unittestdatabase
                 'first_names' => 'staffy',
                 'yearofstudy' => 1
             ],
-            1 =>  [
+            1 => [
                 'grade' => 'M6UNUTRN',
                 'surname' => 'John',
                 'username' => 'brzhs5',
@@ -1238,7 +1238,7 @@ class cssmstest extends unittestdatabase
                 'first_names' => 'Lewis',
                 'yearofstudy' => 1
             ],
-            2 =>  [
+            2 => [
                 'grade' => 'M6UCVENG',
                 'surname' => 'Watson',
                 'username' => 'brzamh',
@@ -1270,12 +1270,12 @@ class cssmstest extends unittestdatabase
         $this->assertEquals($expectedTable, $queryTable);
         $queryTable = $this->query(['columns' => ['userID', 'idMod', 'calendar_year'], 'table' => 'modules_student']);
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'userID' => \userutils::username_exists('brzhs5', $this->db),
                 'idMod' => $this->mod['id'],
                 'calendar_year' => 2016
             ],
-            1 =>  [
+            1 => [
                 'userID' => \userutils::username_exists('brzamh', $this->db),
                 'idMod' => $this->mod['id'],
                 'calendar_year' => 2016

@@ -52,7 +52,7 @@ class xml_helpertest extends unittestdatabase
         $this->assertTrue(xml_helper::check_for_error($doc, $userid, $this->db, 'assessment', ['academic_session' => 2017, 'campus' => 'M']));
         $queryTable = $this->query(['columns' => ['auth_user', 'errtype', 'errstr'], 'table' => 'sys_errors']);
         $expectedTable = [
-            0 =>  [
+            0 => [
                 'auth_user' => 'plugin_cs_sms',
                 'errtype' => 'Application Warning',
                 'errstr' => 'assessment - Header Info'
