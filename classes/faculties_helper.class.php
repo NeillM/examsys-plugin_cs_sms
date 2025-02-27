@@ -54,8 +54,8 @@ class faculties_helper
             }
         }
         $faculties = $data->getElementsByTagName('Faculty');
-        $currentfaculties = array();
-        $currentschools = array();
+        $currentfaculties = [];
+        $currentschools = [];
         $node = 1;
         // Create / Update faculties.
         $fm = new \api\facultymanagement($db);
@@ -70,7 +70,7 @@ class faculties_helper
             }
             if (!is_null($externalid)) {
                 $currentfaculties[] = $externalid;
-                $params = array();
+                $params = [];
                 $facultyid = \FacultyUtils::get_facultyid_from_externalid($externalid, plugin_cs_sms::SMS, $db);
                 try {
                     $params['code'] = $xpath->query('./FacultyCode', $faculty)->item(0)->nodeValue;
@@ -103,7 +103,7 @@ class faculties_helper
             }
         }
 
-        return array($currentfaculties, $currentschools);
+        return [$currentfaculties, $currentschools];
     }
 
     /**
@@ -124,7 +124,7 @@ class faculties_helper
         $delete = \SchoolUtils::diff_external_schools_to_internal_schools($currentschools, plugin_cs_sms::SMS, $db);
         // Try to delete course via schoolmanagement delete api.
         foreach ($delete as $deleteid) {
-            $params = array();
+            $params = [];
             $params['externalid'] = $deleteid;
             $params['nodeid'] = $node;
             $node++;
@@ -135,7 +135,7 @@ class faculties_helper
         $delete = \FacultyUtils::diff_external_faculties_to_internal_faculties($currentfaculties, plugin_cs_sms::SMS, $db);
         // Try to delete course via facultymanagement delete api.
         foreach ($delete as $deleteid) {
-            $params = array();
+            $params = [];
             $params['externalid'] = $deleteid;
             $params['nodeid'] = $node;
             $node++;

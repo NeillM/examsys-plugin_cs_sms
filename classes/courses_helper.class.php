@@ -55,7 +55,7 @@ class courses_helper
         }
         // Courses in ExamSys are Plans in Campus Solutions.
         $plans = $data->getElementsByTagName('Plan');
-        $currentplans = array();
+        $currentplans = [];
         $node = 1;
         // Create / Update Courses.
         $cm = new \api\coursemanagement($db);
@@ -70,7 +70,7 @@ class courses_helper
             }
             if (!is_null($externalid)) {
                 $currentplans[] = $externalid;
-                $params = array();
+                $params = [];
                 $courseid = \CourseUtils::get_courseid_from_externalid($externalid, plugin_cs_sms::SMS, $db);
                 try {
                     $params['name'] = $xpath->query('./PlanCode', $plan)->item(0)->nodeValue;
@@ -114,7 +114,7 @@ class courses_helper
         $node = 1;
         // Try to delete course via coursemanagement delete api.
         foreach ($delete as $deleteid) {
-            $params = array();
+            $params = [];
             $params['externalid'] = $deleteid;
             $params['nodeid'] = $node;
             $node++;

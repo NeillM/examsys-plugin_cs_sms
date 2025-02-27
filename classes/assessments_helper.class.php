@@ -34,7 +34,7 @@ class assessments_helper
      * SUMMATIVE - CS only currently mapping one exam type to ExamSys (summative)
      * @var array $validtypes
      */
-    private static $validtypes = array('SUMMATIVE');
+    private static $validtypes = ['SUMMATIVE'];
 
     /**
      * Process assessment WS response
@@ -81,7 +81,7 @@ class assessments_helper
             }
             if (!is_null($externalid)) {
                 // Schedule assessment.
-                $params = array();
+                $params = [];
                 $params['externalid'] = $externalid;
                 $params['externalsys'] = plugin_cs_sms::SMS;
                 try {
@@ -214,13 +214,13 @@ class assessments_helper
             throw new \Exception('modules tag missing');
             exit();
         }
-        $modulesarray = array();
+        $modulesarray = [];
         $i = 0;
         foreach ($modulenode as $module) {
             if ($module->hasChildNodes()) {
                 $xpath = new \DOMXPath($module->ownerDocument);
                 try {
-                    $modulesarray[] = array('id' => $i,'value' => $xpath->query('./ModuleID', $module)->item(0)->nodeValue);
+                    $modulesarray[] = ['id' => $i,'value' => $xpath->query('./ModuleID', $module)->item(0)->nodeValue];
                 } catch (\exception $e) {
                     // If ModuleID not provided skip to next module.
                     continue;

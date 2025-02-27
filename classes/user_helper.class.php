@@ -61,7 +61,7 @@ class user_helper
                     // Only update a user once per enrolment import.
                     if (!in_array($externalid, $userupdated)) {
                         $id = \UserUtils::studentid_exists($externalid, $db);
-                        $params = array();
+                        $params = [];
                         try {
                             // Status affects Role.
                             if ($xpath->query('./Role', $users)->item(0)->nodeValue == 'Student') {

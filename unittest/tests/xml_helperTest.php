@@ -49,21 +49,21 @@ class xml_helpertest extends unittestdatabase
             <Error><Header>Header Info</Header><Detail>Some Details</Detail></Error>';
         $doc = new DOMDocument();
         $doc->loadXML($data);
-        $this->assertTrue(xml_helper::check_for_error($doc, $userid, $this->db, 'assessment', array('academic_session' => 2017, 'campus' => 'M')));
-        $queryTable = $this->query(array('columns' => array('auth_user', 'errtype', 'errstr'), 'table' => 'sys_errors'));
-        $expectedTable = array(
-            0 => array (
+        $this->assertTrue(xml_helper::check_for_error($doc, $userid, $this->db, 'assessment', ['academic_session' => 2017, 'campus' => 'M']));
+        $queryTable = $this->query(['columns' => ['auth_user', 'errtype', 'errstr'], 'table' => 'sys_errors']);
+        $expectedTable = [
+            0 =>  [
                 'auth_user' => 'plugin_cs_sms',
                 'errtype' => 'Application Warning',
                 'errstr' => 'assessment - Header Info'
-            )
-        );
+            ]
+        ];
         $this->assertEquals($expectedTable, $queryTable);
         // No Error.
         $data = '<?xml version="1.0"?>
             <FacultyList></FacultyList>';
         $doc = new DOMDocument();
         $doc->loadXML($data);
-        $this->assertFalse(xml_helper::check_for_error($doc, $userid, $this->db, 'assessment', array('academic_session' => 2017, 'campus' => 'M')));
+        $this->assertFalse(xml_helper::check_for_error($doc, $userid, $this->db, 'assessment', ['academic_session' => 2017, 'campus' => 'M']));
     }
 }

@@ -35,31 +35,31 @@ class user_helpertest extends unittestdatabase
     public function datageneration(): void
     {
         $datagenerator = $this->get_datagenerator('users', 'core');
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy1', 'roles' => 'Student', 'sid' => 'dgsfg345235b'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy1', 'roles' => 'Student', 'sid' => 'dgsfg345235b']);
         $this->uid1 = $user['id'];
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy2', 'roles' => 'Student', 'sid' => 'dgsfg345235c'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy2', 'roles' => 'Student', 'sid' => 'dgsfg345235c']);
         $this->uid2 = $user['id'];
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy3', 'roles' => 'Student', 'sid' => 'dgsfg345235b'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy3', 'roles' => 'Student', 'sid' => 'dgsfg345235b']);
         $this->uid3 = $user['id'];
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy4', 'roles' => 'Student', 'sid' => 'dgsfg345235c'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy4', 'roles' => 'Student', 'sid' => 'dgsfg345235c']);
         $this->uid4 = $user['id'];
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy5', 'roles' => 'Student', 'sid' => 'dgsfg345235d'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy5', 'roles' => 'Student', 'sid' => 'dgsfg345235d']);
         $this->uid5 = $user['id'];
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy6', 'roles' => 'Student', 'sid' => 'dgsfg345235e'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy6', 'roles' => 'Student', 'sid' => 'dgsfg345235e']);
         $this->uid6 = $user['id'];
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy7', 'roles' => 'Student', 'sid' => 'dgsfg345235f'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy7', 'roles' => 'Student', 'sid' => 'dgsfg345235f']);
         $this->uid7 = $user['id'];
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy8', 'roles' => 'Student', 'sid' => 'dgsfg345235g'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy8', 'roles' => 'Student', 'sid' => 'dgsfg345235g']);
         $this->uid8 = $user['id'];
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy9', 'roles' => 'Student', 'sid' => 'dgsfg345235h'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy9', 'roles' => 'Student', 'sid' => 'dgsfg345235h']);
         $this->uid9 = $user['id'];
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy10', 'roles' => 'Student', 'sid' => 'dgsfg345235i'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy10', 'roles' => 'Student', 'sid' => 'dgsfg345235i']);
         $this->uid10 = $user['id'];
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy11', 'roles' => 'Student', 'sid' => 'dgsfg345235j'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy11', 'roles' => 'Student', 'sid' => 'dgsfg345235j']);
         $this->uid11 = $user['id'];
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy12', 'roles' => 'Suspended', 'sid' => 'dgsfg345235k'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy12', 'roles' => 'Suspended', 'sid' => 'dgsfg345235k']);
         $this->uid12 = $user['id'];
-        $user = $datagenerator->create_user(array('surname' => 'tester', 'username' => 'testy13', 'roles' => 'Locked', 'sid' => 'dgsfg345235l'));
+        $user = $datagenerator->create_user(['surname' => 'tester', 'username' => 'testy13', 'roles' => 'Locked', 'sid' => 'dgsfg345235l']);
         $this->uid13 = $user['id'];
     }
 

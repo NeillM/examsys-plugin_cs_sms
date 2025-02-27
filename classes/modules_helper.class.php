@@ -54,7 +54,7 @@ class modules_helper
             }
         }
         $modules = $data->getElementsByTagName('Module');
-        $currentmodules = array();
+        $currentmodules = [];
         $node = 1;
         // Create / Update modules.
         $mm = new \api\modulemanagement($config->db);
@@ -69,7 +69,7 @@ class modules_helper
             }
             if (!is_null($externalid)) {
                 $currentmodules[] = $externalid;
-                $params = array();
+                $params = [];
                 $params['externalid'] = $externalid;
                 try {
                     $params['modulecode'] = self::module_campus_mapping($xpath->query('./ModuleCode', $module)->item(0)->nodeValue);
@@ -170,7 +170,7 @@ class modules_helper
         $delete = \module_utils::diff_external_modules_to_internal_modules($currentmodules, plugin_cs_sms::SMS, $config->db);
         // Try to delete course via modulemanagement delete api.
         foreach ($delete as $deleteid) {
-            $params = array();
+            $params = [];
             $params['externalid'] = $deleteid;
             $params['nodeid'] = $node;
             $node++;
@@ -189,7 +189,7 @@ class modules_helper
     {
         $config = \Config::get_instance();
         $sms = plugin_cs_sms::SMS;
-        $modules = array();
+        $modules = [];
         switch ($campus) {
             case 'C':
                 $modcode = 'AND moduleid LIKE \'%_UNNC\'';
