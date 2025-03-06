@@ -33,9 +33,9 @@ if (PHP_SAPI != 'cli') {
 
 // Lets look to see what arguments have been passed.
 $options = 'hy::';
-$longoptions = array(
+$longoptions = [
     'help',
-);
+];
 $optionslist = getopt($options, $longoptions);
 // Check if we should display help to the user.
 if (isset($optionslist['h']) || isset($optionslist['help'])) {

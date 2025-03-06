@@ -56,14 +56,14 @@ class enrolments_helper
             }
         }
         $enrolments = $data->getElementsByTagName('Module');
-        $current_enrols = array();
+        $current_enrols = [];
         // Enrol/UnEnrol users on to modules.
         $mm = new \api\modulemanagement($db);
-        $smsimports = array();
+        $smsimports = [];
         $node = 1;
-        $userupdated = array();
+        $userupdated = [];
         foreach ($enrolments as $enrolment) {
-            $currentenrols = array();
+            $currentenrols = [];
             $xpath = new \DOMXPath($enrolment->ownerDocument);
             // The ModuleID in Campus Solutions is the Module External ID in ExamSys.
             try {
@@ -106,7 +106,7 @@ class enrolments_helper
                 $smsimports[$moduleid]['enrolusers'] = '';
                 $smsimports[$moduleid]['unenrolcount'] = 0;
                 $smsimports[$moduleid]['unenrolusers'] = '';
-                $params = array();
+                $params = [];
                 $params['moduleextid'] = $externalid;
                 $params['moduleextsys'] = plugin_cs_sms::SMS;
                 $params['session'] = $session;
@@ -131,7 +131,7 @@ class enrolments_helper
                     }
                 }
                 // Unenrol.
-                $params = array();
+                $params = [];
                 $params['moduleextid'] = $externalid;
                 $params['moduleextsys'] = plugin_cs_sms::SMS;
                 $params['session'] = $session;

@@ -43,7 +43,7 @@ class school_helper
         // Create / Update schools.
         $sm = new \api\schoolmanagement($db);
         $node = 1;
-        $currentschools = array();
+        $currentschools = [];
         foreach ($schoolnode as $school) {
             $xpath = new \DOMXPath($school->ownerDocument);
             if ($school->hasChildNodes()) {
@@ -56,7 +56,7 @@ class school_helper
                 }
                 if (!is_null($externalid)) {
                     $currentschools[] = $externalid;
-                    $params = array();
+                    $params = [];
                     $schoolid = \SchoolUtils::get_schoolid_from_externalid($externalid, plugin_cs_sms::SMS, $db);
                     try {
                         $params['code'] = $xpath->query('./SchoolCode', $school)->item(0)->nodeValue;

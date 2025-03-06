@@ -138,7 +138,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
      * arguments should be in the following order if given - academic_session, campus, externalid
      * @return string xml data from web service
      */
-    public function callws($type, $version, $args = array())
+    public function callws($type, $version, $args = [])
     {
         $url = $this->config->get_setting($this->plugin, 'url');
         $url .= '/' . $type . '.' . $version . '/';
@@ -150,13 +150,13 @@ class plugin_cs_sms extends \plugins\plugins_sms
         $username = $this->config->get_setting($this->plugin, 'username');
         $password = $this->config->get_setting($this->plugin, 'password');
         $timeout = $this->config->get_setting($this->plugin, 'timeout');
-        $options = array(CURLOPT_TIMEOUT => $timeout,
+        $options = [CURLOPT_TIMEOUT => $timeout,
             CURLOPT_SSL_VERIFYPEER => $this->config->get_setting($this->plugin, 'ssl_verify')
-        );
+        ];
         // Auth options.
         if ($username != '') {
-            $authoptions = array(CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-                CURLOPT_USERPWD => $username . ':' . $password);
+            $authoptions = [CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
+                CURLOPT_USERPWD => $username . ':' . $password];
             $options += $authoptions;
         }
         $restful = new \restful($this->db);
@@ -181,7 +181,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             file_put_contents($lockfile, time());
             $logfile = log_helper::set_logfile($this->logdir, 'assessment');
             foreach ($this->campuslist as $campus) {
-                $args = array('academic_session' => $session, 'campus' => $campus);
+                $args = ['academic_session' => $session, 'campus' => $campus];
                 $response = $this->callws('RogoAssessments', self::CSVERSIONONE, $args);
                 if ($response != '') {
                     assessments_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $session, $this->validation, $args);
@@ -223,7 +223,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             }
             $yearutils = new \yearutils($this->config->db);
             foreach ($campuses as $campus) {
-                $args = array('academic_session' => $session, 'campus' => $campus);
+                $args = ['academic_session' => $session, 'campus' => $campus];
                 // Targeted list of modules.
                 if (is_null($externalid) and $targeted) {
                     $targetmodules = modules_helper::get_target_modules($campus, $active);
@@ -298,10 +298,10 @@ class plugin_cs_sms extends \plugins\plugins_sms
         if (!file_exists($lockfile)) {
             file_put_contents($lockfile, time());
             $logfile = log_helper::set_logfile($this->logdir, 'faculty');
-            $currentfaculties = array();
-            $currentschools = array();
+            $currentfaculties = [];
+            $currentschools = [];
             foreach ($this->campuslist as $campus) {
-                $args = array('faculty' => '', 'campus' => $campus);
+                $args = ['faculty' => '', 'campus' => $campus];
                 $response = $this->callws('RogoSchools', self::CSVERSIONONE, $args);
                 if ($response != '') {
                     $faculties = faculties_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $args);
@@ -332,9 +332,9 @@ class plugin_cs_sms extends \plugins\plugins_sms
         if (!file_exists($lockfile)) {
             file_put_contents($lockfile, time());
             $logfile = log_helper::set_logfile($this->logdir, 'course');
-            $currentplans = array();
+            $currentplans = [];
             foreach ($this->campuslist as $campus) {
-                $args = array('session' => '', 'campus' => $campus);
+                $args = ['session' => '', 'campus' => $campus];
                 $response = $this->callws('RogoProgPlan', self::CSVERSIONONE, $args);
                 if ($response != '') {
                     $plans = courses_helper::process($response, $this->userid, $this->strings, $this->db, $logfile, $this->validation, $args);
@@ -365,10 +365,10 @@ class plugin_cs_sms extends \plugins\plugins_sms
         lockfile_helper::lockfiletimeout($lockfile, $lifespan);
         if (!file_exists($lockfile)) {
             file_put_contents($lockfile, time());
-            $args = array();
+            $args = [];
             $logfile = log_helper::set_logfile($this->logdir, 'module');
             $singleexternal = false;
-            $currentmodules = array();
+            $currentmodules = [];
             // If external id is provided we can select the specific campus to call.
             if (!is_null($externalid)) {
                 try {
@@ -382,10 +382,10 @@ class plugin_cs_sms extends \plugins\plugins_sms
             }
             foreach ($campuses as $campus) {
                 if (!is_null($externalid) and !is_null($session)) {
-                    $args = array('academic_session' => $session, 'externalid' => $externalid, 'campus' => $campus);
+                    $args = ['academic_session' => $session, 'externalid' => $externalid, 'campus' => $campus];
                     $singleexternal = true;
                 } else {
-                    $args = array('academic_session' => '', 'externalid' => '', 'campus' => $campus);
+                    $args = ['academic_session' => '', 'externalid' => '', 'campus' => $campus];
                 }
                 $response = $this->callws('RogoClasses', self::CSVERSIONONE, $args);
                 if ($response != '') {
@@ -433,7 +433,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
     public function supports_module_import()
     {
         if ($this->is_configured('module') or $this->is_configured('enrolment')) {
-            return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_modules.php', 'blurb' => $this->strings['importmodules'], 'tooltip' => $this->strings['importmodulestooltip']);
+            return ['url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_modules.php', 'blurb' => $this->strings['importmodules'], 'tooltip' => $this->strings['importmodulestooltip']];
         } else {
             return false;
         }
@@ -446,7 +446,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
     public function supports_faculty_import()
     {
         if ($this->is_configured('faculty')) {
-            return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_faculties.php', 'blurb' => $this->strings['importfaculties'], 'tooltip' => $this->strings['importfacultiestooltip']);
+            return ['url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_faculties.php', 'blurb' => $this->strings['importfaculties'], 'tooltip' => $this->strings['importfacultiestooltip']];
         } else {
             return false;
         }
@@ -459,7 +459,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
     public function supports_course_import()
     {
         if ($this->is_configured('course')) {
-            return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_courses.php', 'blurb' => $this->strings['importcourses'], 'tooltip' => $this->strings['importcoursestooltip']);
+            return ['url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_courses.php', 'blurb' => $this->strings['importcourses'], 'tooltip' => $this->strings['importcoursestooltip']];
         } else {
             return false;
         }
@@ -485,7 +485,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
     public function supports_assessment_import()
     {
         if ($this->is_configured('assessment')) {
-            return array('url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_assessments.php', 'blurb' => $this->strings['importassessments'], 'tooltip' => $this->strings['importassessmentstooltip']);
+            return ['url' => $this->config->get('cfg_root_path') . '/plugins/SMS/' . $this->plugin . '/admin/import_assessments.php', 'blurb' => $this->strings['importassessments'], 'tooltip' => $this->strings['importassessmentstooltip']];
         } else {
             return false;
         }

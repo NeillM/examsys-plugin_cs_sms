@@ -90,7 +90,7 @@ class gradebook_helper
      */
     private static function get_paper_gradebook($paper_id, $db)
     {
-        $response = array();
+        $response = [];
         $paperdetails = \Paper_utils::get_paper_properties($paper_id, $db);
         $activityid = $paperdetails['externalid'];
         $activitysys = $paperdetails['externalsys'];
@@ -116,7 +116,7 @@ class gradebook_helper
                         $courseid = $moduledetails['externalid'];
                         $coursedesc = $moduledetails['fullname'];
                         $coursesubject = $moduledetails['moduleid'];
-                        $response[] = array(
+                        $response[] = [
                             'courseid' => $courseid,
                             'coursedesc' => $coursedesc,
                             'coursesubject' => $coursesubject,
@@ -129,12 +129,12 @@ class gradebook_helper
                             'resultstatus' => $resultstatus,
                             'resulttype' => $resulttype,
                             'submissiondate' => $submissiondate,
-                            'duedate' => $submissiondate);
+                            'duedate' => $submissiondate];
                     }
                 }
             }
         }
-        return array('activityid' => $activityid, 'grades' => $response);
+        return ['activityid' => $activityid, 'grades' => $response];
     }
 
     /**
