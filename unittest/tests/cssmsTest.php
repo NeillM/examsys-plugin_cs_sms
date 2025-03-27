@@ -975,9 +975,9 @@ class cssmstest extends unittestdatabase
         $this->assertEquals($expectedTable, $queryTable);
         $student1 = \userutils::username_exists('brzhs5', $this->db);
         $student2 = \userutils::username_exists('brzamh', $this->db);
-        $this->assertEquals('Staff', implode(Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
-        $this->assertEquals('Student', implode(Role::getUsersRoles($student1)));
-        $this->assertEquals('Student', implode(Role::getUsersRoles($student2)));
+        $this->assertEquals('Staff', implode('', Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
+        $this->assertEquals('Student', implode('', Role::getUsersRoles($student1)));
+        $this->assertEquals('Student', implode('', Role::getUsersRoles($student2)));
         $queryTable = $this->query(['table' => 'sid',
             'where' => [['column' => 'userID', 'operator' => 'IN', 'value' => [$student1, $student2]]]]);
         $expectedTable = [
@@ -1082,9 +1082,9 @@ class cssmstest extends unittestdatabase
         $this->assertEquals($expectedTable, $queryTable);
         $student1 = \userutils::username_exists('brzhs5', $this->db);
         $student2 = \userutils::username_exists('brzamh', $this->db);
-        $this->assertEquals('Staff', implode(Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
-        $this->assertEquals('Student', implode(Role::getUsersRoles($student1)));
-        $this->assertEquals('Student', implode(Role::getUsersRoles($student2)));
+        $this->assertEquals('Staff', implode('', Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
+        $this->assertEquals('Student', implode('', Role::getUsersRoles($student1)));
+        $this->assertEquals('Student', implode('', Role::getUsersRoles($student2)));
         $queryTable = $this->query(['table' => 'sid',
             'where' => [['column' => 'userID', 'operator' => 'IN', 'value' => [$student1, $student2]]]]);
         $expectedTable = [
@@ -1176,9 +1176,9 @@ class cssmstest extends unittestdatabase
         $this->assertEquals($expectedTable, $queryTable);
         $student1 = \userutils::username_exists('brzhs5', $this->db);
         $student2 = \userutils::username_exists('brzamh', $this->db);
-        $this->assertEquals('Staff', implode(Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
-        $this->assertEquals('Student', implode(Role::getUsersRoles($student1)));
-        $this->assertEquals('left', implode(Role::getUsersRoles($student2)));
+        $this->assertEquals('Staff', implode('', Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
+        $this->assertEquals('Student', implode('', Role::getUsersRoles($student1)));
+        $this->assertEquals('left', implode('', Role::getUsersRoles($student2)));
         $queryTable = $this->query(['table' => 'sid',
             'where' => [['column' => 'userID', 'operator' => 'IN', 'value' => [$student1]]]]);
         $expectedTable = [
@@ -1252,9 +1252,9 @@ class cssmstest extends unittestdatabase
         $this->assertEquals($expectedTable, $queryTable);
         $student1 = \userutils::username_exists('brzhs5', $this->db);
         $student2 = \userutils::username_exists('brzamh', $this->db);
-        $this->assertEquals('Staff', implode(Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
-        $this->assertEquals('Student', implode(Role::getUsersRoles($student1)));
-        $this->assertEquals('Student', implode(Role::getUsersRoles($student2)));
+        $this->assertEquals('Staff', implode('', Role::getUsersRoles(UserUtils::username_exists('staff', $this->db))));
+        $this->assertEquals('Student', implode('', Role::getUsersRoles($student1)));
+        $this->assertEquals('Student', implode('', Role::getUsersRoles($student2)));
         $queryTable = $this->query(['table' => 'sid',
             'where' => [['column' => 'userID', 'operator' => 'IN', 'value' => [$student1, $student2]]]]);
         $expectedTable = [
