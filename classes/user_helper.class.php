@@ -124,22 +124,13 @@ class user_helper
          //  O - Other
          //  U - Unknown
          //  X - Intersex
-        switch ($csgender) {
-            case 'F':
-                $gender = 'Female';
-                break;
-            case 'M':
-                $gender = 'Male';
-                break;
-            case 'O':
-            case 'X':
-                $gender = 'Other';
-                break;
-            default:
-                // Use title in ExamSys to assume gender.
-                $gender = self::title_to_gender($title);
-                break;
-        }
+        $gender = match ($csgender) {
+            'F' => 'Female',
+            'M' => 'Male',
+            'O', 'X' => 'Other',
+            // Use title in ExamSys to assume gender.
+            default => self::title_to_gender($title),
+        };
         return $gender;
     }
 
@@ -168,22 +159,12 @@ class user_helper
     public static function title_to_gender($title)
     {
         // Valid ExamSys titles Mx|Mr|Mrs|Miss|Ms|Dr|Professor
-        switch ($title) {
-            case 'Mx':
-                $gender = 'Other';
-                break;
-            case 'Mr':
-                $gender = 'Male';
-                break;
-            case 'Mrs':
-            case 'Miss':
-            case 'Ms':
-                $gender = 'Female';
-                break;
-            default:
-                $gender = null;
-                break;
-        }
+        $gender = match ($title) {
+            'Mx' => 'Other',
+            'Mr' => 'Male',
+            'Mrs', 'Miss', 'Ms' => 'Female',
+            default => null,
+        };
         return $gender;
     }
 
@@ -214,27 +195,12 @@ class user_helper
         // PM  Prematriculant - should not be sent to ExamSys so deafults to suspended
         // SP  Suspended
         // WT  Waitlisted - should not be sent to ExamSys so deafults to suspended
-        switch ($csstatus) {
-            case 'CN':
-            case 'DC':
-            case 'DE':
-            case 'DM':
-                $role = 'left';
-                break;
-            case 'CM':
-                $role = 'graduate';
-                break;
-            case 'AD':
-            case 'AP':
-            case 'PM':
-            case 'SP':
-            case 'WT':
-                $role = 'Suspended';
-                break;
-            default:
-                $role = 'Student';
-                break;
-        }
+        $role = match ($csstatus) {
+            'CN', 'DC', 'DE', 'DM' => 'left',
+            'CM' => 'graduate',
+            'AD', 'AP', 'PM', 'SP', 'WT' => 'Suspended',
+            default => 'Student',
+        };
         return $role;
     }
 
