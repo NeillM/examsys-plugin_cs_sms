@@ -190,17 +190,11 @@ class modules_helper
         $config = \Config::get_instance();
         $sms = plugin_cs_sms::SMS;
         $modules = [];
-        switch ($campus) {
-            case 'C':
-                $modcode = 'AND moduleid LIKE \'%_UNNC\'';
-                break;
-            case 'M':
-                $modcode = 'AND moduleid LIKE \'%_UNMC\'';
-                break;
-            default:
-                $modcode = 'AND moduleid NOT LIKE \'%_UNMC\' AND moduleid NOT LIKE \'%_UNNC\'';
-                break;
-        }
+        $modcode = match ($campus) {
+            'C' => 'AND moduleid LIKE \'%_UNNC\'',
+            'M' => 'AND moduleid LIKE \'%_UNMC\'',
+            default => 'AND moduleid NOT LIKE \'%_UNMC\' AND moduleid NOT LIKE \'%_UNNC\'',
+        };
         if ($active) {
             $act = 'active = 1 AND';
         } else {
