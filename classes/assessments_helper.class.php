@@ -140,7 +140,7 @@ class assessments_helper
                     if (!empty($notes)) {
                         $params['notes'] = $notes->nodeValue;
                     }
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // Optional so dont care.
                 }
                 $params['nodeid'] = $node;
@@ -196,7 +196,7 @@ class assessments_helper
         $xpath = new \DOMXPath($usernode->ownerDocument);
         try {
             $username = $xpath->query('./UserName', $usernode)->item(0)->nodeValue;
-        } catch (\exception $e) {
+        } catch (\exception) {
             // Should not get here but fail gracefully later on.
             $username = null;
         }
@@ -221,7 +221,7 @@ class assessments_helper
                 $xpath = new \DOMXPath($module->ownerDocument);
                 try {
                     $modulesarray[] = ['id' => $i,'value' => $xpath->query('./ModuleID', $module)->item(0)->nodeValue];
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // If ModuleID not provided skip to next module.
                     continue;
                 }

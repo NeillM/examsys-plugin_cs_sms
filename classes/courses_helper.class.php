@@ -64,7 +64,7 @@ class courses_helper
             // The PlanID in Campus Solutions is the Course External ID in ExamSys.
             try {
                 $externalid = $xpath->query('./PlanID', $plan)->item(0)->nodeValue;
-            } catch (\exception $e) {
+            } catch (\exception) {
                 // If externalid not provided skip to next course.
                 continue;
             }
@@ -76,7 +76,7 @@ class courses_helper
                     $params['name'] = $xpath->query('./PlanCode', $plan)->item(0)->nodeValue;
                     $params['description'] = $xpath->query('./PlanDescr', $plan)->item(0)->nodeValue;
                     $params['schoolextid'] = $xpath->query('./SchoolID', $plan)->item(0)->nodeValue;
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // If course data not provided skip to next course.
                     continue;
                 }

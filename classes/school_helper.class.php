@@ -50,7 +50,7 @@ class school_helper
                 // The SchoolID in Campus Solutions is the School External ID in ExamSys.
                 try {
                     $externalid = $xpath->query('./SchoolID', $school)->item(0)->nodeValue;
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // If externalid not provided skip to next school.
                     continue;
                 }
@@ -61,7 +61,7 @@ class school_helper
                     try {
                         $params['code'] = $xpath->query('./SchoolCode', $school)->item(0)->nodeValue;
                         $params['name'] = $xpath->query('./SchoolDescr', $school)->item(0)->nodeValue;
-                    } catch (\exception $e) {
+                    } catch (\exception) {
                         // If missing data nodes skip to next school.
                         continue;
                     }
