@@ -109,13 +109,9 @@ class plugin_cs_sms extends \plugins\plugins_sms
 
     /**
      * Constructor
-     * @param \mysqli $mysqli db connection
-     * @param integer $userid ExamSys id of user running import
+     * @param int $userid ExamSys id of user running import
      */
-    public function __construct(/**
-     * User running import.
-     */
-    private $userid = 0)
+    public function __construct(private $userid = 0)
     {
         parent::__construct();
         $this->set_lang_strings();
