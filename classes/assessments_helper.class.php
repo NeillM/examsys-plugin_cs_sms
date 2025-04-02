@@ -75,7 +75,7 @@ class assessments_helper
                 if (!self::validate_type($assessmenttype)) {
                     continue;
                 }
-            } catch (\exception $e) {
+            } catch (\exception) {
                 // If externalid not provided skip to next assessment.
                 continue;
             }
@@ -93,7 +93,7 @@ class assessments_helper
                     $params['owner'] = self::process_owner($owners, $db);
                     $modules = $xpath->query('./Modules', $assessment)->item(0)->childNodes;
                     $params['extmodules'] = self::process_module($modules);
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // If the above are not provided we cannot create the assessment.
                     continue;
                 }
@@ -108,7 +108,7 @@ class assessments_helper
                     if (!empty($month)) {
                         $params['month'] = $month->nodeValue;
                     }
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // Optional so dont care.
                 }
                 try {
@@ -116,7 +116,7 @@ class assessments_helper
                     if (!empty($cohort)) {
                         $params['cohort_size'] = $cohort->nodeValue;
                     }
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // Optional so dont care.
                 }
                 try {
@@ -124,7 +124,7 @@ class assessments_helper
                     if (!empty($barrier)) {
                         $params['barriers'] = $barrier->nodeValue;
                     }
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // Optional so dont care.
                 }
                 try {
@@ -132,7 +132,7 @@ class assessments_helper
                     if (!empty($campus)) {
                         $params['campus'] = $campus->nodeValue;
                     }
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // Optional so dont care.
                 }
                 try {
