@@ -63,7 +63,7 @@ class modules_helper
             // The ModuleID in Campus Solutions is the Module External ID in ExamSys.
             try {
                 $externalid = $xpath->query('./ModuleID', $module)->item(0)->nodeValue;
-            } catch (\exception $e) {
+            } catch (\exception) {
                 // If externalid not provided skip to next module.
                 continue;
             }
@@ -75,7 +75,7 @@ class modules_helper
                     $params['modulecode'] = self::module_campus_mapping($xpath->query('./ModuleCode', $module)->item(0)->nodeValue);
                     $params['name'] = $xpath->query('./Description', $module)->item(0)->nodeValue;
                     $params['schoolextid'] = $xpath->query('./SchoolID', $module)->item(0)->nodeValue;
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // If module data not provided skip to next module.
                     continue;
                 }

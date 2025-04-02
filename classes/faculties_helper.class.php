@@ -95,7 +95,7 @@ class faculties_helper
                 log_helper::log($type, $params, $response, $logfile);
                 try {
                     $memberschools = $xpath->query('./MemberSchools', $faculty)->item(0)->childNodes;
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // If school data not provided skip to next faculty.
                     continue;
                 }

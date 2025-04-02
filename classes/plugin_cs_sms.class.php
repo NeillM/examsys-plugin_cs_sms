@@ -214,7 +214,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             if (!is_null($externalid)) {
                 try {
                     $campuses[] = modules_helper::get_campus_code($externalid);
-                } catch (\Exception $e) {
+                } catch (\Exception) {
                     // Module not in system so have to check all campuses.
                     $campuses = $this->campuslist;
                 }
@@ -373,7 +373,7 @@ class plugin_cs_sms extends \plugins\plugins_sms
             if (!is_null($externalid)) {
                 try {
                     $campuses[] = modules_helper::get_campus_code($externalid);
-                } catch (\Exception $e) {
+                } catch (\Exception) {
                     // Module not in system so have to check all campuses.
                     $campuses = $this->campuslist;
                 }

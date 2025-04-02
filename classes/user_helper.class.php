@@ -51,7 +51,7 @@ class user_helper
                 // Student IDs in ExamSys are User IDs in Campus Solutions.
                 try {
                     $externalid = $xpath->query('./UserId', $users)->item(0)->nodeValue;
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // If externalid not provided skip to next user.
                     continue;
                 }
@@ -79,7 +79,7 @@ class user_helper
                             $params['gender'] = self::map_gender($xpath->query('./Gender', $users)->item(0)->nodeValue, $params['title']);
                             $params['course'] = $xpath->query('./PlanID', $users)->item(0)->nodeValue;
                             $params['year'] = self::map_yearofstudy($xpath->query('./YearOfStudy', $users)->item(0)->nodeValue);
-                        } catch (\exception $e) {
+                        } catch (\exception) {
                             // If user data not provided skip to next user.
                             continue;
                         }

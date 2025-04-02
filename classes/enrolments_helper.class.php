@@ -68,7 +68,7 @@ class enrolments_helper
             // The ModuleID in Campus Solutions is the Module External ID in ExamSys.
             try {
                 $externalid = $xpath->query('./ModuleID', $enrolment)->item(0)->nodeValue;
-            } catch (\exception $e) {
+            } catch (\exception) {
                 // If externalid not provided skip to next module.
                 continue;
             }
@@ -76,7 +76,7 @@ class enrolments_helper
                 // Create/update users.
                 try {
                     $usermembership = $xpath->query('./Membership', $enrolment)->item(0)->childNodes;
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // If membership node not provided cannot proceed with current module enrolments.
                     continue;
                 }
@@ -116,7 +116,7 @@ class enrolments_helper
                     $params['studentid'] = $userexternalid;
                     try {
                         $params['session'] = $xpath->query('./Year', $enrolment)->item(0)->nodeValue;
-                    } catch (\exception $e) {
+                    } catch (\exception) {
                         // If session not provided no enrolments can take place.
                         break;
                     }
