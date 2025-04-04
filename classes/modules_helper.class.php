@@ -141,9 +141,9 @@ class modules_helper
         $details = \module_utils::get_full_details('external', $externalid, $config->db, plugin_cs_sms::SMS);
         if (is_array($details)) {
             // Check for Campus Solution modules codes and map campus. Default to UK(U).
-            if (preg_match('/^[A-Z]{4}[F1-5][0-9]{3}_UNNC$/', $details['moduleid'])) {
+            if (preg_match('/^[A-Z]{4}[F1-5][0-9]{3}_UNNC$/', (string) $details['moduleid'])) {
                 $campuscode = 'C';
-            } elseif (preg_match('/^[A-Z]{4}[F1-5][0-9]{3}_UNMC$/', $details['moduleid'])) {
+            } elseif (preg_match('/^[A-Z]{4}[F1-5][0-9]{3}_UNMC$/', (string) $details['moduleid'])) {
                 $campuscode = 'M';
             } else {
                 $campuscode = 'U';
