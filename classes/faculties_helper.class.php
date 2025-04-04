@@ -64,7 +64,7 @@ class faculties_helper
             // The FacultyID in Campus Solutions is the Faculty External ID in ExamSys.
             try {
                 $externalid = $xpath->query('./FacultyID', $faculty)->item(0)->nodeValue;
-            } catch (\exception $e) {
+            } catch (\exception) {
                 // If externalid not provided skip to next faculty.
                 continue;
             }
@@ -75,7 +75,7 @@ class faculties_helper
                 try {
                     $params['code'] = $xpath->query('./FacultyCode', $faculty)->item(0)->nodeValue;
                     $params['name'] = $xpath->query('./FacultyDescr', $faculty)->item(0)->nodeValue;
-                } catch (\exception $e) {
+                } catch (\exception) {
                     // If data not provided skip to next faculty.
                     continue;
                 }

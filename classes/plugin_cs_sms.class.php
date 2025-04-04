@@ -48,12 +48,6 @@ class plugin_cs_sms extends \plugins\plugins_sms
     private $strings;
 
     /**
-     * User running import.
-     * @var integer
-     */
-    private $userid;
-
-    /**
      * Schema validation status.
      * @var boolean
      */
@@ -115,15 +109,13 @@ class plugin_cs_sms extends \plugins\plugins_sms
 
     /**
      * Constructor
-     * @param \mysqli $mysqli db connection
-     * @param integer $userid ExamSys id of user running import
+     * @param int $userid ExamSys id of user running import
      */
-    public function __construct($userid = 0)
+    public function __construct(private $userid = 0)
     {
         parent::__construct();
         $this->set_lang_strings();
         $this->logdir = $this->config->get_setting($this->plugin, 'loglocation');
-        $this->userid = $userid;
         $campuslist = $this->config->get_setting($this->plugin, 'campuslist') ?? '';
         $this->campuslist = explode(',', ($campuslist));
         $this->validation = $this->config->get_setting($this->plugin, 'validate_schema');
