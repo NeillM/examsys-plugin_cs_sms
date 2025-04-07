@@ -29,6 +29,8 @@ namespace plugins\SMS\plugin_cs_sms;
  */
 class plugin_cs_sms extends \plugins\plugins_sms
 {
+    public $logdir;
+    public $gradebookdir;
     /**
      * Name of the plugin;
      * @var string

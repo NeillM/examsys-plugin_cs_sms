@@ -28,6 +28,19 @@ use plugins\SMS\plugin_cs_sms\user_helper as user_helper;
  */
 class user_helpertest extends unittestdatabase
 {
+    public $uid1;
+    public $uid2;
+    public $uid3;
+    public $uid4;
+    public $uid5;
+    public $uid6;
+    public $uid7;
+    public $uid8;
+    public $uid9;
+    public $uid10;
+    public $uid11;
+    public $uid12;
+    public $uid13;
     /**
      * Generate data for test.
      * @throws \testing\datagenerator\not_found
