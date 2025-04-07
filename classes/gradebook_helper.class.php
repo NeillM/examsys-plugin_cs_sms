@@ -68,7 +68,7 @@ class gradebook_helper
                 $grades = $g['grades'];
                 $response_xml = $render->render_xml('gradebook.xml', 'UON_AssessmentResults', $grades);
                 if ($configObject->get_setting('plugin_cs_sms', 'gradebook_md5')) {
-                    $suffix = md5($response_xml);
+                    $suffix = md5((string) $response_xml);
                 } else {
                     $suffix = date('YmdHis');
                 }
