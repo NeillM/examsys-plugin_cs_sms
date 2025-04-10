@@ -43,6 +43,7 @@ class lockfile_helperTest extends UnitTest
      *
      * @return void
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
